@@ -28,7 +28,11 @@ Describe the initial design concept: Hardware/software architecture, programming
 
 ## Background
 
-The background will contain a more detailed description of the product and a comparison to existing similar projects/products. A literature search should be conducted and the results listed. Proper citation of sources is required. If there are similar open-source products, you should state whether existing source will be used and to what extent. If there are similar closed-source/proprietary products, you should state how the proposed product will be similar and different.
+Similar products include MindDoc (https://minddoc.com/us/en) and Headspace (https://www.headspace.com/). Both are closed-source applications focused on providing users Mental Health resources, self-care strategies, mood tracking, and direct contacts to therapists. Headspace in particular also offers an Ai "empathy" based chat feature using a LLM to direct users to resources. While the approach of the user-experience for both are based in scientific research, they both can bombard the user with many options, lots of questions, and may feel overwhelming. The goal of our mental health literacy app is to use the scientifically backed method of encouraging users to journal as a way to eventually direct them to proper resources. 
+
+Another product in the space includes BetterHelp (https://www.betterhelp.com/), a robust closed-source application that allows users to make appointments with licensed therapists as well as use a journal feature that can be viewed by their selected therapist. However, it requires the user to schedule and comes at a high price for appointments, something our application is looking to avoid in both respects. 
+
+Lastly, a popular closed-source application for self-help is Calm (https://www.calm.com), providing users with mediation, sleep and specialists. This app has great user reviews, however it can be ineffective in addressing the core goal of getting users to seek appropriate help rather than using a "band aid" approach to their mental health. Using the concepts of all these applications but in a much more focused and streamlined approach, our application will simplify the user experience into approachable journaling sessions creating intrinsic motivation to seek proper resources. 
 
 ## Required Resources
 
