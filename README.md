@@ -38,6 +38,18 @@ Lastly, a popular closed-source application for self-help is Calm (https://www.c
 
 Discuss what you need to develop this project. This includes background information you will need to acquire, hardware resources, and software resources. If these are not part of the standard Computer Science Department lab resources, these must be identified early and discussed with the instructor.
 
+## Features and Requirements
+### Functional Requirements
+- Users' journal should be save to cache.
+- Users should be able to create, delete, and edit journal entries.
+- Users should be able to login to save their journal onto the server.
+- Users will be authenticated when logging in to the system.
+- Users will be able to configure when they want to be notified to journal.
+
+### Non-functional Requirements
+- Users should be able to navigate UI within a single button click.
+- Data backups will be ran periodically to prevent loss of data.
+
 ## Collaborators
 
 [//]: # ( readme: collaborators -start )
