@@ -40,7 +40,7 @@ Discuss what you need to develop this project. This includes background informat
 
 ## Features and Requirements
 ### Functional Requirements
-- Users' journal should be save to cache.
+- Users' journals should be saved to cache.
 - Users should be able to create, delete, and edit journal entries.
 - Users should be able to login to save their journal onto the server.
 - Users will be authenticated when logging in to the system.
