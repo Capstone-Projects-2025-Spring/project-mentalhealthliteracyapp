@@ -21,6 +21,13 @@ This document proposes a novel application of a text message (SMS or Email) read
 ## High Level Requirement
 
 Describe the requirements – i.e., what the product does and how it does it from a user point of view – at a high level.
+this app will :
+- Provide a journal space for users
+- Provide users to additional resources
+- Become a gateway to seek professional help
+- Allow users to keep logs of thier everyday life
+- All journal entries and personal data are securely encrypted and accessible only to the user
+
 
 ## Conceptual Design
 
