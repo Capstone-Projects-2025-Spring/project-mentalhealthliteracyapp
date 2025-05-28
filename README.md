@@ -16,7 +16,7 @@ Section 701, Mental Health, Mobile Application
 
 ## Project Abstract
 
-This document proposes a novel application of a text message (SMS or Email) read-out and hands-free call interacted between an Android Smartphone and an infotainment platform (headunit) in a car environment. When a phone receives an SMS or Email, the text message is transferred from the phone to the headunit through a Bluetooth connection. On the headunit, user can control which and when the received SMS or E-mail to be read out through the in-vehicle audio system. The user may press one button on the headunit to activate the hands-free feature to call back the SMS sender.
+This project proposes the development of a mental health literacy app centered around journaling as a foundational tool for everyday emotional self-care. The app is designed to encourage users to regularly reflect and document their thoughts and feelings, fostering awareness and emotional clarity. Unlike diagnostic tools, this app will not attempt to label or assess users' mental health conditions. Instead, it aims to build trust through a safe, non judgmental journaling experience. As users engage with the app, they will be gently guided toward accessible, vetted mental health resources should they choose to seek additional support. The goal is to empower users with self-awareness and provide a seamless bridge to professional help when needed without pressure, stigma, or clinical labeling.
 
 ## High Level Requirement
 
@@ -31,7 +31,7 @@ this app will :
 
 ## Conceptual Design
 
-Describe the initial design concept: Hardware/software architecture, programming language, operating system, etc.
+The frontend of the app will be developed using React and TypeScript, with Vite used for fast development and build optimization. For handling data fetching and caching, the app will use react-query. The backend will also be built using TypeScript, providing APIs and handling user authentication and other logic. All user data, including journal entries and preferences, will be stored in a PostgreSQL database. The entire application, both frontend and backend, will be deployed using Vercel for a streamlined and efficient deployment process. Some tools and technologies may be subject to change as the project evolves and based on the team’s needs.
 
 ## Background
 
