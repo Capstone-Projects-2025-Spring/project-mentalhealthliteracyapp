@@ -36,3 +36,32 @@ sidebar_position: 5
 2. The user clicks the "Settings" tab and the settings page is displayed.
 3. The user changes the frequency of notifications being sent to the email or mobile device. 
 4. The user clicks the "Save" button, and the preferences are saved to their account.
+
+## Use Case 4 - Journal entry
+
+
+**As a user, I want to quickly write and save a journal entry each day so I can reflect on my emotions and track my mental health over time.**
+
+1. The user logs into the Mental Health Literacy website and lands on the home screen.
+
+2. The user taps the “Journal” tab or is prompted by a daily reminder notification.
+
+3. The app opens a blank journal entry with today’s date pre-filled.
+
+4. The user begins writing thoughts, feelings, or experiences in the text field.
+
+5. The app autosaves as the user types (with a “Last saved” timestamp visible).
+
+**Use Case 5 - seeking professional help**
+
+**As a user seeking help, I want to find professional mental health providers so I can connect with someone if I choose to.
+**
+1. The user logs into Mental Health Literacy website and taps the “Get Help” button on the home screen.
+
+The app displays a list of available professional support options:
+
+- Licensed therapists (with links to booking platforms)
+  
+- Emergency hotline numbers
+  
+- Local in-person counseling centers
