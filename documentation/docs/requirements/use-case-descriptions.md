@@ -61,5 +61,5 @@ sidebar_position: 5
 
 1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
 2. The user clicks on "Journal Prompt" and is given a prompt.
-3. The user accesses their journal and behins a new entry.
+3. The user accesses their journal and begins a new entry.
 4. After the user has finished writing, they click “Save” button and the journal entry is saved onto the server. 
