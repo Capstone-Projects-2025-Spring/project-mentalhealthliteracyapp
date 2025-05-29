@@ -36,3 +36,30 @@ sidebar_position: 5
 2. The user clicks the "Settings" tab and the settings page is displayed.
 3. The user changes the frequency of notifications being sent to the email or mobile device. 
 4. The user clicks the "Save" button, and the preferences are saved to their account.
+
+## Use Case 4 - Emergency Resources
+
+**As a user with an active account, I want to access emergency resources.**
+
+1. The user goes on the Mental Health Literacy website on their personal computer, presses the Sign In button, and enters their credentials.
+2. The user clicks on the "Resources" tab.
+3. The user clicks on "Get Help Now" button.
+4. The user is connected with a 24/7 hotline.
+
+## Use Case 5 - Educational Resources
+
+**As a user with an active account, I want to learn more about mental health and therapy.** 
+
+1. The user goes on the Mental Health Literacy website on their personal computer, presses the Sign In button, and enters their credentials.
+2. The user clicks on the "Resources" tab.
+3. The user clicks on "Educational Resources" button.
+4. The user has access to friendly modules and videos explaining therapy.
+
+## Use Case 6 - Prompts
+
+**As a user with an active account, I want to understand why I am avoiding treatment.** 
+
+1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
+2. The user clicks on "Journal Prompt" and is given a prompt.
+3. The user accesses their journal and behins a new entry.
+4. After the user has finished writing, they click “Save” button and the journal entry is saved onto the server. 
