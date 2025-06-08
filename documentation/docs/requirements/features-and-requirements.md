@@ -16,6 +16,9 @@ sidebar_position: 4
 - Users will be authenticated when logging in to the system.
 
 ## Non-functional Requirements
-
+#### User Experience
 - Users should be able to navigate the UI with minimal button presses.
+####
+- The API that stores users' data should be secure.
+#### Data Storage
 - Data backups will be run periodically to prevent loss of users' data. The data will include users' journals, notification settings, etc.
