@@ -71,30 +71,73 @@ h6 {
 Our own CSS
 */
 
+:root {
+  --clr-sidebar: hsl(203, 77%, 83%);
+  --clr-sidebar-btn: hsl(216, 97%, 73%);
+  --clr-text: black;
+}
+
 #root {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  flex-direction: column;
-}
-
-#sidebar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 15rem 1fr;
   height: 100vh;
-  width: 150px;
-  flex-direction: column;
-}
-
-#app-container {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
+  min-height: 100vh;
 }
 
 #topbar {
-  display: flex;
-  flex-direction: row;
+  width: 100%;
+}
+
+#container {
+  display: grid;
+  grid-template-rows: 3rem 1fr;
+  height: 100%;
+  gap: 2rem;
+  background: linear-gradient(
+    0deg,
+    hsl(78, 26%, 44%) 25%,
+    hsl(78, 35%, 57%) 90%
+  );
+}
+
+#sidebar {
+  background-color: var(--clr-sidebar);
+}
+
+#sidebar ul {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  row-gap: 2rem;
   align-items: center;
+  justify-items: center;
+  list-style: none;
+
+  padding: 0;
+  padding-top: 2rem;
+
+  & li {
+    background: var(--clr-sidebar-btn);
+    grid-column-start: 2;
+    width: 100%;
+    line-height: 3;
+    border-radius: 1rem;
+  }
+
+  & li a {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    height: 100%;
+    width: 100%;
+    color: var(--clr-text);
+    font-size: 1.5rem;
+  }
+
+  & .active {
+  }
+
+  & .inactive {
+  }
 }
 
 #topbar button {
@@ -105,10 +148,4 @@ Our own CSS
   display: flex;
   flex-direction: column;
   flex: 1;
-}
-
-.hidden {
-  display: none;
-  width: 0;
-  height: 0;
 }

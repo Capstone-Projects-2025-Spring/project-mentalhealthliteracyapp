@@ -12,16 +12,16 @@ import Video from "./pages/Video";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Router>
-      <Topbar />
-      <div id="app-container">
-        <Sidebar />
+      <Sidebar />
+      <main id="container">
+        <Topbar />
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/login" element={<Login />} />
           <Route path="/tutorial" element={<Tutorial />} />
           <Route path="video" element={<Video />} />
         </Routes>
-      </div>
+      </main>
     </Router>
   </StrictMode>
 );
