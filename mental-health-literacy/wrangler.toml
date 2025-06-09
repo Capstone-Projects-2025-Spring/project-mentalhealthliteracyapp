@@ -1,5 +1,2 @@
 name = "mental-health-literacy"
-compatibility_date = "2025-06-08"
-
-[site]
-bucket = "./dist" 
+compatibility_date = "2025-06-08" 
