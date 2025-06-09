@@ -8,7 +8,7 @@ sidebar_position: 5
 
 **As a user, I want to create an account so that my journal entries and settings are saved securely and available across devices.**
 
-1. **Access Registration:** Upon launching ReflectCare for the first time, the app displays a Welcome screen with Sign Up and Log In buttons. The user taps Sign Up.
+1. **Access Registration:** Upon launching our app for the first time, the app displays a Welcome screen with Sign Up and Log In buttons. The user taps Sign Up.
 2. **Enter Details:** The app presents the Create Account form, asking for:
    - Email address
    - Password (with strength indicator)
