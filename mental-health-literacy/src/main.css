@@ -113,7 +113,6 @@ Our own CSS
   height: 0;
 }
 
-/* Video Feed Styles */
 .video-feed {
   height: 100vh;
   scroll-snap-type: x mandatory;
@@ -125,7 +124,6 @@ Our own CSS
   background-color: #f0f0f0;
   padding: 0 20px;
   gap: 20px;
-  /* Hide scrollbar but keep functionality */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 }

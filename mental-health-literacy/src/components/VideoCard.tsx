@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import sharkGif from '../assets/sharky.gif';
 
 interface VideoCardProps {
   videoUrl: string;
@@ -33,7 +34,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, 
     <div className="video-card">
       {isGif ? (
         <img
-          src="/sharky.gif"
+          src={videoUrl}
           alt="Dancing shark"
           className="video-player"
         />

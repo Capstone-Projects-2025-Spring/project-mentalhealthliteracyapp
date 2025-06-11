@@ -1,99 +1,42 @@
-import React, { useState } from 'react';
+import VideoCard from '../components/VideoCard';
 import sharkGif from '../assets/sharky.gif';
 
 function Video() {
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-  };
+  const videos = [
+    {
+      id: 1,
+      videoUrl: sharkGif,
+      username: "sharky1",
+      description: "blank",
+      likes: 1234
+    },
+    {
+      id: 2,
+      videoUrl: sharkGif,
+      username: "sharky2",
+      description: "",
+      likes: 856
+    },
+    {
+      id: 3,
+      videoUrl: sharkGif,
+      username: "sharky3",
+      description: "blank",
+      likes: 2045
+    }
+  ];
 
   return (
     <div className="video-feed">
-      <div className="video-card">
-        <img 
-          src={sharkGif} 
-          alt="Dancing shark"
-          className="video-player"
+      {videos.map((video) => (
+        <VideoCard
+          key={video.id}
+          videoUrl={video.videoUrl}
+          username={video.username}
+          description={video.description}
+          likes={video.likes}
         />
-        <div className="video-info">
-          <div className="video-details">
-            <h4>Sharky</h4>
-            <p> Dancing shark</p>
-          </div>
-          <div className="video-actions">
-            <button 
-              className="action-button"
-              onClick={handleLike}
-              style={{ color: isLiked ? '#ff4d4d' : 'white' }}
-            >
-              Like
-            </button>
-            <button className="action-button">
-              Comment
-            </button>
-            <button className="action-button">
-              Follow
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="video-card">
-        <img 
-          src={sharkGif} 
-          alt="Dancing shark"
-          className="video-player"
-        />
-        <div className="video-info">
-          <div className="video-details">
-            <h4>Sharky</h4>
-            <p> Dancing shark</p>
-          </div>
-          <div className="video-actions">
-            <button 
-              className="action-button"
-              onClick={handleLike}
-              style={{ color: isLiked ? '#ff4d4d' : 'white' }}
-            >
-              Like
-            </button>
-            <button className="action-button">
-              Comment
-            </button>
-            <button className="action-button">
-              Follow
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="video-card">
-        <img 
-          src={sharkGif} 
-          alt="Dancing shark"
-          className="video-player"
-        />
-        <div className="video-info">
-          <div className="video-details">
-            <h4>Sharky</h4>
-            <p> Dancing shark</p>
-          </div>
-          <div className="video-actions">
-            <button 
-              className="action-button"
-              onClick={handleLike}
-              style={{ color: isLiked ? '#ff4d4d' : 'white' }}
-            >
-              Like
-            </button>
-            <button className="action-button">
-              Comment
-            </button>
-            <button className="action-button">
-              Follow
-            </button>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
