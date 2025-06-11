@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import sharkGif from '../assets/sharky.gif';
 
 interface VideoCardProps {
   videoUrl: string;
@@ -8,7 +7,7 @@ interface VideoCardProps {
   likes: number;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, likes }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
