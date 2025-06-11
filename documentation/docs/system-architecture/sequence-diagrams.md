@@ -5,3 +5,15 @@ This section provides sequence diagrams that illustrate the flow of interactions
 ## Use Case 1 – Account Creation
 ![alt text](account-creation-sequence.png)
 
+
+
+
+
+
+
+
+
+
+
+## Use Case 6 – Video Interaction
+![alt text](video-interaction.png)
