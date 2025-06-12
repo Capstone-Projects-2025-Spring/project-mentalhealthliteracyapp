@@ -8,7 +8,7 @@ sidebar_position: 5
 
 **As a user, I want to create an account so that my journal entries and settings are saved securely and available across devices.**
 
-1. **Access Registration:** Upon launching ReflectCare for the first time, the app displays a Welcome screen with Sign Up and Log In buttons. The user taps Sign Up.
+1. **Access Registration:** Upon launching our app for the first time, the app displays a Welcome screen with Sign Up and Log In buttons. The user taps Sign Up.
 2. **Enter Details:** The app presents the Create Account form, asking for:
    - Email address
    - Password (with strength indicator)
@@ -37,16 +37,7 @@ sidebar_position: 5
 3. The user changes the frequency of notifications being sent to the email or mobile device. 
 4. The user clicks the "Save" button, and the preferences are saved to their account.
 
-## Use Case 4 - Emergency Resources
-
-**As a user with an active account, I want to access emergency resources.**
-
-1. The user goes on the Mental Health Literacy website on their personal computer, presses the Sign In button, and enters their credentials.
-2. The user clicks on the "Resources" tab.
-3. The user clicks on "Get Help Now" button.
-4. The user is connected with a 24/7 hotline.
-
-## Use Case 5 - Educational Resources
+## Use Case 4 - Educational Resources
 
 **As a user with an active account, I want to learn more about mental health and therapy.** 
 
@@ -55,11 +46,10 @@ sidebar_position: 5
 3. The user clicks on "Educational Resources" button.
 4. The user has access to friendly modules and videos explaining therapy.
 
-## Use Case 6 - Prompts
+## Use Case 5 - Videos
 
-**As a user with an active account, I want to understand why I am avoiding treatment.** 
+**As a user with an active account, I want to watch short-form videos that educate me on mental health and therapy options.** 
 
 1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
-2. The user clicks on "Journal Prompt" and is given a prompt.
-3. The user accesses their journal and begins a new entry.
-4. After the user has finished writing, they click “Save” button and the journal entry is saved onto the server. 
+2. The user clicks on "Videos" and is brought to an infinite-scroll video feed.
+3. The user is able to like and share videos.
