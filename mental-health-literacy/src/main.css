@@ -211,8 +211,6 @@ Our own CSS
     grid-template-columns: 1fr;
   }
 }
-<<<<<<< Updated upstream
-=======
 
 .video-feed {
   height: 100%;
@@ -304,4 +302,3 @@ Our own CSS
 .action-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
->>>>>>> Stashed changes
