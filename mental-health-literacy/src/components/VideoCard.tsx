@@ -5,12 +5,20 @@ interface VideoCardProps {
   username: string;
   description: string;
   likes: number;
+  isLiked?: boolean;
+  onLike: () => void;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, likes }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ 
+  videoUrl, 
+  username, 
+  description, 
+  likes,
+  isLiked = false,
+  onLike 
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -23,9 +31,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, 
     }
   };
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-  };
+  const isGif = videoUrl.toLowerCase().endsWith('.gif');
 
   return (
     <div className="video-card">
@@ -44,10 +50,13 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, 
         <div className="video-actions">
           <button 
             className="action-button"
-            onClick={handleLike}
-            style={{ color: isLiked ? '#ff4d4d' : 'white' }}
+            onClick={onLike}
+            style={{ 
+              color: isLiked ? '#ff4d4d' : 'white',
+              fontWeight: isLiked ? 'bold' : 'normal'
+            }}
           >
-            Like
+            {likes} {isLiked ? 'Liked' : 'Like'}
           </button>
           <button className="action-button">
             Comment

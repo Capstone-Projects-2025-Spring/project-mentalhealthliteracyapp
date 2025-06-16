@@ -1,44 +1,127 @@
-import React from 'react';
+import { useEffect, useState, useRef } from 'react';
 import VideoCard from '../components/VideoCard';
+import sharkGif from '../assets/sharky.gif';
+import { supabase } from '../lib/supabase';
+
+interface Video {
+  id: number;
+  videoUrl: string;
+  username: string;
+  description: string;
+  likes: number;
+  isLiked?: boolean;
+}
 
 function Video() {
-  // Example video data
-  const videos = [
+  const [videos, setVideos] = useState<Video[]>([
     {
       id: 1,
-      videoUrl: "https://example.com/video1.mp4",
-      username: "user1",
-      description: "Mental health tip #1: Deep breathing exercises",
-      likes: 1234
+      videoUrl: sharkGif,
+      username: "sharky1",
+      description: "blank",
+      likes: 0
     },
     {
       id: 2,
-      videoUrl: "https://example.com/video2.mp4",
-      username: "mindfulness_expert",
-      description: "Quick meditation guide for anxiety",
-      likes: 856
+      videoUrl: sharkGif,
+      username: "sharky2",
+      description: "",
+      likes: 0
     },
     {
       id: 3,
-      videoUrl: "https://example.com/video3.mp4",
-      username: "wellness_coach",
-      description: "5 tips for better sleep habits",
-      likes: 2045
-    },
-   
-  ];
+      videoUrl: sharkGif,
+      username: "sharky3",
+      description: "blank",
+      likes: 0
+    }
+  ]);
+
+  const [connectionStatus, setConnectionStatus] = useState<string>('Testing connection...');
+  const videoFeedRef = useRef<HTMLDivElement>(null);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+  // Test connection
+  useEffect(() => {
+    async function testConnection() {
+      try {
+        const { data, error } = await supabase
+          .from('videos')
+          .select('*')
+          .limit(1);
+
+        if (error) {
+          console.error('Supabase connection error:', error);
+          setConnectionStatus('Connection failed: ' + error.message);
+        } else {
+          console.log('Supabase connection successful!', data);
+          setConnectionStatus('Connected to Supabase successfully!');
+        }
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        setConnectionStatus('Connection failed: Unexpected error');
+      }
+    }
+
+    testConnection();
+  }, []);
+
+  // keyboard navigation (chatgpt lol)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!videoFeedRef.current) return;
+
+      const videoCards = videoFeedRef.current.children;
+      if (videoCards.length === 0) return;
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const nextIndex = Math.min(currentVideoIndex + 1, videos.length - 1);
+        setCurrentVideoIndex(nextIndex);
+        videoCards[nextIndex]?.scrollIntoView({ behavior: 'smooth' });
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const prevIndex = Math.max(currentVideoIndex - 1, 0);
+        setCurrentVideoIndex(prevIndex);
+        videoCards[prevIndex]?.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentVideoIndex, videos.length]);
+
+  const handleLike = (videoId: number) => {
+    alert('Please log in to like videos');
+  };
 
   return (
-    <div className="video-feed">
-      {videos.map((video) => (
-        <VideoCard
-          key={video.id}
-          videoUrl={video.videoUrl}
-          username={video.username}
-          description={video.description}
-          likes={video.likes}
-        />
-      ))}
+    <div>
+      <div style={{ 
+        padding: '1rem', 
+        margin: '1rem', 
+        backgroundColor: connectionStatus.includes('successful') ? '#dcfce7' : '#fee2e2',
+        borderRadius: '0.5rem',
+        textAlign: 'center'
+      }}>
+        {connectionStatus}
+        <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
+          Use ↑↓ arrow keys to navigate videos
+        </div>
+      </div>
+      <div className="video-feed" ref={videoFeedRef}>
+        {videos.map((video) => (
+          <VideoCard
+            key={video.id}
+            videoUrl={video.videoUrl}
+            username={video.username}
+            description={video.description}
+            likes={video.likes}
+            isLiked={false}
+            onLike={() => handleLike(video.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
