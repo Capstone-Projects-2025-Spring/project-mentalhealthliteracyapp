@@ -14,9 +14,9 @@ These libraries are suitable for our project because they enable fast, reliable,
 
 ---
 
-🧪 **Focus:** Test React components, custom hooks, and utility functions in isolation to ensure small UI logic parts work as expected.
+**Focus:** Test React components, custom hooks, and utility functions in isolation to ensure small UI logic parts work as expected.
 
-✅ **Tools:**
+**Tools:**
 - **Vitest:** Fast test runner for Vite projects
 - **React Testing Library:** Renders components, simulates user behavior, encourages user-focused tests
 - **Mocking:** Use `vi.mock()` to stub external modules, and mock context providers.
@@ -51,7 +51,7 @@ All external classes should be stubbed using mock objects.
 
 ### Resource Page Rendering
 - **Test:** Displays list of resources
-  - **Input:** resources = [{title: 'Helpline', url: 'https://help.com'}]
+  - **Input:** resources = `[{title: 'Helpline', url: 'https://help.com'}]`
   - **Expected Result:** Resource title and link are rendered
 - **Test:** Handles empty resource list
   - **Input:** resources = []
@@ -61,4 +61,4 @@ All external classes should be stubbed using mock objects.
 
 ### Test Coverage Report
 
-Vitest can generate an HTML coverage report. To make this available in Docusaurus, export the report and place it in the `static` folder. For automation, set up a CI pipeline to run tests, generate the report, and move it to `static` on each update. 
+Vitest can generate an HTML coverage report. To make this available in Docusaurus, export the report and place it in the `static` folder. For automation, set up a CI pipeline to run tests, generate the report, and move it to `static` on each update.
