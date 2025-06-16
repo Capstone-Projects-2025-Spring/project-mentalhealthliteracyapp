@@ -14,9 +14,9 @@ These libraries are suitable for our project because they allow us to test backe
 
 ---
 
-🧰 **Focus:** Test standalone backend logic functions (API handlers, data transformers, Supabase queries) to ensure correct outputs for given inputs.
+**Focus:** Test standalone backend logic functions (API handlers, data transformers, Supabase queries) to ensure correct outputs for given inputs.
 
-✅ **Tools:**
+**Tools:**
 - **Vitest**: For testing server logic, API routes, and edge functions
 - **Mocking:** Use `vi.mock()` or `jest.mock()` to stub Supabase client and mock database results 
 
