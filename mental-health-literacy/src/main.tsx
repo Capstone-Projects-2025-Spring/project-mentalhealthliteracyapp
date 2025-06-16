@@ -7,6 +7,7 @@ import Welcome from "./pages/Welcome";
 import Login from "./pages/Login";
 import Tutorial from "./pages/Tutorial";
 import Video from "./pages/Video";
+import Resources from "./pages/Resources";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/login" element={<Login />} />
           <Route path="/tutorial" element={<Tutorial />} />
           <Route path="video" element={<Video />} />
+          <Route path="/resources" element={<Resources />} />
         </Routes>
       </main>
     </Router>
