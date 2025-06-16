@@ -42,6 +42,13 @@ function Sidebar() {
             >
               <Link to="/video">Video</Link>
             </li>
+            <li
+              className={
+                useLocation().pathname == "/resources" ? "active" : "inactive"
+              }
+            >
+              <Link to="/resources">Resources</Link>
+            </li>
           </ul>
         </nav>
       </aside>

@@ -4,6 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import Sidebar from "./components/Sidebar";
 import { routeList } from "./pages/Pages";
+import Resources from "./pages/Resources";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
