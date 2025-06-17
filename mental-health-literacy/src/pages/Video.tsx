@@ -97,15 +97,9 @@ function Video() {
 
   return (
     <div>
-      <div style={{ 
-        padding: '1rem', 
-        margin: '1rem', 
-        backgroundColor: connectionStatus.includes('successful') ? '#dcfce7' : '#fee2e2',
-        borderRadius: '0.5rem',
-        textAlign: 'center'
-      }}>
+      <div className={`connection-status-message${connectionStatus.includes('successful') ? ' success' : ''}`}>
         {connectionStatus}
-        <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
+        <div className="navigation-hint">
           Use ↑↓ arrow keys to navigate videos
         </div>
       </div>

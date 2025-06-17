@@ -49,12 +49,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
         <div className="video-actions">
           <button 
-            className="action-button"
+            className={`action-button${isLiked ? ' liked' : ''}`}
             onClick={onLike}
-            style={{ 
-              color: isLiked ? '#ff4d4d' : 'white',
-              fontWeight: isLiked ? 'bold' : 'normal'
-            }}
           >
             {likes} {isLiked ? 'Liked' : 'Like'}
           </button>

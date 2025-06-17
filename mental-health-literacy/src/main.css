@@ -310,18 +310,34 @@ Our own CSS
   transform: scale(1.05);
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 .video-feed::-webkit-scrollbar {
   display: none;
 }
 
-/* Hide scrollbar for Firefox */
 .video-feed {
   scrollbar-width: none;
 }
 
-/* Ensure the main content area takes full height */
-main {
-  height: 100vh;
-  overflow: hidden;
+.connection-status-message {
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #fee2e2;
+  border-radius: 0.5rem;
+  text-align: center;
 }
+.connection-status-message.success {
+  background-color: #dcfce7;
+}
+
+.navigation-hint {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.action-button.liked {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+
