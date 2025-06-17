@@ -31,8 +31,6 @@ const VideoCard: React.FC<VideoCardProps> = ({
     }
   };
 
-  const isGif = videoUrl.toLowerCase().endsWith('.gif');
-
   return (
     <div className="video-card">
       <video

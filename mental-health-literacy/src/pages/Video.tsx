@@ -13,7 +13,7 @@ interface Video {
 }
 
 function Video() {
-  const [videos, setVideos] = useState<Video[]>([
+  const [videos] = useState<Video[]>([
     {
       id: 1,
       videoUrl: sharkGif,
@@ -91,7 +91,7 @@ function Video() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentVideoIndex, videos.length]);
 
-  const handleLike = (videoId: number) => {
+  const handleLike = () => {
     alert('Please log in to like videos');
   };
 
@@ -112,7 +112,7 @@ function Video() {
             description={video.description}
             likes={video.likes}
             isLiked={false}
-            onLike={() => handleLike(video.id)}
+            onLike={handleLike}
           />
         ))}
       </div>
