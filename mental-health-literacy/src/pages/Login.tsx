@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Login() {
     return (
         <div className="login-form">
@@ -11,6 +13,10 @@ function Login() {
 
                 <button type="submit">Log In</button>
             </form>
+
+            <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+                Don’t have an account? <Link to="/signup">Sign up</Link>
+            </p>
         </div>
     );
 }
