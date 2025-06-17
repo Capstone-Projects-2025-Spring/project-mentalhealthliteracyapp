@@ -22,11 +22,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - name: Go to the right directory
+      - name: Check that code folder exists
         run: "cd mental-health-literacy"
 
       - name: Install dependencies
+        working-directory: mental-health-literacy
         run: npm install
 
       - name: Run tests
-        run: npm run --prefix mental-health-literacy test
+        working-directory: mental-health-literacy
+        run: npm run test
