@@ -72,9 +72,15 @@ Our own CSS
 */
 
 :root {
-  --clr-sidebar: hsl(203, 77%, 83%);
-  --clr-sidebar-btn: hsl(216, 97%, 73%);
+  --clr-background:
+  --clr-background-secondary:
   --clr-text: black;
+
+  --fs-large: 2rem;
+  --fs-medium:1.3rem;
+  --fs-small:1rem;
+
+  --ff-primary: "Segoe UI", sans-serif;
 }
 
 #root {
@@ -90,7 +96,7 @@ aside {
 
 #sidebar {
   position: sticky;
-  font-family: "Segoe UI", sans-serif;
+  font-family: var(--ff-primary);
   height: 100%;
 }
 
