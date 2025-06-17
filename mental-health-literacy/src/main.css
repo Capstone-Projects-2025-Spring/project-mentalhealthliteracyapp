@@ -214,42 +214,49 @@ Our own CSS
 
 .video-feed {
   height: 100vh;
-  margin: 0 1.5rem;
-  gap: 1.5rem;
-  scroll-snap-type: x mandatory;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  padding: 0;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  box-sizing: border-box;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  flex-direction: column;
+  background: #000;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.video-feed::-webkit-scrollbar {
-  display: none;
-}
-
-.video-card {
-  position: relative;
-  height: 80%;
-  width: auto;
-  scroll-snap-align: start;
+.loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
-  border-radius: 8px;
-  overflow: hidden;
-  flex-shrink: 0; /* Prevent video cards from shrinking */
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: #dc2626;
+  padding: 1rem;
+  text-align: center;
+}
+
+.video-card {
+  scroll-snap-align: start;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #000;
 }
 
 .video-player {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: #000;
 }
 
 .video-info {
@@ -257,47 +264,83 @@ Our own CSS
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1rem;
+  padding: 1.5rem;
   color: white;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  z-index: 1;
 }
 
 .video-details {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .video-details h4 {
-  font-size: 1rem;
+  margin: 0;
+  font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
 }
 
 .video-details p {
-  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  color: #fff;
   opacity: 0.9;
 }
 
 .video-actions {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  gap: 0.5rem;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .action-button {
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
   cursor: pointer;
-  font-size: 0.85rem;
-  padding: 0.5rem 1rem;
-  border-radius: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  transition: background-color 0.2s;
-  min-width: 5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  min-width: 6rem;
   text-align: center;
 }
 
 .action-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
+
+.video-feed::-webkit-scrollbar {
+  display: none;
+}
+
+.video-feed {
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column; 
+  gap: 1rem; 
+}
+
+.connection-status-message {
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #fee2e2;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.connection-status-message.success {
+  background-color: #dcfce7;
+}
+
+.navigation-hint {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.action-button.liked {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+
