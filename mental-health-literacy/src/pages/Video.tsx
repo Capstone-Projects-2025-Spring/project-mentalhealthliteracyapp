@@ -91,9 +91,9 @@ function Video() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentVideoIndex, videos.length]);
 
-  const handleLike = () => {
+  /*const handleLike = () => {
     alert('Please log in to like videos');
-  };
+  };*/
 
   return (
     <div>
