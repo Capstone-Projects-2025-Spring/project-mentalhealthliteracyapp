@@ -1,5 +1,5 @@
-import VideoCard from '../components/VideoCard';
-import sharkGif from '../assets/sharky.gif';
+import VideoCard from "../components/VideoCard";
+import sharkGif from "../assets/sharky.gif";
 
 function Video() {
   const videos = [
@@ -8,22 +8,22 @@ function Video() {
       videoUrl: sharkGif,
       username: "sharky1",
       description: "blank",
-      likes: 1234
+      likes: 1234,
     },
     {
       id: 2,
       videoUrl: sharkGif,
       username: "sharky2",
       description: "",
-      likes: 856
+      likes: 856,
     },
     {
       id: 3,
       videoUrl: sharkGif,
       username: "sharky3",
       description: "blank",
-      likes: 2045
-    }
+      likes: 2045,
+    },
   ];
 
   return (

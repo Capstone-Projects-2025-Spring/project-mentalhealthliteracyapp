@@ -83,6 +83,10 @@ Our own CSS
   height: 100vh;
   min-height: calc(max(100vh, 20rem));
 }
+aside {
+  display: flex;
+  flex-direction: column;
+}
 
 #sidebar {
   position: sticky;
@@ -103,7 +107,6 @@ Our own CSS
 }
 
 #sidebar nav {
-  height: 100%;
   background: #fff;
   position: relative;
 }
@@ -300,4 +303,8 @@ Our own CSS
 
 .action-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
+}
+
+#user-actions {
+  margin-top: auto;
 }
