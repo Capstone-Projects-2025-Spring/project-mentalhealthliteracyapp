@@ -26,9 +26,9 @@ jobs:
         run: "cd mental-health-literacy"
 
       - name: Install dependencies
-        working-directory: mental-health-literacy
+        working-directory: ./mental-health-literacy
         run: npm install
 
       - name: Run tests
-        working-directory: mental-health-literacy
+        working-directory: ./mental-health-literacy
         run: npm run test
