@@ -9,6 +9,9 @@ import Login from "./pages/Login";
 import Tutorial from "./pages/Tutorial";
 import Video from "./pages/Video";
 
+// @ts-ignore
+type ExecutionContext = any;
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Router>
@@ -27,7 +30,7 @@ createRoot(document.getElementById("root")!).render(
 );
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(_request: any, _env: any, _ctx: any) {
     return new Response("Hello from Cloudflare Worker!");
   }
 }
