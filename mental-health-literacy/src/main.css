@@ -72,13 +72,13 @@ Our own CSS
 */
 
 :root {
-  --clr-background:
+  --clr-background-primary:
   --clr-background-secondary:
   --clr-text: black;
 
-  --fs-large: 2rem;
-  --fs-medium:1.3rem;
-  --fs-small:1rem;
+  --fs-l: 2rem;
+  --fs-md:1.3rem;
+  --fs-sm:1rem;
 
   --ff-primary: "Segoe UI", sans-serif;
 }
