@@ -5,11 +5,11 @@ function Login() {
         <div className="login-form">
             <h1>Login</h1>
             <form>
-                <label>Email:</label>
-                <input type="email" placeholder="Enter your email" required />
+                <label>Email:<input type="email" placeholder="Enter your email" required /></label>
+                
 
-                <label>Password:</label>
-                <input type="password" placeholder="Enter your password" required />
+                <label>Password:<input type="password" placeholder="Enter your password" required /></label>
+                
 
                 <button type="submit">Log In</button>
             </form>

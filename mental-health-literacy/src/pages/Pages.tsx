@@ -19,3 +19,5 @@ export const routeList: Array<RouteDef> = [
   { path: "/video", element: <Video /> },
   { path: "/resources", element: <Resources /> },
 ];
+
+export const noSidebarList = ["/login", "/register"];

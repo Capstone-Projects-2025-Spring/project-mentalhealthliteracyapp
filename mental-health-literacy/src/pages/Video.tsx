@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from 'react';
 import VideoCard from '../components/VideoCard';
 import sharkGif from '../assets/sharky.gif';
@@ -19,14 +20,18 @@ function Video() {
       videoUrl: sharkGif,
       username: "sharky1",
       description: "blank",
+
       likes: 0
+
     },
     {
       id: 2,
       videoUrl: sharkGif,
       username: "sharky2",
       description: "",
+
       likes: 0
+
     },
     {
       id: 3,

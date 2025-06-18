@@ -72,9 +72,15 @@ Our own CSS
 */
 
 :root {
-  --clr-sidebar: hsl(203, 77%, 83%);
-  --clr-sidebar-btn: hsl(216, 97%, 73%);
+  --clr-background-primary:
+  --clr-background-secondary:
   --clr-text: black;
+
+  --fs-l: 2rem;
+  --fs-md:1.3rem;
+  --fs-sm:1rem;
+
+  --ff-primary: "Segoe UI", sans-serif;
 }
 
 #root {
@@ -83,10 +89,14 @@ Our own CSS
   height: 100vh;
   min-height: calc(max(100vh, 20rem));
 }
+aside {
+  display: flex;
+  flex-direction: column;
+}
 
 #sidebar {
   position: sticky;
-  font-family: "Segoe UI", sans-serif;
+  font-family: var(--ff-primary);
   height: 100%;
 }
 
@@ -103,7 +113,6 @@ Our own CSS
 }
 
 #sidebar nav {
-  height: 100%;
   background: #fff;
   position: relative;
 }
@@ -310,6 +319,9 @@ Our own CSS
   transform: scale(1.05);
 }
 
+#user-actions {
+  margin-top: auto;
+}
 .video-feed::-webkit-scrollbar {
   display: none;
 }
@@ -388,5 +400,3 @@ Our own CSS
   color: #ff4d4d;
   font-weight: bold;
 }
-
-

@@ -51,6 +51,10 @@ function Sidebar() {
             </li>
           </ul>
         </nav>
+        <div id="user-actions">
+          <button>Sign-in</button>
+          <button>Register</button>
+        </div>
       </aside>
     </>
   );
