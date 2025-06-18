@@ -53,3 +53,13 @@ sidebar_position: 5
 1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
 2. The user clicks on "Videos" and is brought to an infinite-scroll video feed.
 3. The user is able to like and share videos.
+
+## Use Case 6 - Liking Videos
+
+**As a user watching a video, I want to like a video so I can save content that resonates with me** 
+
+1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
+2. The user clicks on "Videos", scrolls finds one that they find helpful.
+3. The video displays a “Like” button beneath or overlaid on the video, and the user clicks it. 
+4. The app visually confirms this with a heart and saves the liked video to the user's account in the database.
+5. The user is able to access their liked videos. 
