@@ -1,8 +1,7 @@
-
 import { useEffect, useState, useRef } from 'react';
 import VideoCard from '../components/VideoCard';
 import sharkGif from '../assets/sharky.gif';
-import { supabase } from '../lib/supabase';
+import { getSupabaseClient } from '../lib/supabase';
 
 interface Video {
   id: number;
@@ -48,9 +47,17 @@ function Video() {
 
   // Test connection
   useEffect(() => {
-    async function testConnection() {
+    //get supabase client
+    const supabase = getSupabaseClient();
+    //check if supabase is null
+    if (!supabase) {
+      setConnectionStatus('Supabase credentials missing: cannot connect.');
+      return;
+    }
+    //ensure supabase is not null
+    async function testConnection(supabaseInstance: NonNullable<typeof supabase>) {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseInstance
           .from('videos')
           .select('*')
           .limit(1);
@@ -67,8 +74,7 @@ function Video() {
         setConnectionStatus('Connection failed: Unexpected error');
       }
     }
-
-    testConnection();
+    testConnection(supabase);
   }, []);
 
   // keyboard navigation (chatgpt lol)

@@ -1,15 +1,14 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Temporarily comment out to allow app to load
-// if (!supabaseUrl || !supabaseAnonKey) {
-//   throw new Error('Missing Supabase environment variables');
-// }
 
-// Use fallback values if env vars are missing
-const url = supabaseUrl || 'https://placeholder.supabase.co';
-const key = supabaseAnonKey || 'placeholder-key';
-
-export const supabase = createClient(url, key);
+// return a supabase client if credentials are present, otherwise return null
+export function getSupabaseClient(): SupabaseClient | null {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Missing Supabase credentials');
+    return null;
+  }
+  return createClient(supabaseUrl, supabaseAnonKey);
+}

@@ -10,8 +10,8 @@ createRoot(document.getElementById("root")!).render(
     <Router>
       <Routes>
         <Route element={<MainLayout />}>
-          {routeList.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element} />
+          {routeList.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
           ))}
         </Route>
       </Routes>
