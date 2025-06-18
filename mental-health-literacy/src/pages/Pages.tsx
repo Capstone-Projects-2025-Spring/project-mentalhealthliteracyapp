@@ -20,4 +20,4 @@ export const routeList: Array<RouteDef> = [
   { path: "/resources", element: <Resources /> },
 ];
 
-export const noSidebarList = ["/login", "/register"];
+export const noSidebarList = ["/login", "/signup"];

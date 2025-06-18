@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route element={<MainLayout />}>
           {routeList.map((route) => (
-            <Route path={route.path} element={route.element} />
+            <Route key={route.path} path={route.path} element={route.element} />
           ))}
         </Route>
       </Routes>
