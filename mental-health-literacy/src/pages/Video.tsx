@@ -2,6 +2,12 @@ import { useEffect, useState, useRef } from 'react';
 import VideoCard from '../components/VideoCard';
 import sharkGif from '../assets/sharky.gif';
 import { getSupabaseClient } from '../lib/supabase';
+import './Video.css';
+
+interface Comment {
+  username: string;
+  text: string;
+}
 
 interface Video {
   id: number;
@@ -9,6 +15,7 @@ interface Video {
   username: string;
   description: string;
   likes: number;
+  comments: Comment[];
   isLiked?: boolean;
 }
 
@@ -18,26 +25,30 @@ function Video() {
       id: 1,
       videoUrl: sharkGif,
       username: "sharky1",
-      description: "blank",
-
-      likes: 0
-
+      description: "Find your center. Swipe up for more & double-tap to like. #meditation",
+      likes: 1200,
+      comments: [
+        { username: 'user1', text: 'So relaxing!' },
+        { username: 'user2', text: 'Great tip, thanks!' }
+      ],
     },
     {
       id: 2,
       videoUrl: sharkGif,
       username: "sharky2",
-      description: "",
-
-      likes: 0
-
+      description: "Another cool video! #awesome",
+      likes: 800,
+      comments: [],
     },
     {
       id: 3,
       videoUrl: sharkGif,
       username: "sharky3",
-      description: "blank",
-      likes: 0
+      description: "Just chilling. #vibes",
+      likes: 3000,
+      comments: [
+        { username: 'user3', text: 'Love this vibe!' }
+      ],
     }
   ]);
 
@@ -122,6 +133,7 @@ function Video() {
             username={video.username}
             description={video.description}
             likes={video.likes}
+            initialComments={video.comments}
           />
         ))}
       </div>
