@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import VideoCard from '../components/VideoCard';
 import sharkGif from '../assets/sharky.gif';
 //import { getSupabaseClient } from '../lib/supabase';
