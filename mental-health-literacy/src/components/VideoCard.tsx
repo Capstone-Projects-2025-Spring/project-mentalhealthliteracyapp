@@ -1,11 +1,232 @@
 import React, { useRef, useState, useEffect } from 'react';
-import './VideoCard.css';
-import Comments from './Comments';
+
+// Styles for VideoCard - normally in VideoCard.css
+const videoCardStyles = `
+.video-card {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  scroll-snap-align: start;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  color: white;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+}
+
+.video-header {
+  text-align: center;
+  font-weight: bold;
+}
+
+.video-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.video-info {
+  max-width: calc(100% - 60px);
+}
+
+.video-info h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.video-info p {
+  font-size: 14px;
+}
+
+.video-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-left: 330px;
+  margin-bottom: 120px;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  text-align: center;
+}
+
+.action-button svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.action-button span {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+`;
+
+// Styles for Comments - normally in Comments.css
+const commentsStyles = `
+.comments-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.comments-container {
+  background: #2c2c2c;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.comments-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.comment {
+  border-bottom: 1px solid #444;
+  padding: 10px 0;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.comment strong {
+  color: #fafafa;
+}
+
+.comment p {
+  color: #ccc;
+  margin: 5px 0 0;
+}
+
+.comment-form {
+  display: flex;
+}
+
+.comment-form input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #555;
+  background: #333;
+  color: white;
+}
+
+.comment-form button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #007bff;
+  color: white;
+  margin-left: 10px;
+  cursor: pointer;
+}
+`;
 
 interface Comment {
   username: string;
   text: string;
 }
+
+interface CommentsProps {
+  comments: Comment[];
+  onAddComment: (comment: Comment) => void;
+  onClose: () => void;
+}
+
+const Comments: React.FC<CommentsProps> = ({ comments, onAddComment, onClose }) => {
+  const [newComment, setNewComment] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newComment.trim()) {
+      onAddComment({ username: 'Guest', text: newComment });
+      setNewComment('');
+    }
+  };
+
+  return (
+    <div className="comments-overlay">
+      <div className="comments-container">
+        <button className="close-button" onClick={onClose}>×</button>
+        <h3>Comments</h3>
+        <div className="comments-list">
+          {comments.map((comment, index) => (
+            <div key={index} className="comment">
+              <strong>{comment.username}</strong>
+              <p>{comment.text}</p>
+            </div>
+          ))}
+        </div>
+        <form onSubmit={handleSubmit} className="comment-form">
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Add a comment..."
+          />
+          <button type="submit">Post</button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 interface VideoCardProps {
   videoUrl: string;
@@ -24,6 +245,15 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, 
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
   const clickTimeout = useRef<number | null>(null);
+
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = videoCardStyles + commentsStyles;
+    document.head.appendChild(styleSheet);
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
 
   const togglePlay = () => {
     if (videoRef.current) {
