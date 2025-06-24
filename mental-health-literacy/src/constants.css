@@ -1,0 +1,21 @@
+:root {
+  --clr-bg-200: hsl(292, 44%, 85%);
+  --clr-bg-300: hsl(290, 43%, 70%);
+  --clr-bg-500: ;
+  --clr-bg-700: hsl(277, 77%, 30%);
+
+  --clr-fc-primary: hsl(0, 0%, 0%);
+  --clr-fc-secondary: hsl(0, 0%, 100%);
+  --clr-fc-hover: hsl(277, 77%, 30%);
+
+  --clr-separator: hsl(0, 0%, 29%);
+
+  --fs-l: 2rem;
+  --fs-md: 1.3rem;
+  --fs-sm: 1rem;
+
+  --fw-sm: 400;
+  --fw-md: 600;
+
+  --ff-primary: "Segoe UI", sans-serif;
+}
