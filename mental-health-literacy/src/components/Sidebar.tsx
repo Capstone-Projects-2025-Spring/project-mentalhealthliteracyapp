@@ -3,6 +3,7 @@ import logo from "../assets/logo.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import "./Sidebar.css";
 
 function Sidebar() {
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
@@ -52,8 +53,12 @@ function Sidebar() {
           </ul>
         </nav>
         <div id="user-actions">
-          <button>Sign-in</button>
-          <button>Register</button>
+          <Link to="/login" className="signin-btn">
+            Sign-in
+          </Link>
+          <Link to="/signup" className="register-btn">
+            Register
+          </Link>
         </div>
       </aside>
     </>
