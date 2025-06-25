@@ -6,9 +6,7 @@ function MainLayout() {
   return (
     <>
       {!noSidebarList.includes(useLocation().pathname) && <Sidebar />}
-      <main>
-        <Outlet />
-      </main>
+      <Outlet />
     </>
   );
 }

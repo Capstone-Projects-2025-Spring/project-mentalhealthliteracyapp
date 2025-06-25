@@ -3,7 +3,8 @@
 #sidebar {
   position: sticky;
   font-family: var(--ff-primary);
-  height: 100%;
+  height: 100vh;
+  top: 0;
 }
 
 #sidebar::after {
