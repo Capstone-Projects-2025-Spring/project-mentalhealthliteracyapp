@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import MuxPlayer from '@mux/mux-player-react';
 
 // Styles for VideoCard - normally in VideoCard.css
 const videoCardStyles = `
@@ -32,6 +33,7 @@ const videoCardStyles = `
   padding: 16px;
   color: white;
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+  pointer-events: none;
 }
 
 .video-header {
@@ -66,6 +68,7 @@ const videoCardStyles = `
   gap: 20px;
   margin-left: 330px;
   margin-bottom: 120px;
+  pointer-events: auto;
 }
 
 .action-button {
@@ -78,6 +81,7 @@ const videoCardStyles = `
   cursor: pointer;
   padding: 0;
   text-align: center;
+  pointer-events: auto;
 }
 
 .action-button svg {
@@ -106,6 +110,7 @@ const commentsStyles = `
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  pointer-events: auto;
 }
 
 .comments-container {
@@ -118,6 +123,7 @@ const commentsStyles = `
   display: flex;
   flex-direction: column;
   position: relative;
+  pointer-events: auto;
 }
 
 .close-button {
@@ -129,6 +135,7 @@ const commentsStyles = `
   color: white;
   font-size: 24px;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .comments-list {
@@ -166,6 +173,7 @@ const commentsStyles = `
   border: 1px solid #555;
   background: #333;
   color: white;
+  pointer-events: auto;
 }
 
 .comment-form button {
@@ -176,6 +184,7 @@ const commentsStyles = `
   color: white;
   margin-left: 10px;
   cursor: pointer;
+  pointer-events: auto;
 }
 `;
 
@@ -229,14 +238,15 @@ const Comments: React.FC<CommentsProps> = ({ comments, onAddComment, onClose }) 
 };
 
 interface VideoCardProps {
-  videoUrl: string;
+  videoUrl?: string;
+  playbackId?: string;
   username: string;
   description: string;
   likes: number;
   initialComments: Comment[];
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, likes, initialComments }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, description, likes, initialComments }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -296,11 +306,20 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, username, description, 
     setComments(prev => [...prev, comment]);
   };
 
-  const isGif = videoUrl.toLowerCase().endsWith('.gif');
+  const isGif = videoUrl && videoUrl.toLowerCase().endsWith('.gif');
 
   return (
     <div className="video-card">
-      {isGif ? (
+      {playbackId ? (
+        <MuxPlayer
+          playbackId={playbackId}
+          metadata={{
+            video_title: description,
+            viewer_user_id: 'Placeholder (optional)',
+          }}
+          style={{ width: '100%', aspectRatio: '16/9' }}
+        />
+      ) : isGif ? (
         <img src={videoUrl} alt={description} className="video-player" onClick={handleVideoClick} />
       ) : (
         <video

@@ -32,7 +32,8 @@ interface Comment {
 
 interface Video {
   id: number;
-  videoUrl: string;
+  playbackId?: string;
+  videoUrl?: string;
   username: string;
   description: string;
   likes: number;
@@ -44,9 +45,9 @@ function Video() {
   const [videos] = useState<Video[]>([
     {
       id: 1,
-      videoUrl: sharkGif,
-      username: "sharky1",
-      description: "Find your center. Swipe up for more & double-tap to like. #meditation",
+      playbackId: "FsnMNRJwGDWF9C01KsSOrze500A9cFtCatEB02Q02B00TT24",
+      username: "mindful_ally",
+      description: "You're not alone. #mentalhealth",
       likes: 1200,
       comments: [
         { username: 'user1', text: 'So relaxing!' },
@@ -55,20 +56,30 @@ function Video() {
     },
     {
       id: 2,
-      videoUrl: sharkGif,
-      username: "sharky2",
-      description: "Another cool video! #awesome",
+      playbackId: "pPH02I7tF7iy00r4GbBLdD4mxaMWSEmmvjwgrETKk6zXw",
+      username: "hopeful_voice",
+      description: "It starts with one conversation. #mentalhealthawareness #letstalk",
       likes: 800,
       comments: [],
     },
     {
       id: 3,
-      videoUrl: sharkGif,
-      username: "sharky3",
-      description: "Just chilling. #vibes",
+      playbackId: "DyNdWvq00sKPP7hywrZ00VWUmjbu53Oth5KeO4BRi602A00",
+      username: "growth_journey",
+      description: "Growth happens in small steps",
       likes: 3000,
       comments: [
         { username: 'user3', text: 'Love this vibe!' }
+      ],
+    },
+    {
+      id: 4,
+      playbackId: "risqYxa7s01lnTKZ7KpVRYS001TErCyandsWNC3xv7jY8",
+      username: "open_ears",
+      description: "Let's talk about mental health",
+      likes: 3000,
+      comments: [
+        { username: 'user4', text: 'Love this vibe!' }
       ],
     }
   ]);
@@ -88,6 +99,7 @@ function Video() {
         <VideoCard
           key={video.id}
           videoUrl={video.videoUrl}
+          playbackId={video.playbackId}
           username={video.username}
           description={video.description}
           likes={video.likes}
