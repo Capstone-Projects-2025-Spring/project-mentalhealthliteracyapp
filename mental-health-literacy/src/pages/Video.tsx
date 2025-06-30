@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import VideoCard from '../components/VideoCard';
 //import sharkGif from '../assets/sharky.gif'; //for testing purposes
 //import { getSupabaseClient } from '../lib/supabase';
@@ -23,6 +23,18 @@ const videoPageStyles = `
 .video-feed::-webkit-scrollbar {
   display: none; /* Chrome, Safari, and Opera */
 }
+
+.video-placeholder {
+  width: 100%;
+  height: 100vh;
+  scroll-snap-align: start;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+}
 `;
 
 interface Comment {
@@ -42,6 +54,9 @@ interface Video {
 }
 
 function Video() {
+  // State for current video index and video refs
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const videoRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [videos] = useState<Video[]>([
     {
       id: 1,
@@ -93,18 +108,64 @@ function Video() {
     };
   }, []);
 
+  useEffect(() => {
+    // Intersection Observer to detect when a video is in view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = videoRefs.current.findIndex(ref => ref === entry.target);
+            if (index !== -1) {
+              setCurrentVideoIndex(index);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: '0px'
+      }
+    );
+
+    // Observe each video ref
+    videoRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    // Cleanup function to disconnect observer
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="video-feed">
-      {videos.map((video) => (
-        <VideoCard
+      {videos.map((video, index) => (
+        <div
           key={video.id}
-          videoUrl={video.videoUrl}
-          playbackId={video.playbackId}
-          username={video.username}
-          description={video.description}
-          likes={video.likes}
-          initialComments={video.comments}
-        />
+          ref={(el) => { videoRefs.current[index] = el; }}
+          style={{ width: '100%', height: '100vh', scrollSnapAlign: 'start' }}
+        >
+          {index === currentVideoIndex ? (
+            <VideoCard
+              videoUrl={video.videoUrl}
+              playbackId={video.playbackId}
+              username={video.username}
+              description={video.description}
+              likes={video.likes}
+              initialComments={video.comments}
+              isActive={true}
+            />
+          ) : (
+            <div className="video-placeholder">
+              <div style={{ textAlign: 'center' }}>
+                <div>@{video.username}</div>
+                <div style={{ fontSize: '14px', marginTop: '8px' }}>{video.description}</div>
+                <div style={{ fontSize: '12px', marginTop: '16px', opacity: 0.7 }}>
+                  Scroll to view video
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );

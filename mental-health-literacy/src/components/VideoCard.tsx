@@ -244,9 +244,10 @@ interface VideoCardProps {
   description: string;
   likes: number;
   initialComments: Comment[];
+  isActive?: boolean;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, description, likes, initialComments }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, description, likes, initialComments, isActive = false }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -307,6 +308,14 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, d
   };
 
   const isGif = videoUrl && videoUrl.toLowerCase().endsWith('.gif');
+
+  // Handle active/inactive video play/pause
+  useEffect(() => {
+    if (!isActive && videoRef.current && isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  }, [isActive, isPlaying]);
 
   return (
     <div className="video-card">
