@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
-import BackButton from "../components/BackButton";
+import CloseButton from "../components/CloseButton";
 
-function SignUp() {
+function SignUp(props) {
   return (
     <>
-      <BackButton />
+      <CloseButton close={props.close}></CloseButton>
       <div className="login-form">
         <h1>Sign Up</h1>
         <form>
@@ -21,7 +20,10 @@ function SignUp() {
         </form>
 
         <p style={{ marginTop: "1rem", textAlign: "center" }}>
-          Already have an account? <Link to="/login">Log in</Link>
+          Already have an account?{" "}
+          <button className="switch-button" onClick={props.switch}>
+            Log In
+          </button>
         </p>
       </div>
     </>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './Comments.css';
+import React, { useState } from "react";
+import "./Comments.css";
 
 interface Comment {
   username: string;
@@ -12,21 +12,27 @@ interface CommentsProps {
   onClose: () => void;
 }
 
-const Comments: React.FC<CommentsProps> = ({ comments, onAddComment, onClose }) => {
-  const [newComment, setNewComment] = useState('');
+const Comments: React.FC<CommentsProps> = ({
+  comments,
+  onAddComment,
+  onClose,
+}) => {
+  const [newComment, setNewComment] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim()) {
-      onAddComment({ username: 'Guest', text: newComment });
-      setNewComment('');
+      onAddComment({ username: "Guest", text: newComment });
+      setNewComment("");
     }
   };
 
   return (
     <div className="comments-overlay">
       <div className="comments-container">
-        <button className="close-button" onClick={onClose}>×</button>
+        <button className="comments-close-button" onClick={onClose}>
+          ×
+        </button>
         <h3>Comments</h3>
         <div className="comments-list">
           {comments.map((comment, index) => (
@@ -50,4 +56,4 @@ const Comments: React.FC<CommentsProps> = ({ comments, onAddComment, onClose }) 
   );
 };
 
-export default Comments; 
+export default Comments;
