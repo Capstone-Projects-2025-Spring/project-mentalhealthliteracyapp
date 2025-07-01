@@ -22,6 +22,7 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background: #fff;
 }
 
 img,
@@ -73,7 +74,7 @@ Our own CSS
 
 #root {
   display: grid;
-  grid-template-columns: 15rem 1fr;
+  grid-template-columns: 15rem 1fr 25rem;
   height: 100vh;
   min-height: calc(max(100vh, 20rem));
 }
