@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import MuxPlayer from '@mux/mux-player-react';
+import React, { useRef, useState, useEffect } from "react";
+import MuxPlayer from "@mux/mux-player-react";
 
 // Styles for VideoCard - normally in VideoCard.css
 const videoCardStyles = `
@@ -273,10 +273,10 @@ interface CommentsProps {
 
 const Comments: React.FC<CommentsProps> = ({ comments, onAddComment, onClose, isOpen }) => {
   const [newComment, setNewComment] = useState('');
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim()) {
+
       onAddComment({ 
         username: 'Guest', 
         text: newComment,
@@ -344,7 +344,15 @@ interface VideoCardProps {
   isActive?: boolean;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, description, likes, initialComments, isActive = false }) => {
+const VideoCard: React.FC<VideoCardProps> = ({
+  videoUrl,
+  playbackId,
+  username,
+  description,
+  likes,
+  initialComments,
+  isActive = false,
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -368,14 +376,16 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, d
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play().catch(error => console.error("Video play failed:", error));
+        videoRef.current
+          .play()
+          .catch((error) => console.error("Video play failed:", error));
       }
       setIsPlaying(!isPlaying);
     }
   };
 
   const handleLike = () => {
-    setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
     setIsLiked(!isLiked);
   };
 
@@ -401,10 +411,10 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, d
   }, []);
 
   const handleAddComment = (comment: Comment) => {
-    setComments(prev => [...prev, comment]);
+    setComments((prev) => [...prev, comment]);
   };
 
-  const isGif = videoUrl && videoUrl.toLowerCase().endsWith('.gif');
+  const isGif = videoUrl && videoUrl.toLowerCase().endsWith(".gif");
 
   // Handle active/inactive video play/pause
   useEffect(() => {
@@ -421,12 +431,17 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, d
           playbackId={playbackId}
           metadata={{
             video_title: description,
-            viewer_user_id: 'Placeholder (optional)',
+            viewer_user_id: "Placeholder (optional)",
           }}
-          style={{ width: '100%', aspectRatio: '16/9' }}
+          style={{ width: "100%", aspectRatio: "16/9" }}
         />
       ) : isGif ? (
-        <img src={videoUrl} alt={description} className="video-player" onClick={handleVideoClick} />
+        <img
+          src={videoUrl}
+          alt={description}
+          className="video-player"
+          onClick={handleVideoClick}
+        />
       ) : (
         <video
           ref={videoRef}
@@ -445,6 +460,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoUrl, playbackId, username, d
           </div>
           <div className="video-actions">
             <button className="action-button" onClick={handleLike}>
+
               <svg viewBox="0 0 24 24" fill={isLiked ? '#ff4d4d' : '#fff'} style={{ transition: 'fill 0.2s' }}>
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>

@@ -1,0 +1,15 @@
+.back-button {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: var(--clr-bg-700);
+  color: hsl(0, 0%, 100%);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: var(--fs-md);
+  cursor: pointer;
+  box-shadow: 0 4px 8px hsl(0, 0%, 0%, 0.2);
+  transition: all 0.3s ease;
+}
