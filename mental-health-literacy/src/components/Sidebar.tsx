@@ -25,11 +25,13 @@ function Sidebar() {
 
           <ul>
             <li
+                id="nav-welcome"
               className={useLocation().pathname == "/" ? "active" : "inactive"}
             >
               <Link to="/">Welcome</Link>
             </li>
             <li
+                id="nav-tutorial"
               className={
                 useLocation().pathname == "/tutorial" ? "active" : "inactive"
               }
@@ -37,6 +39,7 @@ function Sidebar() {
               <Link to="/tutorial">Tutorial</Link>
             </li>
             <li
+                id="nav-video"
               className={
                 useLocation().pathname == "/video" ? "active" : "inactive"
               }
@@ -44,6 +47,7 @@ function Sidebar() {
               <Link to="/video">Video</Link>
             </li>
             <li
+                id="nav-resources"
               className={
                 useLocation().pathname == "/resources" ? "active" : "inactive"
               }
@@ -53,10 +57,10 @@ function Sidebar() {
           </ul>
         </nav>
         <div id="user-actions">
-          <Link to="/login" className="signin-btn">
+          <Link id="nav-login" to="/login" className="signin-btn">
             Sign-in
           </Link>
-          <Link to="/signup" className="register-btn">
+          <Link id="nav-signup" to="/signup" className="register-btn">
             Register
           </Link>
         </div>
