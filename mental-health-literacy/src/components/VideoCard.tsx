@@ -337,6 +337,7 @@ const Comments: React.FC<CommentsProps> = ({ comments, onAddComment, onClose, is
 interface VideoCardProps {
   videoUrl?: string;
   playbackId?: string;
+  imageUrl?: string;
   username: string;
   description: string;
   likes: number;
@@ -347,6 +348,7 @@ interface VideoCardProps {
 const VideoCard: React.FC<VideoCardProps> = ({
   videoUrl,
   playbackId,
+  imageUrl,
   username,
   description,
   likes,
@@ -426,7 +428,14 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   return (
     <div className="video-card">
-      {playbackId ? (
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={description}
+          className="video-player"
+          onClick={handleLike}
+        />
+      ) : playbackId ? (
         <MuxPlayer
           playbackId={playbackId}
           metadata={{

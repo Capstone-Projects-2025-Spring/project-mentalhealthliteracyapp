@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import VideoCard from '../components/VideoCard';
+import anxietyImg from '../assets/anxiety.png';
+import depressionImg from '../assets/depression.png';
+import stressImg from '../assets/stress.png';
 //import sharkGif from '../assets/sharky.gif'; //for testing purposes
 //import { getSupabaseClient } from '../lib/supabase';
 import './Video.css';
@@ -46,6 +49,7 @@ interface Video {
   id: number;
   playbackId?: string;
   videoUrl?: string;
+  imageUrl?: string;
   username: string;
   description: string;
   likes: number;
@@ -71,6 +75,17 @@ function Video() {
     },
     {
       id: 2,
+      imageUrl: anxietyImg,
+      username: "mental_health_edu",
+      description: "Understanding anxiety and how it affects daily life. #anxiety #mentalhealth",
+      likes: 950,
+      comments: [
+        { username: 'user5', text: 'This really helped me understand anxiety better' },
+        { username: 'user6', text: 'Thank you for sharing this information' }
+      ],
+    },
+    {
+      id: 3,
       playbackId: "pPH02I7tF7iy00r4GbBLdD4mxaMWSEmmvjwgrETKk6zXw",
       username: "hopeful_voice",
       description: "It starts with one conversation. #mentalhealthawareness #letstalk",
@@ -78,7 +93,17 @@ function Video() {
       comments: [],
     },
     {
-      id: 3,
+      id: 4,
+      imageUrl: depressionImg,
+      username: "wellness_guide",
+      description: "Depression is a common mental health condition. Let's break the stigma. #depression #support",
+      likes: 1150,
+      comments: [
+        { username: 'user7', text: 'Important information to share' },
+      ],
+    },
+    {
+      id: 5,
       playbackId: "DyNdWvq00sKPP7hywrZ00VWUmjbu53Oth5KeO4BRi602A00",
       username: "growth_journey",
       description: "Growth happens in small steps",
@@ -88,7 +113,18 @@ function Video() {
       ],
     },
     {
-      id: 4,
+      id: 6,
+      imageUrl: stressImg,
+      username: "calm_mind",
+      description: "Stress is natural, but learning to manage it makes all the difference. #stress #wellness",
+      likes: 890,
+      comments: [
+        { username: 'user8', text: 'Great tips for managing stress!' },
+        { username: 'user9', text: 'I needed to see this today' }
+      ],
+    },
+    {
+      id: 7,
       playbackId: "risqYxa7s01lnTKZ7KpVRYS001TErCyandsWNC3xv7jY8",
       username: "open_ears",
       description: "Let's talk about mental health",
@@ -148,6 +184,7 @@ function Video() {
             <VideoCard
               videoUrl={video.videoUrl}
               playbackId={video.playbackId}
+              imageUrl={video.imageUrl}
               username={video.username}
               description={video.description}
               likes={video.likes}
