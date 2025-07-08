@@ -1,6 +1,6 @@
 import CloseButton from "../components/CloseButton";
 
-function SignUp(props) {
+function SignUp(props: any) {
   return (
     <>
       <CloseButton close={props.close}></CloseButton>

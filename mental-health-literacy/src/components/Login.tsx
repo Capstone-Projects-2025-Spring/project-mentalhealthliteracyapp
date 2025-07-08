@@ -1,6 +1,6 @@
 import "./Login.css";
 import CloseButton from "./CloseButton";
-function Login(props) {
+function Login(props: any) {
   return (
     <>
       <CloseButton close={props.close}></CloseButton>

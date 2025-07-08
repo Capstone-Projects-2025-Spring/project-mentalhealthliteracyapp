@@ -1,11 +1,21 @@
-import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/logo.png";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import "./Sidebar.css";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import logo from "../assets/logo.png";
+import Login from "../components/Login";
+import SignUp from "../components/SignUp";
+
+import style from "./Sidebar.css?url";
+
+export function links() {
+  return [
+    {
+      rel: "stylesheet",
+      href: style,
+    },
+  ];
+}
 
 function Sidebar() {
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
@@ -39,7 +49,7 @@ function Sidebar() {
   };
 
   return (
-    <>
+    <div id="root">
       <dialog ref={loginRef} className="dialog dialog-centered">
         <Login
           close={() => {
@@ -76,11 +86,13 @@ function Sidebar() {
 
           <ul>
             <li
+              id="nav-welcome"
               className={useLocation().pathname == "/" ? "active" : "inactive"}
             >
               <Link to="/">Welcome</Link>
             </li>
             <li
+              id="nav-tutorial"
               className={
                 useLocation().pathname == "/tutorial" ? "active" : "inactive"
               }
@@ -88,6 +100,7 @@ function Sidebar() {
               <Link to="/tutorial">Tutorial</Link>
             </li>
             <li
+              id="nav-video"
               className={
                 useLocation().pathname == "/video" ? "active" : "inactive"
               }
@@ -95,6 +108,7 @@ function Sidebar() {
               <Link to="/video">Video</Link>
             </li>
             <li
+              id="nav-resources"
               className={
                 useLocation().pathname == "/resources" ? "active" : "inactive"
               }
@@ -104,10 +118,10 @@ function Sidebar() {
           </ul>
         </nav>
         <div id="user-actions">
-          {/* <Link to="/login" className="signin-btn">
+          {/* <Link id="nav-login" to="/login" className="signin-btn">
             Sign-in
           </Link>
-          <Link to="/signup" className="register-btn">
+          <Link id="nav-signup" to="/signup" className="register-btn">
             Register
           </Link> */}
           <button
@@ -128,7 +142,9 @@ function Sidebar() {
           </button>
         </div>
       </aside>
-    </>
+
+      <Outlet />
+    </div>
   );
 }
 
