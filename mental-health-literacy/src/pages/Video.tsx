@@ -103,18 +103,6 @@ function Video() {
       ],
     },
     {
-      id: 6,
-      imageUrl: stressImg,
-      username: "calm_mind",
-      description:
-        "Stress is natural, but learning to manage it makes all the difference. #stress #wellness",
-      likes: 890,
-      comments: [
-        { username: "user8", text: "Great tips for managing stress!" },
-        { username: "user9", text: "I needed to see this today" },
-      ],
-    },
-    {
       id: 7,
       playbackId: "risqYxa7s01lnTKZ7KpVRYS001TErCyandsWNC3xv7jY8",
       username: "open_ears",
