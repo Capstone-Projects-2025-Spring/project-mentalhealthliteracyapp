@@ -8,6 +8,7 @@ import {
 import type { Route } from "./+types/root";
 
 import appStylesHref from "./main.css?url";
+import logo from "./assets/logo.png?url";
 
 export default function App() {
   return <Outlet />;
@@ -20,10 +21,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <title>Amazing Tutorial with React Router</title>
+        <title>Mental Health Literacy</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href={appStylesHref} />
+        <link rel="icon" href={logo} />
         <Links />
       </head>
       <body>
