@@ -137,3 +137,43 @@ sequenceDiagram
     deactivate "Auth Service (Supabase)"
     deactivate App
 ```
+## Use Case 6 - Liking Videos
+```mermaid
+sequenceDiagram
+    participant User
+    participant App
+    participant "Auth Service (Supabase)"
+    participant "PostgreSQL"
+    User->>App: Launch app
+    activate App
+    App-->>User: Welcome screen<br>Sign Up / Log In
+    User->>App: Tap "Log In"
+    App-->>User: Show Log in form
+    User->>App: Enter email, pwd -> "Log In"
+    App->>"Auth Service (Supabase)": SELECT /user
+    activate "Auth Service (Supabase)"
+    "Auth Service (Supabase)"->>"PostgreSQL": Validate email and pwd
+    "PostgreSQL"-->>"Auth Service (Supabase)": /user Exists
+    "Auth Service (Supabase)"->>App: 200 OK (user Exists)
+    App-->>User: Show Home screen
+    User->>App: Tap "Videos"
+    App->>"PostgreSQL": GET /videos
+    activate "PostgreSQL"
+    "PostgreSQL"-->>App: Return video list
+    deactivate "PostgreSQL"
+    App-->>User: Display videos
+    User->>App: Tap "Like" on a video
+    App->>"PostgreSQL": POST /user/like (videoID)
+    activate "PostgreSQL"
+    "PostgreSQL"-->>App: Like saved
+    deactivate "PostgreSQL"
+    App-->>User: Show heart animation/confirmation
+    User->>App: Tap "Liked Videos"
+    App->>"PostgreSQL": GET /user/liked-videos
+    activate "PostgreSQL"
+    "PostgreSQL"-->>App: Return liked videos
+    deactivate "PostgreSQL"
+    App-->>User: Display liked videos
+    deactivate "Auth Service (Supabase)"
+    deactivate App
+```
