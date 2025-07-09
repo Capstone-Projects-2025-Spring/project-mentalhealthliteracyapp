@@ -1,7 +1,7 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=19548116)
 <div align="center">
 
-# Project Name
+# Mental Health Literacy
 [![Report Issue on Jira](https://img.shields.io/badge/Report%20Issues-Jira-0052CC?style=flat&logo=jira-software)](https://temple-cis-projects-in-cs.atlassian.net/jira/software/c/projects/DT/issues)
 [![Deploy Docs](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml/badge.svg)](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml)
 [![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://applebaumian.github.io/tu-cis-4398-docs-template/)
@@ -17,6 +17,15 @@ Section 701, Mental Health, Mobile Application
 ## Project Abstract
 
 This project proposes the development of a mental health literacy app centered around journaling as a foundational tool for everyday emotional self-care. The app is designed to encourage users to regularly reflect and document their thoughts and feelings, fostering awareness and emotional clarity. Unlike diagnostic tools, this app will not attempt to label or assess users' mental health conditions. Instead, it aims to build trust through a safe, non judgmental journaling experience. As users engage with the app, they will be gently guided toward accessible, vetted mental health resources should they choose to seek additional support. The goal is to empower users with self-awareness and provide a seamless bridge to professional help when needed without pressure, stigma, or clinical labeling.
+
+## Installation Instructions
+To run the project, Node.js is required. [Install](https://nodejs.org/en)
+```
+git clone https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp.git
+cd ./project-mentalhealthliteracyapp/mental-health-literacy
+npm install
+npm run dev
+```
 
 ## High Level Requirement
 
