@@ -6,12 +6,18 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 import type { Route } from "./+types/root";
+import { Provider } from "react-redux";
 
 import appStylesHref from "./main.css?url";
 import logo from "./assets/logo.png?url";
+import { store } from "./context/global_store";
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <Provider store={store}>
+      <Outlet />
+    </Provider>
+  );
 }
 
 // The Layout component is a special export for the root route.
