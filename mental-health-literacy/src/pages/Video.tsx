@@ -7,10 +7,7 @@ import stressImg from "../assets/stress.png";
 //import { getSupabaseClient } from '../lib/supabase';
 import style from "./Video.css?url";
 
-interface Comment {
-  username: string;
-  text: string;
-}
+
 
 interface Video {
   id: number;
@@ -20,7 +17,6 @@ interface Video {
   username: string;
   description: string;
   likes: number;
-  comments: Comment[];
   isLiked?: boolean;
 }
 
@@ -44,10 +40,6 @@ function Video() {
       username: "mindful_ally",
       description: "You're not alone. #mentalhealth",
       likes: 1200,
-      comments: [
-        { username: "user1", text: "So relaxing!" },
-        { username: "user2", text: "Great tip, thanks!" },
-      ],
     },
     {
       id: 2,
@@ -56,13 +48,6 @@ function Video() {
       description:
         "Understanding anxiety and how it affects daily life. #anxiety #mentalhealth",
       likes: 950,
-      comments: [
-        {
-          username: "user5",
-          text: "This really helped me understand anxiety better",
-        },
-        { username: "user6", text: "Thank you for sharing this information" },
-      ],
     },
     {
       id: 3,
@@ -71,7 +56,6 @@ function Video() {
       description:
         "It starts with one conversation. #mentalhealthawareness #letstalk",
       likes: 800,
-      comments: [],
     },
     {
       id: 4,
@@ -80,7 +64,6 @@ function Video() {
       description:
         "Depression is a common mental health condition. Let's break the stigma. #depression #support",
       likes: 1150,
-      comments: [{ username: "user7", text: "Important information to share" }],
     },
     {
       id: 5,
@@ -88,7 +71,6 @@ function Video() {
       username: "growth_journey",
       description: "Growth happens in small steps",
       likes: 3000,
-      comments: [{ username: "user3", text: "Love this vibe!" }],
     },
     {
       id: 6,
@@ -97,10 +79,6 @@ function Video() {
       description:
         "Stress is natural, but learning to manage it makes all the difference. #stress #wellness",
       likes: 890,
-      comments: [
-        { username: "user8", text: "Great tips for managing stress!" },
-        { username: "user9", text: "I needed to see this today" },
-      ],
     },
     {
       id: 7,
@@ -108,7 +86,6 @@ function Video() {
       username: "open_ears",
       description: "Let's talk about mental health",
       likes: 3000,
-      comments: [{ username: "user4", text: "Love this vibe!" }],
     },
   ]);
 
@@ -160,7 +137,6 @@ function Video() {
               username={video.username}
               description={video.description}
               likes={video.likes}
-              initialComments={video.comments}
               isActive={true}
             />
           ) : (
