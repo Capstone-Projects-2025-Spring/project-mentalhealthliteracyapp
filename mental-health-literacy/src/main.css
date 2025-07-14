@@ -78,10 +78,12 @@ Our own CSS
   height: 100vh;
   min-height: calc(max(100vh, 20rem));
 }
+
 aside {
   display: flex;
   flex-direction: column;
 }
+
 main {
   width: 100%;
   height: 100%;
@@ -92,9 +94,110 @@ main {
   height: 100%;
 }
 
-@media screen and (max-width: 720px) {
+/* Mobile Responsive Design */
+@media screen and (max-width: 768px) {
   #root {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  
+  aside {
+    display: none; /* Hide sidebar on mobile */
+  }
+  
+  .video-feed {
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .video-card {
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .video-info {
+    padding: 1rem;
+  }
+  
+  .video-details h4 {
+    font-size: 1rem;
+  }
+  
+  .video-details p {
+    font-size: 0.875rem;
+  }
+  
+  .action-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    min-width: 3.5rem;
+    margin-right: 0.75rem;
+    margin-bottom: 3rem;
+  }
+  
+  .login-form {
+    margin: 1rem;
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  /* Ensure menu button is above video content */
+  #menu-toggle {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
+    z-index: 1001 !important;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+  .video-info {
+    padding: 0.75rem;
+  }
+  
+  .video-details h4 {
+    font-size: 0.875rem;
+  }
+  
+  .video-details p {
+    font-size: 0.75rem;
+  }
+  
+  .action-button {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    min-width: 3rem;
+  }
+  
+  .login-form {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+}
+
+/* Landscape mobile */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .video-card {
+    flex-direction: row;
+  }
+  
+  .video-player {
+    width: 60%;
+    height: 100%;
+  }
+  
+  .video-info {
+    width: 40%;
+    position: relative;
+    padding: 1rem;
   }
 }
 
@@ -162,8 +265,6 @@ main {
   right: 0;
   padding: 1.5rem;
   color: white;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  z-index: 1;
 }
 
 .video-details {
@@ -196,8 +297,10 @@ main {
   padding: 0.75rem 1.5rem;
   border-radius: 2rem;
   font-size: 1rem;
+  margin-right: 1.875rem; 
+  margin-bottom: 6.25rem;
   transition: all 0.2s ease;
-  min-width: 6rem;
+  min-width: 4.75rem;
   text-align: center;
 }
 
