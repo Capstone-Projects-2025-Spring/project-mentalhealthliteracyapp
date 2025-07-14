@@ -18,6 +18,7 @@ interface Video {
   description: string;
   likes: number;
   isLiked?: boolean;
+  tags?: { label: string; url: string }[];
 }
 
 export function links() {
@@ -36,10 +37,14 @@ function Video() {
   const [videos] = useState<Video[]>([
     {
       id: 1,
-      playbackId: "FsnMNRJwGDWF9C01KsSOrze500A9cFtCatEB02Q02B00TT24",
-      username: "mindful_ally",
-      description: "You're not alone. #mentalhealth",
+      playbackId: "yqxGVhVrrkaM6UvIKNEkTbcR8AIdWJ5Dfsvh43TS7sg",
+      username: "cbt_therapist",
+      description: "Experience a one-on-one CBT therapy session. #CBT #TherapySession",
       likes: 1200,
+      tags: [
+        { label: "CBT", url: "/resources/cbt" },
+        { label: "Therapy", url: "/resources/therapy" },
+      ],
     },
     {
       id: 2,
@@ -48,14 +53,22 @@ function Video() {
       description:
         "Understanding anxiety and how it affects daily life. #anxiety #mentalhealth",
       likes: 950,
+      tags: [
+        { label: "Anxiety", url: "/resources/anxiety" },
+        { label: "CBT", url: "/resources/cbt" },
+      ],
     },
     {
       id: 3,
-      playbackId: "pPH02I7tF7iy00r4GbBLdD4mxaMWSEmmvjwgrETKk6zXw",
-      username: "hopeful_voice",
+      playbackId: "XySCCoSeiLPRkasKAMi1GQtmZH78vOu9GKnSDEDUpQY",
+      username: "peer_supporter",
       description:
-        "It starts with one conversation. #mentalhealthawareness #letstalk",
+        "Discover the Togetherall app: a safe, anonymous space for mental health peer support. #Togetherall #PeerSupport",
       likes: 800,
+      tags: [
+        { label: "Peer Support", url: "/resources/peer-support" },
+        { label: "Apps", url: "/resources/apps" },
+      ],
     },
     {
       id: 4,
@@ -64,13 +77,21 @@ function Video() {
       description:
         "Depression is a common mental health condition. Let's break the stigma. #depression #support",
       likes: 1150,
+      tags: [
+        { label: "Depression", url: "/resources/depression" },
+        { label: "Support", url: "/resources/support" },
+      ],
     },
     {
       id: 5,
-      playbackId: "DyNdWvq00sKPP7hywrZ00VWUmjbu53Oth5KeO4BRi602A00",
-      username: "growth_journey",
-      description: "Growth happens in small steps",
+      playbackId: "6bF6fj3MLNyOPJtZH500uRnzw6p7gIRqzjq3NI4uIxD8",
+      username: "group_therapy_cbt",
+      description: "Join a group CBT therapy session and learn together. #GroupTherapy #CBT",
       likes: 3000,
+      tags: [
+        { label: "CBT", url: "/resources/cbt" },
+        { label: "Group Therapy", url: "/resources/group-therapy" },
+      ],
     },
     {
       id: 6,
@@ -79,6 +100,10 @@ function Video() {
       description:
         "Stress is natural, but learning to manage it makes all the difference. #stress #wellness",
       likes: 890,
+      tags: [
+        { label: "Stress", url: "/resources/stress" },
+        { label: "Wellness", url: "/resources/wellness" },
+      ],
     },
     {
       id: 7,
@@ -86,6 +111,20 @@ function Video() {
       username: "open_ears",
       description: "Let's talk about mental health",
       likes: 3000,
+      tags: [
+        { label: "Mental Health", url: "/resources/mental-health" },
+      ],
+    },
+    {
+      id: 8,
+      playbackId: "QiDNSKw1QkXMWz32AVmMYjiKYE3f8eVd6AX02F9Bgm2w",
+      username: "yoga_influencer",
+      description: "Join me for a therapeutic yoga session to boost your mental well-being. #YogaTherapy #Mindfulness",
+      likes: 2100,
+      tags: [
+        { label: "Yoga", url: "/resources/yoga" },
+        { label: "Mindfulness", url: "/resources/mindfulness" },
+      ],
     },
   ]);
 
@@ -138,6 +177,7 @@ function Video() {
               description={video.description}
               likes={video.likes}
               isActive={true}
+              tags={video.tags}
             />
           ) : (
             <div className="video-placeholder">

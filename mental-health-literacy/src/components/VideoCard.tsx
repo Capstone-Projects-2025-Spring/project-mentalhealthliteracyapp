@@ -109,6 +109,10 @@ const videoCardStyles = `
   color: #888;
 }
 
+.video-tags, .video-tag {
+  pointer-events: auto;
+}
+
 /* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
   .video-card {
@@ -245,6 +249,7 @@ interface VideoCardProps {
   description: string;
   likes: number;
   isActive?: boolean;
+  tags?: { label: string; url: string }[];
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({
@@ -255,6 +260,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   description,
   likes,
   isActive = false,
+  tags = [],
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -363,6 +369,30 @@ const VideoCard: React.FC<VideoCardProps> = ({
           <div className="video-info">
             <h4>@{username}</h4>
             <p>{description}</p>
+            {tags && tags.length > 0 && (
+              <div className="video-tags" style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+                {tags.map((tag) => (
+                  <a
+                    key={tag.label}
+                    href={tag.url}
+                    className="video-tag"
+                    style={{
+                      background: '#333',
+                      color: '#fff',
+                      borderRadius: 16,
+                      padding: '4px 12px',
+                      fontSize: 14,
+                      textDecoration: 'none',
+                      transition: 'background 0.2s',
+                    }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {tag.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
           <div className="video-actions">
             <button className="action-button" onClick={handleLike}>
