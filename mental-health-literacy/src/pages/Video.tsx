@@ -42,7 +42,7 @@ function Video() {
       description: "Experience a one-on-one CBT therapy session. #CBT #TherapySession",
       likes: 1200,
       tags: [
-        { label: "CBT", url: "/resources/cbt" },
+        { label: "CBT", url: "/cbt" },
         { label: "Therapy", url: "/resources/therapy" },
       ],
     },
@@ -89,7 +89,7 @@ function Video() {
       description: "Join a group CBT therapy session and learn together. #GroupTherapy #CBT",
       likes: 3000,
       tags: [
-        { label: "CBT", url: "/resources/cbt" },
+        { label: "CBT", url: "/group-therapy" },
         { label: "Group Therapy", url: "/resources/group-therapy" },
       ],
     },
@@ -121,8 +121,8 @@ function Video() {
       username: "yoga_influencer",
       description: "Join me for a therapeutic yoga session to boost your mental well-being. #YogaTherapy #Mindfulness",
       likes: 2100,
-      tags: [
-        { label: "Yoga", url: "/resources/yoga" },
+      tags: [s
+        { label: "Yoga", url: "/yoga" },
         { label: "Mindfulness", url: "/resources/mindfulness" },
       ],
     },
