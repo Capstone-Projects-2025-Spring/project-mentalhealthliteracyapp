@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./resources.css";
+import "./Resources.css";
 
 const Yoga = () => {
     return (
