@@ -14,5 +14,8 @@ export default [
     route("/cbt", "pages/CBT.tsx"),
     route("/group-therapy", "pages/GroupTherapy.tsx"),
     route("/yoga", "pages/Yoga.tsx"),
+    route("/animal-therapy", "pages/AnimalTherapy.tsx"),
+    route("/art-therapy", "pages/ArtTherapy.tsx"),
+    route("/family-therapy", "pages/FamilyTherapy.tsx"),
   ]),
 ] satisfies RouteConfig;
