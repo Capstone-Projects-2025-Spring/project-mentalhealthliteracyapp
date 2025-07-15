@@ -121,8 +121,8 @@ function Video() {
       username: "yoga_influencer",
       description: "Join me for a therapeutic yoga session to boost your mental well-being. #YogaTherapy #Mindfulness",
       likes: 2100,
-      tags: [s
-        { label: "Yoga", url: "/yoga" },
+      tags: [
+        { label: "Yoga", url: "yoga" },
         { label: "Mindfulness", url: "/resources/mindfulness" },
       ],
     },
