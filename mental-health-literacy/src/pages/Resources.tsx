@@ -48,11 +48,11 @@ const Resources = () => {
                             Integrates mental health, human services, and the creative process.
                         </div>
                     </Link>
-                    <Link to="/family-therapy" className="resource-card"> 
+                    <Link to="/family-therapy" className="resource-card">
                         <img src={familyTherapy} alt="Family Therapy" className="card-image" />
                         <div className="resource-title">Family Therapy</div>
                         <div className="resource-meta">
-                            Improves relationships and communication among family members. Learn about family therapy and services at Temple.
+                            Improves relationships and communication among family members.
                         </div>
                     </Link>
                 </div>
