@@ -4,6 +4,7 @@ import groupTherapy from "../assets/group-therapy.png";
 import cbt from "../assets/cbt.png";
 import therapeuticYoga from "../assets/therapeutic-yoga.png";
 import animalTherapy from "../assets/animal-therapy.png";
+import artTherapy from "../assets/art.png";
 
 const Resources = () => {
     return (
@@ -33,10 +34,17 @@ const Resources = () => {
                         </div>
                     </Link>
                     <Link to="/animal-therapy" className="resource-card">
-                        <img src={animalTherapy} alt="Animal-Assisted Therapy" className="card-image" />
+                        <img src={animalTherapy} alt="Animal Assisted Therapy" className="card-image" />
                         <div className="resource-title">Animal Assisted Therapy</div>
                         <div className="resource-meta">
-                            Comfort and support from therapy animals such as dogs and cats
+                            Comfort and support from therapy animals such as dogs and cats.
+                        </div>
+                    </Link>
+                    <Link to="/art-therapy" className="resource-card"> {/* New card */}
+                        <img src={artTherapy} alt="Art Therapy" className="card-image" />
+                        <div className="resource-title">Art Therapy</div>
+                        <div className="resource-meta">
+                            Integrates mental health, human services, and the creative process.
                         </div>
                     </Link>
                 </div>

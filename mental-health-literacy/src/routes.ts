@@ -15,5 +15,6 @@ export default [
     route("/group-therapy", "pages/GroupTherapy.tsx"),
     route("/yoga", "pages/Yoga.tsx"),
     route("/animal-therapy", "pages/AnimalTherapy.tsx"),
+    route("/art-therapy", "pages/ArtTherapy.tsx"),
   ]),
 ] satisfies RouteConfig;
