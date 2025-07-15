@@ -3,6 +3,7 @@ import "./Resources.css";
 import groupTherapy from "../assets/group-therapy.png";
 import cbt from "../assets/cbt.png";
 import therapeuticYoga from "../assets/therapeutic-yoga.png";
+import animalTherapy from "../assets/animal-therapy.png";
 
 const Resources = () => {
     return (
@@ -29,6 +30,13 @@ const Resources = () => {
                         <div className="resource-title">Therapeutic Yoga</div>
                         <div className="resource-meta">
                             Reduces stress and improves mood.
+                        </div>
+                    </Link>
+                    <Link to="/animal-therapy" className="resource-card">
+                        <img src={animalTherapy} alt="Animal-Assisted Therapy" className="card-image" />
+                        <div className="resource-title">Animal Assisted Therapy</div>
+                        <div className="resource-meta">
+                            Comfort and support from therapy animals such as dogs and cats
                         </div>
                     </Link>
                 </div>
