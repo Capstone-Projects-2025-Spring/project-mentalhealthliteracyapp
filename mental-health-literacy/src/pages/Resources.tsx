@@ -1,7 +1,39 @@
-function Resources() {
-  return (
-    <div className="main-screen">
-    </div>
-  );
-}
+import { Link } from "react-router-dom";
+import "./Resources.css";
+import groupTherapy from "../assets/group-therapy.png";
+import cbt from "../assets/cbt.png";
+import therapeuticYoga from "../assets/therapeutic-yoga.png";
+
+const Resources = () => {
+    return (
+        <div className="resources-container">
+            <div className="section">
+                <h2 className="section-title">Mental Health Conditions</h2>
+                <div className="card-grid">
+                    <Link to="/cbt" className="resource-card">
+                        <img src={cbt} alt="CBT" className="card-image" />
+                        <div className="resource-title">Cognitive Behavioral Therapy</div>
+                        <div className="resource-meta">
+                            Effective for depression and anxiety disorders.
+                        </div>
+                    </Link>
+                    <Link to="/group-therapy" className="resource-card">
+                        <img src={groupTherapy} alt="Group Therapy" className="card-image" />
+                        <div className="resource-title">Group Therapy</div>
+                        <div className="resource-meta">
+                            Support for anxiety, depression, and PTSD.
+                        </div>
+                    </Link>
+                    <Link to="/yoga" className="resource-card">
+                        <img src={therapeuticYoga} alt="Therapeutic Yoga" className="card-image" />
+                        <div className="resource-title">Therapeutic Yoga</div>
+                        <div className="resource-meta">
+                            Reduces stress and improves mood.
+                        </div>
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+};
 export default Resources;

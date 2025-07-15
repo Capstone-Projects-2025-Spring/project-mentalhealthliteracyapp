@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./resources.css";
 
 const CBT = () => {
@@ -43,6 +44,9 @@ const CBT = () => {
                     </a>
                 </div>
             </div>
+            <Link to="/resources" className="back-button">
+                &larr; Back to Resources
+            </Link>
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./resources.css";
 
 const GroupTherapy = () => {
@@ -56,6 +57,9 @@ const GroupTherapy = () => {
                     </a>
                 </div>
             </div>
+            <Link to="/resources" className="back-button">
+                &larr; Back to Resources
+            </Link>
         </div>
     );
 };
