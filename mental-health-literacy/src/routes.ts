@@ -11,5 +11,8 @@ export default [
     route("/tutorial", "pages/Tutorial.tsx"),
     route("/video", "pages/Video.tsx"),
     route("resources", "pages/Resources.tsx"),
+    route("/cbt", "pages/CBT.tsx"),
+    route("/group-therapy", "pages/GroupTherapy.tsx"),
+    route("/yoga", "pages/Yoga.tsx"),
   ]),
 ] satisfies RouteConfig;
