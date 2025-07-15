@@ -341,6 +341,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
       ) : playbackId ? (
         <MuxPlayer
           playbackId={playbackId}
+          autoPlay
+          muted
+          loop
           metadata={{
             video_title: description,
             viewer_user_id: "Placeholder (optional)",
