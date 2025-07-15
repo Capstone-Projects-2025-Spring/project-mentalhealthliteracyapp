@@ -6,10 +6,12 @@ import "./Resources.css";
 import groupTherapy from "../assets/group-therapy.png";
 import cbt from "../assets/cbt.png";
 import therapeuticYoga from "../assets/therapeutic-yoga.png";
+import helpIcon from "../assets/help.png";
 
 const Resources = () => {
     const [run, setRun] = useState(false);
     const navigate = useNavigate();
+    const [showDialog, setShowDialog] = useState(false);
     const steps: Step[] = [
         {
             target: "#resource-cbt",
@@ -49,14 +51,38 @@ const Resources = () => {
                     skip: "Skip tutorial",
                 }}
             />
+            {showDialog && (
+                <div className="help-dialog-overlay">
+                    <div className="help-dialog">
+                        <div className="help-dialog-message">
+                            Follow the highlighted dots for a guided tutorial of the resources page!
+                        </div>
+                        <button
+                            className="help-dialog-close"
+                            onClick={() => { setShowDialog(false); setRun(true); }}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
             <div className="section">
                 <h2 className="section-title">Mental Health Conditions</h2>
                 <button
                     className="guided-tour-btn"
                     onClick={() => setRun(true)}
+                    style={{ display: "none" }}
                 >
                     Tutorial
                 </button>
+                <img
+                    src={helpIcon}
+                    alt="Help"
+                    className="help-icon"
+                    style={{ width: 36, height: 36, cursor: "pointer", marginBottom: "2rem" }}
+                    onClick={() => setShowDialog(true)}
+                    title="Help"
+                />
                 <div className="card-grid">
                     <Link to="/cbt" className="resource-card" id="resource-cbt">
                         <img src={cbt} alt="CBT" className="card-image" />
