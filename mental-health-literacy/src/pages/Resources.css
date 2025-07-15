@@ -107,3 +107,22 @@
 .back-button:hover {
     background-color: #e0e0e0;
 }
+
+.guided-tour-btn {
+    margin-bottom: 2rem;
+    background: var(--clr-bg-700);
+    color: var(--clr-fc-secondary);
+    border: 1px solid var(--clr-bg-300);
+    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: var(--ff-primary);
+    font-weight: var(--fw-md);
+    transition: background 0.2s, color 0.2s;
+}
+
+.guided-tour-btn:hover {
+    background: var(--clr-bg-300);
+    color: var(--clr-fc-primary);
+}
