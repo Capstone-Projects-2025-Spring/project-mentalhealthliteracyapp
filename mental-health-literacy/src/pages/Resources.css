@@ -107,3 +107,80 @@
 .back-button:hover {
     background-color: #e0e0e0;
 }
+
+.guided-tour-btn {
+    margin-bottom: 2rem;
+    background: var(--clr-bg-700);
+    color: var(--clr-fc-secondary);
+    border: 1px solid var(--clr-bg-300);
+    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: var(--ff-primary);
+    font-weight: var(--fw-md);
+    transition: background 0.2s, color 0.2s;
+}
+
+.guided-tour-btn:hover {
+    background: var(--clr-bg-300);
+    color: var(--clr-fc-primary);
+}
+
+.help-icon {
+    display: block;
+    margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: 0;
+    transition: filter 0.2s;
+}
+.help-icon:hover {
+    filter: brightness(0.8);
+}
+
+.help-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+.help-dialog {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem 1.5rem 1.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    max-width: 90vw;
+    min-width: 240px;
+    text-align: center;
+    position: relative;
+}
+.help-dialog-message {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+.help-dialog-close {
+    display: block;
+    margin: 1.2rem auto 0 auto;
+    background: var(--clr-bg-700);
+    color: var(--clr-fc-secondary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.98rem;
+    cursor: pointer;
+    font-family: var(--ff-primary);
+    font-weight: var(--fw-md);
+    transition: background 0.2s, color 0.2s;
+    position: static;
+}
+.help-dialog-close:hover {
+    background: var(--clr-bg-300);
+    color: var(--clr-fc-primary);
+}
