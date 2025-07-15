@@ -5,15 +5,28 @@ sidebar_position: 4
 # Features and Requirements
 
 ## Functional Requirements
-#### Journal
-- Users should be able to create, delete, and edit journal entries.
-- Users' journals should be saved to local storage.
-- Users should be able to log in to save their journal onto the server.
-- Users should be able to access their journal across different devices by signing in.
-#### Customization Options
-- Users will be able to configure when they want to be notified to journal.
+
+#### Video Feed
+- Users should be able to view a vertically scrolling feed of short-form videos focused on mental health topics.
+- The system shall display one video at a time, occupying the full screen for an immersive experience.
+- Video playback should start automatically when a video comes into view and pause when it is scrolled out of view.
+- The feed will feature a variety of content, including educational clips, guided exercises, and personal stories.
+
+#### Resource Hub
+- Users should have access to a dedicated section for mental health resources.
+- The hub should provide articles, guides, and information on different therapy modalities (e.g., CBT, DBT, Mindfulness).
+- Resources should be organized into categories for easy navigation (e.g., Anxiety, Depression, Stress).
+- Users should be able to view resource content within the application.
+
+#### User Interaction
+- Users should be able to "like" videos to show appreciation and influence future content recommendations.
+- Users should be able to leave comments on videos to engage in discussion with the community.
+- Users should be able to view comments left by other users.
+
 #### Authentication
-- Users will be authenticated when logging in to the system.
+- Users should be able to create an account using an email and password.
+- The system will authenticate users when they log in to access personalized features.
+- Logged-in users will have their interactions (likes, comments) associated with their account.
 
 ## Non-functional Requirements
 #### User Experience

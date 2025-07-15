@@ -85,8 +85,7 @@
   margin-top: auto;
   width: 100%;
 }
-
-#user-actions a,
+.user-actions a,
 button {
   flex: 1;
   padding: 0.5rem;
@@ -129,6 +128,7 @@ button:hover {
     transition: transform 0.3s ease-in-out;
     bottom: 0;
     z-index: 1;
+    background: #fff;
   }
   #sidebar::after {
     border: none;
@@ -157,7 +157,6 @@ button:hover {
     width: fit-content;
     z-index: 2;
     right: 0;
-    margin: 1.3rem;
   }
 
   .hidden {

@@ -1,9 +1,11 @@
 .video-feed {
+  grid-column: 2 / -1; /* Span from second column to end to use full width */
   width: 100%;
   max-width: 450px; /* Max-width similar to mobile phone screens */
   height: 100vh;
   margin: 0 auto;
   overflow-y: scroll;
+  display: flex;
   scroll-snap-type: y mandatory;
   /* For browsers that support it, this hides the scrollbar */
   -ms-overflow-style: none; /* IE and Edge */
@@ -38,24 +40,6 @@
   font-size: 12px;
   opacity: 0.8;
   margin-top: 4px;
-}
-
-.video-feed {
-  width: 100%;
-  max-width: 450px; /* Max-width similar to mobile phone screens */
-  height: 100vh;
-  margin: 0 auto;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  /* For browsers that support it, this hides the scrollbar */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  border-left: 1px solid #333;
-  border-right: 1px solid #333;
-}
-
-.video-feed::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
 }
 
 .video-placeholder {
