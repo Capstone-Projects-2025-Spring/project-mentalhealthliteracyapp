@@ -1,13 +1,20 @@
 @import "../constants.css";
 
 #sidebar {
-  position: sticky;
   font-family: var(--ff-primary);
   height: 100vh;
   top: 0;
 }
 
-#sidebar::after {
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-container::after {
   content: "";
   position: absolute;
   border-right: 1px solid var(--clr-separator);
@@ -19,12 +26,12 @@
   bottom: 0;
 }
 
-#sidebar nav {
+.sidebar-container nav {
   background: hsl(0, 0%, 100%);
   position: relative;
 }
 
-#sidebar ul {
+.sidebar-container ul {
   display: grid;
   padding: 0;
   margin: 0 1rem;
@@ -32,7 +39,7 @@
   gap: 1rem;
 }
 
-#sidebar li a {
+.sidebar-container li a {
   font-size: 1.3rem;
   display: inline-block;
   width: 100%;
@@ -43,12 +50,12 @@
   transition: all 0.2s ease;
 }
 
-#sidebar li a:hover {
+.sidebar-container li a:hover {
   color: var(--clr-fc-hover);
   padding-left: 1rem;
 }
 
-#sidebar ul .active {
+.sidebar-container ul .active {
   background-color: var(--clr-bg-200);
   border-radius: 8px;
 }

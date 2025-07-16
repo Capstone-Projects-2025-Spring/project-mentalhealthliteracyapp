@@ -74,7 +74,7 @@ Our own CSS
 
 #root {
   display: grid;
-  grid-template-columns: 15rem 1fr 25rem;
+  grid-template-columns: 15rem 1fr;
   height: 100vh;
   min-height: calc(max(100vh, 20rem));
 }
@@ -100,40 +100,40 @@ main {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
   }
-  
+
   aside {
     display: none; /* Hide sidebar on mobile */
   }
-  
+
   .video-feed {
     height: 100vh;
     width: 100%;
   }
-  
+
   .video-card {
     height: 100vh;
     width: 100%;
     flex-direction: column;
   }
-  
+
   .video-player {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   .video-info {
     padding: 1rem;
   }
-  
+
   .video-details h4 {
     font-size: 1rem;
   }
-  
+
   .video-details p {
     font-size: 0.875rem;
   }
-  
+
   .action-button {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
@@ -141,13 +141,13 @@ main {
     margin-right: 0.75rem;
     margin-bottom: 3rem;
   }
-  
+
   .login-form {
     margin: 1rem;
     padding: 1.5rem;
     max-width: 100%;
   }
-  
+
   /* Ensure menu button is above video content */
   #menu-toggle {
     position: fixed !important;
@@ -162,21 +162,21 @@ main {
   .video-info {
     padding: 0.75rem;
   }
-  
+
   .video-details h4 {
     font-size: 0.875rem;
   }
-  
+
   .video-details p {
     font-size: 0.75rem;
   }
-  
+
   .action-button {
     padding: 0.375rem 0.75rem;
     font-size: 0.75rem;
     min-width: 3rem;
   }
-  
+
   .login-form {
     margin: 0.5rem;
     padding: 1rem;
@@ -188,12 +188,12 @@ main {
   .video-card {
     flex-direction: row;
   }
-  
+
   .video-player {
     width: 60%;
     height: 100%;
   }
-  
+
   .video-info {
     width: 40%;
     position: relative;
@@ -297,7 +297,7 @@ main {
   padding: 0.75rem 1.5rem;
   border-radius: 2rem;
   font-size: 1rem;
-  margin-right: 1.875rem; 
+  margin-right: 1.875rem;
   margin-bottom: 6.25rem;
   transition: all 0.2s ease;
   min-width: 4.75rem;
