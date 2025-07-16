@@ -7,6 +7,7 @@ import groupTherapy from "../assets/group-therapy.png";
 import cbt from "../assets/cbt.png";
 import therapeuticYoga from "../assets/therapeutic-yoga.png";
 import helpIcon from "../assets/help.png";
+import isClientHook from "utils/IsClientHook";
 
 export function links() {
   return [{ rel: "stylesheet", href: style }];
@@ -16,6 +17,7 @@ const Resources = () => {
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
+  const isClient = isClientHook();
   const steps: Step[] = [
     {
       target: "#resource-cbt",
@@ -37,28 +39,30 @@ const Resources = () => {
   };
   return (
     <div className="resources-container">
-      {/* <Joyride
-                steps={steps}
-                run={run}
-                continuous
-                showProgress={false}
-                showSkipButton
-                callback={handleJoyrideCallback}
-                styles={{
-                    options: {
-                        primaryColor: "var(--clr-bg-300)",
-                        zIndex: 1000,
-                        textColor: "var(--clr-fc-primary)",
-                    },
-                }}
-                locale={{
-                    back: "Back",
-                    close: "Skip tutorial",
-                    last: "Next",
-                    next: "Next",
-                    skip: "Skip tutorial",
-                }}
-            /> */}
+      {isClient && (
+        <Joyride
+          steps={steps}
+          run={run}
+          continuous
+          showProgress={false}
+          showSkipButton
+          callback={handleJoyrideCallback}
+          styles={{
+            options: {
+              primaryColor: "var(--clr-bg-300)",
+              zIndex: 1000,
+              textColor: "var(--clr-fc-primary)",
+            },
+          }}
+          locale={{
+            back: "Back",
+            close: "Skip tutorial",
+            last: "Next",
+            next: "Next",
+            skip: "Skip tutorial",
+          }}
+        />
+      )}
       {showDialog && (
         <div className="help-dialog-overlay">
           <div className="help-dialog">
@@ -101,14 +105,14 @@ const Resources = () => {
           title="Help"
         />
         <div className="card-grid">
-          <Link to="/cbt" className="resource-card" id="resource-cbt">
+          <Link to="/resources/cbt" className="resource-card" id="resource-cbt">
             <img src={cbt} alt="CBT" className="card-image" />
             <div className="resource-title">Cognitive Behavioral Therapy</div>
             <div className="resource-meta">
               Effective for depression and anxiety disorders.
             </div>
           </Link>
-          <Link to="/group-therapy" className="resource-card">
+          <Link to="/resources/group-therapy" className="resource-card">
             <img
               src={groupTherapy}
               alt="Group Therapy"
@@ -119,7 +123,7 @@ const Resources = () => {
               Support for anxiety, depression, and PTSD.
             </div>
           </Link>
-          <Link to="/yoga" className="resource-card">
+          <Link to="/resources/yoga" className="resource-card">
             <img
               src={therapeuticYoga}
               alt="Therapeutic Yoga"
