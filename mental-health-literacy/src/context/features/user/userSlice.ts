@@ -1,37 +1,61 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import supabase from "src/lib/supabase";
 
+// Initial user state is going to be email fetched from Supabase if they have an active session
 const initialState = {
-  authStatus: supabase()
+  user: await supabase()
     .auth.getUser()
-    .then((user) => user.data.user?.aud),
+    .then((response) => {
+      return response.data.user?.email ? response.data.user.email : null;
+    }),
+  error: null as string | null,
 };
-export const statusSlice = createSlice({
-  name: "status",
+
+export const update = createAsyncThunk("user/update", async () => {
+  const response = (await supabase().auth.getUser()).data.user?.email;
+  return response;
+});
+
+export const login = createAsyncThunk(
+  "user/login",
+  async (credentials: { email: string; password: string }) => {
+    const { email, password } = credentials;
+    return (await supabase().auth.signInWithPassword({ email, password })).data
+      .user?.email;
+  }
+);
+
+export const register = createAsyncThunk(
+  "user/register",
+  async (credentials: { email: string; password: string }) => {
+    const { email, password } = credentials;
+    return (await supabase().auth.signUp({ email, password })).data.user?.email;
+  }
+);
+
+export const signout = createAsyncThunk("user/signout", async () => {
+  await supabase().auth.signOut();
+  return null; // Return null to indicate user is signed out
+});
+
+export const userSlice = createSlice({
+  name: "user",
   initialState,
-  reducers: {
-    updateAuthStatus: (state) => {
-      state.authStatus = supabase()
-        .auth.getUser()
-        .then((user) => {
-          return user.data.user?.aud;
-        });
-    },
-    signinWithPassword: (state, action) => {
-      const { email, password } = action.payload;
-      supabase().auth.signInWithPassword({
-        email,
-        password,
-      });
-      statusSlice.caseReducers.updateAuthStatus(state);
-    },
-    signout: (state) => {
-      supabase().auth.signOut();
-      statusSlice.caseReducers.updateAuthStatus(state);
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.user = action.payload ? action.payload : null;
+    });
+
+    builder.addCase(register.fulfilled, (state, action) => {
+      state.user = action.payload ? action.payload : null;
+    });
+
+    builder.addCase(signout.fulfilled, (state) => {
+      state.user = null; // Set user to null on signout
+    });
   },
 });
 
-export const { updateAuthStatus, signinWithPassword, signout } =
-  statusSlice.actions;
-export default statusSlice.reducer;
+export const {} = userSlice.actions;
+export default userSlice.reducer;
