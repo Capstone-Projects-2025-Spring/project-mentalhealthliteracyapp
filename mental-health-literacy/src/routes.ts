@@ -2,6 +2,7 @@ import {
   index,
   layout,
   route,
+  prefix,
   type RouteConfig,
 } from "@react-router/dev/routes";
 
@@ -14,5 +15,10 @@ export default [
     route("/cbt", "pages/CBT.tsx"),
     route("/group-therapy", "pages/GroupTherapy.tsx"),
     route("/yoga", "pages/Yoga.tsx"),
+  ]),
+  ...prefix("/api", [
+    route("/login", "api/login.tsx"),
+    route("/register", "api/register.tsx"),
+    route("/signout", "api/signout.tsx"),
   ]),
 ] satisfies RouteConfig;
