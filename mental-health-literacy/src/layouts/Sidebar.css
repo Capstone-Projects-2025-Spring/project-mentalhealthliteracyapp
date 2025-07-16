@@ -2,7 +2,7 @@
 
 #sidebar {
   font-family: var(--ff-primary);
-  height: 100vh;
+  height: 100%;
   top: 0;
 }
 
