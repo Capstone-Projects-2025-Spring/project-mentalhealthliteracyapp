@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Joyride, { STATUS } from "react-joyride";
 import type { Step, CallBackProps } from "react-joyride";
 import style from "./Tutorial.css?url";
+import IsClientHook from "utils/IsClientHook";
 
 export function links() {
   return [
@@ -14,6 +15,7 @@ export function links() {
 
 const Tutorial: React.FC = () => {
   const [run, setRun] = useState(true);
+  const isClient = IsClientHook();
 
   const steps: Step[] = [
     {
@@ -81,28 +83,30 @@ const Tutorial: React.FC = () => {
       </div>
 
       <div className="tutorial-joyride-wrapper">
-        <Joyride
-          steps={steps}
-          run={run}
-          continuous
-          showProgress={false}
-          showSkipButton
-          callback={handleJoyrideCallback}
-          styles={{
-            options: {
-              primaryColor: "var(--clr-bg-300)",
-              zIndex: 1000,
-              textColor: "var(--clr-fc-primary)",
-            },
-          }}
-          locale={{
-            back: "Back",
-            close: "Skip tutorial",
-            last: "Finish tutorial",
-            next: "Next",
-            skip: "Skip tutorial",
-          }}
-        />
+        {isClient && (
+          <Joyride
+            steps={steps}
+            run={run}
+            continuous
+            showProgress={false}
+            showSkipButton
+            callback={handleJoyrideCallback}
+            styles={{
+              options: {
+                primaryColor: "var(--clr-bg-300)",
+                zIndex: 1000,
+                textColor: "var(--clr-fc-primary)",
+              },
+            }}
+            locale={{
+              back: "Back",
+              close: "Skip tutorial",
+              last: "Finish tutorial",
+              next: "Next",
+              skip: "Skip tutorial",
+            }}
+          />
+        )}
       </div>
     </div>
   );
