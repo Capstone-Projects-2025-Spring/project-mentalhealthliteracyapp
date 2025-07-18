@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.3.2">
 <title data-rh="true">Integration tests | Project Mentalhealthliteracyapp</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/integration-testing"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Integration tests | Project Mentalhealthliteracyapp"><meta data-rh="true" name="description" content="Tests to demonstrate each use-case based on the use-case descriptions and the sequence diagrams. External input should be provided via mock objects and results verified via mock objects. Integration tests should not require manual entry of data nor require manual interpretation of results."><meta data-rh="true" property="og:description" content="Tests to demonstrate each use-case based on the use-case descriptions and the sequence diagrams. External input should be provided via mock objects and results verified via mock objects. Integration tests should not require manual entry of data nor require manual interpretation of results."><link data-rh="true" rel="icon" href="/project-mentalhealthliteracyapp/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/integration-testing"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/integration-testing" hreflang="en"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/integration-testing" hreflang="x-default"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><link rel="stylesheet" href="/project-mentalhealthliteracyapp/assets/css/styles.a93c73f5.css">
-<script src="/project-mentalhealthliteracyapp/assets/js/runtime~main.d342dfff.js" defer="defer"></script>
+<script src="/project-mentalhealthliteracyapp/assets/js/runtime~main.53c1de0a.js" defer="defer"></script>
 <script src="/project-mentalhealthliteracyapp/assets/js/main.168c822a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -48,14 +48,95 @@
 </ul>
 </li>
 </ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="use-case-6--liking-videos">Use Case 6 – Liking Videos<a href="#use-case-6--liking-videos" class="hash-link" aria-label="Direct link to Use Case 6 – Liking Videos" title="Direct link to Use Case 6 – Liking Videos">​</a></h2>
-<p><strong>Goal:</strong> Verify that a signed-in user can like a video and have it persist to their account.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="use-case-2--onboarding-to-the-application">Use Case 2 – Onboarding to the Application<a href="#use-case-2--onboarding-to-the-application" class="hash-link" aria-label="Direct link to Use Case 2 – Onboarding to the Application" title="Direct link to Use Case 2 – Onboarding to the Application">​</a></h2>
+<p><strong>Goal:</strong> Verify that a new user completes onboarding and prefereneces are stored for future personalization.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-steps-1">Integration Test Steps<a href="#integration-test-steps-1" class="hash-link" aria-label="Direct link to Integration Test Steps" title="Direct link to Integration Test Steps">​</a></h3>
+<ol>
+<li>
+<p><strong>Launch Application &amp; Welcome Screen</strong></p>
+<ul>
+<li>Simulate app launch for a first time user (mock navigation).</li>
+<li><strong>Assert:</strong> Welcome screen is displayed with onboarding prompt (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Preference Questionnaire</strong></p>
+<ul>
+<li>Simulate user answering onboarding questions.</li>
+<li>Simulate user clicking &quot;Continue&quot; after answering questions (mock form submission).</li>
+<li><strong>Assert:</strong> All preferences are captured and ingested in backend (mock request payload).</li>
+</ul>
+</li>
+<li>
+<p><strong>Store Preferences</strong></p>
+<ul>
+<li>Mock backend response for saving user preferences.</li>
+<li><strong>Assert:</strong> Preferences are saved to user profile (database state check).</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="use-case-3--videos">Use Case 3 – Videos<a href="#use-case-3--videos" class="hash-link" aria-label="Direct link to Use Case 3 – Videos" title="Direct link to Use Case 3 – Videos">​</a></h2>
+<p><strong>Goal:</strong> Verify that a user can view and scroll through short-form videos.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-steps-2">Integration Test Steps<a href="#integration-test-steps-2" class="hash-link" aria-label="Direct link to Integration Test Steps" title="Direct link to Integration Test Steps">​</a></h3>
+<ol>
+<li>
+<p><strong>Access Application</strong></p>
+<ul>
+<li>Simulate app launch to &quot;Welcome&quot; screen (mock launch).</li>
+<li><strong>Assert:</strong> Welcome screen displayed (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Navigate to Videos feed</strong></p>
+<ul>
+<li>Simulate user clicking &quot;Videos&quot; tab in the Navigation bar (mock user event).</li>
+<li><strong>Assert:</strong> Video feed is displayed in an infinite-scroll format (UI state check).</li>
+<li><strong>Assert:</strong> Videos begin to auto-play as user scrolls (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Scroll to load more videos</strong></p>
+<ul>
+<li>Simulate user scrolling down (mock user event).</li>
+<li><strong>Assert:</strong> Additional video or photo displayed (UI state check).</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="use-case-4--educational-resources">Use Case 4 – Educational Resources<a href="#use-case-4--educational-resources" class="hash-link" aria-label="Direct link to Use Case 4 – Educational Resources" title="Direct link to Use Case 4 – Educational Resources">​</a></h2>
+<p><strong>Goal:</strong> Verify that a user can access educational resources.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-steps-3">Integration Test Steps<a href="#integration-test-steps-3" class="hash-link" aria-label="Direct link to Integration Test Steps" title="Direct link to Integration Test Steps">​</a></h3>
+<ol>
+<li>
+<p><strong>Access Application</strong></p>
+<ul>
+<li>Simulate app launch and navigation to the Welcome screen (mock user event).</li>
+<li><strong>Assert:</strong> Welcome screen displayed (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Navigation to Resources</strong></p>
+<ul>
+<li>Simulate user clicking on &quot;Resources&quot; tab in the navigation bar (mock user event).</li>
+<li><strong>Assert:</strong> Resource tab UI is displayed with categorized content (UI state check)</li>
+</ul>
+</li>
+<li>
+<p><strong>View Educational Content</strong></p>
+<ul>
+<li>Simulate user clicking module</li>
+<li><strong>Assert:</strong> Educational resources, links, and contact information for the module is displayed (UI state check)</li>
+<li><strong>Assert:</strong> Users can interact with content by accessing and opening links (UI state check)</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="use-case-5--user-profile">Use Case 5 – User Profile<a href="#use-case-5--user-profile" class="hash-link" aria-label="Direct link to Use Case 5 – User Profile" title="Direct link to Use Case 5 – User Profile">​</a></h2>
+<p><strong>Goal:</strong> Verify that a signed-in user can view and manage their account information, preferences, and liked videos.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-steps-4">Integration Test Steps<a href="#integration-test-steps-4" class="hash-link" aria-label="Direct link to Integration Test Steps" title="Direct link to Integration Test Steps">​</a></h3>
 <ol>
 <li>
 <p><strong>Access &amp; Sign In</strong></p>
 <ul>
-<li>Simulate app launch and navigation to the Welcome screen (mock navigation).</li>
+<li>Simulate app launch and navigation to the Welcome screen (mock user event).</li>
 <li>Simulate user clicking &quot;Sign In&quot; (mock user event).</li>
 <li><strong>Assert:</strong> Log in form is displayed (UI state check).</li>
 </ul>
@@ -69,9 +150,67 @@
 </ul>
 </li>
 <li>
+<p><strong>Navigate to Profile</strong></p>
+<ul>
+<li>Simulate user clicking on &quot;Profile&quot; tab (mock user event).</li>
+<li><strong>Assert:</strong> Profile page is displayed with tabs for Account Management, Liked Videos, and Preferences (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Account Management</strong></p>
+<ul>
+<li>Simulate user clicking on &quot;Account Management&quot; (mock user event).</li>
+<li><strong>Assert:</strong> Display name, email, and masked password are shown (UI state check).</li>
+<li>Simulate user clicking &quot;Change Password&quot; (mock user event).</li>
+<li><strong>Assert:</strong> Fields for current password, new password, and new password confirmation are displayed (UI state check).</li>
+<li>Simualte user entering current password, new password, and new password confirmation (mock user event).</li>
+<li>Simulate user clicking &quot;Save&quot;</li>
+<li><strong>Assert:</strong> Backend recieves password update request (mock database state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Liked Videos</strong></p>
+<ul>
+<li>Simulate user clicking &quot;Liked Videos&quot; (mock user event).</li>
+<li><strong>Assert:</strong> Liked videos appear as a scrollable list of video thumbnails (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Preferences</strong></p>
+<ul>
+<li>Simulate user clicking &quot;Preferences&quot; (mock user event).</li>
+<li><strong>Assert:</strong> Onboarding questions and current slider values are shown</li>
+<li>Simulate user updating slider values</li>
+<li><strong>Assert:</strong> Save preferences button is shown upon change (UI state check)</li>
+<li>Simulate user clicking &quot;Save&quot; (mock user event).</li>
+<li><strong>Assert:</strong> Backend recieves updated preferences (mock database state check).</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="use-case-6--liking-videos">Use Case 6 – Liking Videos<a href="#use-case-6--liking-videos" class="hash-link" aria-label="Direct link to Use Case 6 – Liking Videos" title="Direct link to Use Case 6 – Liking Videos">​</a></h2>
+<p><strong>Goal:</strong> Verify that a signed-in user can like a video and have it persist to their account.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-steps-5">Integration Test Steps<a href="#integration-test-steps-5" class="hash-link" aria-label="Direct link to Integration Test Steps" title="Direct link to Integration Test Steps">​</a></h3>
+<ol>
+<li>
+<p><strong>Access &amp; Sign In</strong></p>
+<ul>
+<li>Simulate app launch and navigation to the Welcome screen (mock navigation).</li>
+<li>Simulate user clicking &quot;Sign In&quot; (mock user event).</li>
+<li><strong>Assert:</strong> Log in form is displayed (UI state check).</li>
+</ul>
+</li>
+<li>
+<p><strong>Enter Credentials and Authenticate</strong></p>
+<ul>
+<li>Simulate user entering valid credentials (mock user event).</li>
+<li>Simulate user submitting the log in form (mock backend validation).</li>
+<li><strong>Assert:</strong> System checks credentials and authenticates user (authentication state check)</li>
+</ul>
+</li>
+<li>
 <p><strong>Navigate to Videos</strong></p>
 <ul>
-<li>Simulate user clicking videos tab</li>
+<li>Simulate user clicking videos tab (mock user event).</li>
 <li><strong>Assert:</strong> Video player and &quot;Like&quot; button is displayed (UI state check)</li>
 </ul>
 </li>
@@ -86,7 +225,7 @@
 <li>
 <p><strong>Access Liked Videos</strong></p>
 <ul>
-<li>Simulate user navigating to profile (mock user event).</li>
+<li>Simulate user navigating to &quot;Profile&quot; (mock user event).</li>
 <li><strong>Assert:</strong> Liked video appears in user&#x27;s liked video list (UI state check)</li>
 <li><strong>Assert:</strong> Video is associated with correct user (database state check)</li>
 </ul>
@@ -96,6 +235,6 @@
 <ul>
 <li>All external services are mocked.</li>
 <li>No manual data entry or result interpretation required; all assertions are automated.</li>
-</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp/edit/main/documentation/docs/testing/integration-testing.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>kathrynalvarez</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-mentalhealthliteracyapp/docs/testing/frontend-unit-testing"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Frontend Unit Tests</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-mentalhealthliteracyapp/docs/testing/acceptance-testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Acceptance Tests</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#use-case-1--account-creation" class="table-of-contents__link toc-highlight">Use Case 1 – Account Creation</a><ul><li><a href="#integration-test-steps" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li><li><a href="#use-case-6--liking-videos" class="table-of-contents__link toc-highlight">Use Case 6 – Liking Videos</a><ul><li><a href="#integration-test-steps-1" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-mentalhealthliteracyapp/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU"></div><div class="footer__copyright">Copyright © 2025 Project Mentalhealthliteracyapp, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp/edit/main/documentation/docs/testing/integration-testing.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>kathrynalvarez</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-mentalhealthliteracyapp/docs/testing/frontend-unit-testing"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Frontend Unit Tests</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-mentalhealthliteracyapp/docs/testing/acceptance-testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Acceptance Tests</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#use-case-1--account-creation" class="table-of-contents__link toc-highlight">Use Case 1 – Account Creation</a><ul><li><a href="#integration-test-steps" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li><li><a href="#use-case-2--onboarding-to-the-application" class="table-of-contents__link toc-highlight">Use Case 2 – Onboarding to the Application</a><ul><li><a href="#integration-test-steps-1" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li><li><a href="#use-case-3--videos" class="table-of-contents__link toc-highlight">Use Case 3 – Videos</a><ul><li><a href="#integration-test-steps-2" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li><li><a href="#use-case-4--educational-resources" class="table-of-contents__link toc-highlight">Use Case 4 – Educational Resources</a><ul><li><a href="#integration-test-steps-3" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li><li><a href="#use-case-5--user-profile" class="table-of-contents__link toc-highlight">Use Case 5 – User Profile</a><ul><li><a href="#integration-test-steps-4" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li><li><a href="#use-case-6--liking-videos" class="table-of-contents__link toc-highlight">Use Case 6 – Liking Videos</a><ul><li><a href="#integration-test-steps-5" class="table-of-contents__link toc-highlight">Integration Test Steps</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-mentalhealthliteracyapp/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU"></div><div class="footer__copyright">Copyright © 2025 Project Mentalhealthliteracyapp, Inc. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
