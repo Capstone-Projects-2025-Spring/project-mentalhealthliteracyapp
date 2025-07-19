@@ -25,14 +25,6 @@ function SignUp(props: any) {
             required
           />
 
-          <label>Display Name:</label>
-          <input
-            type="text"
-            name="displayName"
-            placeholder="Enter your name"
-            required
-          />
-
           <button type="submit">Create Account</button>
         </fetcher.Form>
 
