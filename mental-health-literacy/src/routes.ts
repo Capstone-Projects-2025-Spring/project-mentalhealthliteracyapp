@@ -8,7 +8,6 @@ import {
 export default [
   layout("./layouts/Sidebar.tsx", [
     index("./pages/Welcome.tsx"),
-    route("/tutorial", "pages/Tutorial.tsx"),
     route("/video", "pages/Video.tsx"),
     route("resources", "pages/Resources.tsx"),
     route("/cbt", "pages/CBT.tsx"),
