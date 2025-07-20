@@ -6,18 +6,12 @@ import logo from "../assets/logo.png";
 import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 
-import style from "./Sidebar.css?url";
-
-export function links() {
-  return [
-    {
-      rel: "stylesheet",
-      href: style,
-    },
-  ];
-}
+import "./Sidebar.css";
+import { getUser } from "utils/GetUserHook";
+import ProfileSidebar from "src/components/ProfileSidebar";
 
 function Sidebar() {
+  const userEmail = getUser();
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
 
   const loginRef = useRef<HTMLDialogElement>(null);
@@ -81,65 +75,74 @@ function Sidebar() {
       </div>
 
       <aside id="sidebar" className={sidebarStatus ? "hidden" : "shown"}>
-        <nav>
-          <img src={logo}></img>
+        <div className="sidebar-container">
+          <nav>
+            <img src={logo}></img>
 
-          <ul>
-            <li
-              id="nav-welcome"
-              className={useLocation().pathname == "/" ? "active" : "inactive"}
-            >
-              <Link to="/">Welcome</Link>
-            </li>
-            <li
-              id="nav-tutorial"
-              className={
-                useLocation().pathname == "/tutorial" ? "active" : "inactive"
-              }
-            >
-              <Link to="/tutorial">Tutorial</Link>
-            </li>
-            <li
-              id="nav-video"
-              className={
-                useLocation().pathname == "/video" ? "active" : "inactive"
-              }
-            >
-              <Link to="/video">Video</Link>
-            </li>
-            <li
-              id="nav-resources"
-              className={
-                useLocation().pathname == "/resources" ? "active" : "inactive"
-              }
-            >
-              <Link to="/resources">Resources</Link>
-            </li>
-          </ul>
-        </nav>
-        <div id="user-actions">
-          {/* <Link id="nav-login" to="/login" className="signin-btn">
-            Sign-in
-          </Link>
-          <Link id="nav-signup" to="/signup" className="register-btn">
-            Register
-          </Link> */}
-          <button
-            className="signin-btn"
-            onClick={() => {
-              loginRef.current?.showModal();
-            }}
-          >
-            Sign-in
-          </button>
-          <button
-            className="register-btn"
-            onClick={() => {
-              registerRef.current?.showModal();
-            }}
-          >
-            Register
-          </button>
+            <ul>
+              <li
+                id="nav-welcome"
+                className={
+                  useLocation().pathname == "/" ? "active" : "inactive"
+                }
+              >
+                <Link to="/">Welcome</Link>
+              </li>
+              <li
+                id="nav-tutorial"
+                className={
+                  useLocation().pathname == "/tutorial" ? "active" : "inactive"
+                }
+              >
+                <Link to="/tutorial">Tutorial</Link>
+              </li>
+              <li
+                id="nav-video"
+                className={
+                  useLocation().pathname == "/video" ? "active" : "inactive"
+                }
+              >
+                <Link to="/video">Video</Link>
+              </li>
+              <li
+                id="nav-resources"
+                className={
+                  useLocation().pathname == "/resources" ? "active" : "inactive"
+                }
+              >
+                <Link to="/resources">Resources</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <>
+            {userEmail ? (
+              <>
+                <ProfileSidebar />
+              </>
+            ) : (
+              <>
+                <div id="user-actions">
+                  <button
+                    className="signin-btn"
+                    onClick={() => {
+                      loginRef.current?.showModal();
+                    }}
+                  >
+                    Sign-in
+                  </button>
+                  <button
+                    className="register-btn"
+                    onClick={() => {
+                      registerRef.current?.showModal();
+                    }}
+                  >
+                    Register
+                  </button>
+                </div>
+              </>
+            )}
+          </>
         </div>
       </aside>
 

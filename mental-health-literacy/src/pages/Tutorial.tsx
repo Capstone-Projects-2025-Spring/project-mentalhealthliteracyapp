@@ -1,17 +1,8 @@
 import React, { useState } from "react";
 import Joyride, { STATUS } from "react-joyride";
 import type { Step, CallBackProps } from "react-joyride";
-import style from "./Tutorial.css?url";
+import style from "./Tutorial.css";
 import IsClientHook from "utils/IsClientHook";
-
-export function links() {
-  return [
-    {
-      rel: "stylesheet",
-      href: style,
-    },
-  ];
-}
 
 const Tutorial: React.FC = () => {
   const [run, setRun] = useState(true);

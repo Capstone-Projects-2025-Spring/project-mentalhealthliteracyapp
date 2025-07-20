@@ -2,16 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import Joyride, { STATUS } from "react-joyride";
 import type { Step, CallBackProps } from "react-joyride";
-import style from "./Resources.css?url";
+import "./Resources.css";
 import groupTherapy from "../assets/group-therapy.png";
 import cbt from "../assets/cbt.png";
 import therapeuticYoga from "../assets/therapeutic-yoga.png";
 import helpIcon from "../assets/help.png";
 import isClientHook from "utils/IsClientHook";
-
-export function links() {
-  return [{ rel: "stylesheet", href: style }];
-}
 
 const Resources = () => {
   const [run, setRun] = useState(false);
