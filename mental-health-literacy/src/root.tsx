@@ -9,9 +9,15 @@ import type { Route } from "./+types/root";
 
 import appStylesHref from "./main.css?url";
 import logo from "./assets/logo.png?url";
+import Onboarding from "./components/Onboarding";
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <>
+      <Onboarding />
+      <Outlet />
+    </>
+  );
 }
 
 // The Layout component is a special export for the root route.
