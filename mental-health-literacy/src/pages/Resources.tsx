@@ -6,6 +6,9 @@ import "./Resources.css";
 import groupTherapy from "../assets/group-therapy.png";
 import cbt from "../assets/cbt.png";
 import therapeuticYoga from "../assets/therapeutic-yoga.png";
+import animalTherapy from "../assets/animal-therapy.png";
+import artTherapy from "../assets/art.png";
+import familyTherapy from "../assets/family-therapy.png";
 import helpIcon from "../assets/help.png";
 import isClientHook from "utils/IsClientHook";
 
@@ -13,7 +16,6 @@ const Resources = () => {
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
-  const isClient = isClientHook();
   const steps: Step[] = [
     {
       target: "#resource-cbt",
@@ -35,30 +37,28 @@ const Resources = () => {
   };
   return (
     <div className="resources-container">
-      {isClient && (
-        <Joyride
-          steps={steps}
-          run={run}
-          continuous
-          showProgress={false}
-          showSkipButton
-          callback={handleJoyrideCallback}
-          styles={{
-            options: {
-              primaryColor: "var(--clr-bg-300)",
-              zIndex: 1000,
-              textColor: "var(--clr-fc-primary)",
-            },
-          }}
-          locale={{
-            back: "Back",
-            close: "Skip tutorial",
-            last: "Next",
-            next: "Next",
-            skip: "Skip tutorial",
-          }}
-        />
-      )}
+      <Joyride
+        steps={steps}
+        run={run}
+        continuous
+        showProgress={false}
+        showSkipButton
+        callback={handleJoyrideCallback}
+        styles={{
+          options: {
+            primaryColor: "var(--clr-bg-300)",
+            zIndex: 1000,
+            textColor: "var(--clr-fc-primary)",
+          },
+        }}
+        locale={{
+          back: "Back",
+          close: "Skip tutorial",
+          last: "Next",
+          next: "Next",
+          skip: "Skip tutorial",
+        }}
+      />
       {showDialog && (
         <div className="help-dialog-overlay">
           <div className="help-dialog">

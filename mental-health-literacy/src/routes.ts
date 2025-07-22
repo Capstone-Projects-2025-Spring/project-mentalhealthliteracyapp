@@ -9,14 +9,21 @@ import {
 export default [
   layout("./layouts/Sidebar.tsx", [
     index("./pages/Welcome.tsx"),
-    route("/tutorial", "pages/Tutorial.tsx"),
     route("/video", "pages/Video.tsx"),
-    route("/profile", "pages/Profile.tsx"),
+    route("resources", "pages/Resources.tsx"),
+    route("/cbt", "pages/CBT.tsx"),
+    route("/group-therapy", "pages/GroupTherapy.tsx"),
+    route("/yoga", "pages/Yoga.tsx"),
+
     ...prefix("/resources", [
       index("pages/Resources.tsx"),
       route("cbt", "pages/CBT.tsx"),
       route("group-therapy", "pages/GroupTherapy.tsx"),
       route("yoga", "pages/Yoga.tsx"),
+      route("/art-therapy", "pages/ArtTherapy.tsx"),
+      route("/family-therapy", "pages/FamilyTherapy.tsx"),
+      route("/profile", "pages/Profile.tsx"),
+      route("/animal-therapy", "pages/AnimalTherapy.tsx"),
     ]),
   ]),
   ...prefix("/api", [

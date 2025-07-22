@@ -34,8 +34,12 @@ const CBT = () => {
     ];
 
     const handleJoyrideCallback = (data: CallBackProps) => {
-        const { status } = data;
-        if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
+        const { status, action } = data;
+        if (
+            status === STATUS.FINISHED ||
+            status === STATUS.SKIPPED ||
+            action === 'close'
+        ) {
             setRun(false);
         }
     };
@@ -47,7 +51,7 @@ const CBT = () => {
                 run={run}
                 continuous
                 showProgress={false}
-                showSkipButton
+                showSkipButton={false}
                 callback={handleJoyrideCallback}
                 styles={{
                     options: {
@@ -58,10 +62,8 @@ const CBT = () => {
                 }}
                 locale={{
                     back: "Back",
-                    close: "Skip tutorial",
                     last: "Finish tutorial",
-                    next: "Next",
-                    skip: "Skip tutorial",
+                    next: "Next"
                 }}
             />
             <div className="section">

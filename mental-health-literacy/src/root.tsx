@@ -11,10 +11,12 @@ import { Provider } from "react-redux";
 import appStylesHref from "./main.css?url";
 import logo from "./assets/logo.png?url";
 import { store } from "./context/global_store";
+import Onboarding from "./components/Onboarding";
 
 export default function App() {
   return (
     <Provider store={store}>
+      <Onboarding />
       <Outlet />
     </Provider>
   );
