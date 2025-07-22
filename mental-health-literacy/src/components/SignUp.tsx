@@ -1,8 +1,14 @@
 import { useFetcher } from "react-router-dom";
 import CloseButton from "../components/CloseButton";
+import { getError } from "utils/GetErrorHook";
 
 function SignUp(props: any) {
   const fetcher = useFetcher();
+  const error = getError();
+
+  if (fetcher.data?.status == 200 && !error) {
+    props.close();
+  }
   return (
     <>
       <CloseButton close={props.close}></CloseButton>
