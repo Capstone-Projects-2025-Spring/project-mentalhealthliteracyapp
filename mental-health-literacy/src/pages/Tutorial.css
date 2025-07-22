@@ -2,12 +2,10 @@
   background: #fff;
   color: var(--clr-fc-primary);
   font-family: var(--ff-primary);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 2rem 1rem 3rem 1rem;
 }
 
 .tutorial-title {
@@ -26,16 +24,6 @@
   margin-bottom: 2rem;
   text-align: center;
   max-width: 600px;
-}
-
-.tutorial-joyride-wrapper {
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-  min-height: 300px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
 }
 
 .tutorial-list {
@@ -128,4 +116,4 @@
   .tutorial-joyride-wrapper {
     min-height: 200px;
   }
-} 
+}
