@@ -1,15 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import store from "src/context/global_store";
 import supabase from "src/lib/supabase";
 
 // Initial user state is going to be email fetched from Supabase if they have an active session
 const initialState = {
-  user: await supabase()
+  user: "Guest" as string | null,
+  error: null as string | null,
+};
+
+export const get_user = createAsyncThunk("user/get", async () => {
+  return await supabase()
     .auth.getUser()
     .then((response) => {
       return response.data.user?.email ? response.data.user.email : null;
-    }),
-  error: null as string | null,
-};
+    });
+});
 
 export const update = createAsyncThunk("user/update", async () => {
   const response = (await supabase().auth.getUser()).data.user?.email;
@@ -53,6 +58,9 @@ export const userSlice = createSlice({
 
     builder.addCase(signout.fulfilled, (state) => {
       state.user = null; // Set user to null on signout
+    });
+    builder.addCase(get_user.fulfilled, (state, action) => {
+      state.user = action.payload ? action.payload : null;
     });
   },
 });

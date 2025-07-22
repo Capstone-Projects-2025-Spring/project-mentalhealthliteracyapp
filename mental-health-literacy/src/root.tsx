@@ -12,8 +12,10 @@ import appStylesHref from "./main.css?url";
 import logo from "./assets/logo.png?url";
 import { store } from "./context/global_store";
 import Onboarding from "./components/Onboarding";
+import { get_user } from "./context/features/user/userSlice";
 
 export default function App() {
+  store.dispatch(get_user());
   return (
     <Provider store={store}>
       <Onboarding />
