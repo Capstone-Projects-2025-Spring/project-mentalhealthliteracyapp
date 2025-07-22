@@ -15,7 +15,7 @@ import Onboarding from "./components/Onboarding";
 import { get_user } from "./context/features/user/userSlice";
 
 export default function App() {
-  // store.dispatch(get_user());
+  store.dispatch(get_user());
   return (
     <Provider store={store}>
       <Onboarding />
