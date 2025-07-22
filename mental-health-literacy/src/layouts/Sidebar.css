@@ -19,7 +19,7 @@
 .sidebar-container::after {
   content: "";
   position: absolute;
-  border-right: 1px solid var(--clr-separator);
+  border-right: 2px solid var(--clr-separator);
   margin: auto 0;
   height: 90%;
   width: 1px;
@@ -94,6 +94,13 @@
   margin-top: auto;
   width: 100%;
 }
+.action-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-width: 3.5rem;
+  margin-right: 0.75rem;
+  margin-bottom: 3rem;
+}
 .user-actions a,
 button {
   flex: 1;
@@ -130,13 +137,15 @@ button:hover {
 
 @media screen and (max-width: 768px) {
   #sidebar {
-    position: absolute;
+    position: fixed;
     display: grid;
     grid-template-columns: 1fr;
     width: 100%;
+    max-width: 20rem;
+    top: 0;
+    left: 0;
     transition: transform 0.3s ease-in-out;
-    bottom: 0;
-    z-index: 1;
+    z-index: 9999;
     background: #fff;
   }
   #sidebar::after {
@@ -145,7 +154,6 @@ button:hover {
   #sidebar nav::before {
     content: "";
     position: absolute;
-    border-right: 1px solid hsl(0, 0%, 0%, 0.2);
     margin: auto 0;
     height: 90%;
     width: 1px;
@@ -164,7 +172,9 @@ button:hover {
     display: inline-block;
     height: fit-content;
     width: fit-content;
-    z-index: 2;
+    z-index: 99999;
+    top: 1rem;
+    left: 1rem;
     right: 0;
   }
 
