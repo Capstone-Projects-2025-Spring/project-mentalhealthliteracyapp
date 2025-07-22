@@ -1,8 +1,14 @@
 import "./Login.css";
 import CloseButton from "./CloseButton";
 import { Form, useFetcher } from "react-router-dom";
+import { getError } from "utils/GetErrorHook";
 function Login(props: any) {
   const fetcher = useFetcher();
+  const error = getError();
+
+  if (fetcher.data?.status == 200 && !error) {
+    props.close();
+  }
   return (
     <>
       <CloseButton close={props.close}></CloseButton>
