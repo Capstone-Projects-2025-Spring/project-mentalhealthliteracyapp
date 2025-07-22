@@ -18,10 +18,13 @@ function ProfileSidebar() {
         nav("/profile");
       }}
     >
-      <p>
-        Signed in as: <br></br>
-        {userEmail}
-      </p>
+      <div className="profile-sidebar-info">
+        <p>
+          Signed in as: <br></br>
+          {userEmail}
+        </p>
+      </div>
+
       <button
         onClick={(e) => {
           e.preventDefault();

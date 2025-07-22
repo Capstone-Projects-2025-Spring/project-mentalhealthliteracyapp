@@ -1,11 +1,12 @@
 .profile-sidebar {
   display: flex;
   position: relative;
-  margin-top: auto;
-  max-width: 100%;
+  margin: auto auto 0 0;
+  width: 100%;
+  max-width: 20rem;
   transition: all 0.2s ease;
   cursor: pointer;
-  & p {
+  & .profile-sidebar-info {
     flex: 1;
     max-width: 70%;
     overflow: hidden;

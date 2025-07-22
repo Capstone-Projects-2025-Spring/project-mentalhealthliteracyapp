@@ -11,6 +11,7 @@ export default [
     index("./pages/Welcome.tsx"),
     route("/tutorial", "pages/Tutorial.tsx"),
     route("/video", "pages/Video.tsx"),
+    route("/profile", "pages/Profile.tsx"),
     ...prefix("/resources", [
       index("pages/Resources.tsx"),
       route("cbt", "pages/CBT.tsx"),
