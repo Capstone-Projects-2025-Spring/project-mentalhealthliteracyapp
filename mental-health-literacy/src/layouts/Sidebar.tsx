@@ -92,14 +92,6 @@ function Sidebar() {
               <Link to="/">Welcome</Link>
             </li>
             <li
-              id="nav-tutorial"
-              className={
-                useLocation().pathname == "/tutorial" ? "active" : "inactive"
-              }
-            >
-              <Link to="/tutorial">Tutorial</Link>
-            </li>
-            <li
               id="nav-video"
               className={
                 useLocation().pathname == "/video" ? "active" : "inactive"
