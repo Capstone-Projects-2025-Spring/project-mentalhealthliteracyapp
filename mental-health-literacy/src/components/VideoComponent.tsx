@@ -4,7 +4,6 @@ import MuxPlayer from "@mux/mux-player-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import useVisibleComponent from "utils/useVisibleComponent";
 
 interface VideoInterface {
   playbackId: string;
