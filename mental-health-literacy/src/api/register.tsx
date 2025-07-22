@@ -7,9 +7,6 @@ export async function clientAction({ params, request }: Route.ActionArgs) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  // Call the Supabase API to create a new user
-  console.log("Register action triggered with email:", email);
-  console.log("Register action triggered with password:", password);
   await store.dispatch(
     register({
       email,
