@@ -8,12 +8,6 @@ const initialState = {
   error: null as string | null,
 };
 
-const test = supabase()
-  .auth.getUser()
-  .then((response) => {
-    return response.data.user?.email ? response.data.user.email : null;
-  });
-
 export const get_user = createAsyncThunk("user/get", async () => {
   return await supabase()
     .auth.getUser()
