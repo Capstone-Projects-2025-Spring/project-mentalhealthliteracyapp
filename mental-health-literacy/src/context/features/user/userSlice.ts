@@ -25,8 +25,22 @@ export const login = createAsyncThunk(
   "user/login",
   async (credentials: { email: string; password: string }) => {
     const { email, password } = credentials;
-    return (await supabase().auth.signInWithPassword({ email, password })).data
+    const user = (await supabase().auth.signInWithPassword({ email, password })).data
       .user?.email;
+
+    // Sync preferences to Supabase after login
+    if (user) {
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const userInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+      const userTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+      const preferences = [...userInterests, ...userTraits];
+      if (onboardingComplete && preferences.length > 0) {
+        console.log("[Login Thunk] Syncing preferences to Supabase after login:", preferences);
+        await saveUserPreferences(preferences);
+      }
+    }
+
+    return user;
   }
 );
 
@@ -43,12 +57,12 @@ export const signout = createAsyncThunk("user/signout", async () => {
   return null; // Return null to indicate user is signed out
 });
 
-// Thunk to save preferences to Supabase
+// Thunk to save preferences to Supabase 
 export const savePreferences = createAsyncThunk(
   "user/savePreferences",
   async (preferences: string[], { rejectWithValue }) => {
     console.log("[Redux] savePreferences thunk called with:", preferences);
-    const result = await saveUserPreferences(preferences);
+    const result = await saveUserPreferences(preferences); 
     if (result.error) {
       console.log("[Redux] savePreferences thunk error:", result.error);
       return rejectWithValue(result.error);
@@ -58,7 +72,6 @@ export const savePreferences = createAsyncThunk(
   }
 );
 
-// Redux slice definition for user authentication state
 export const userSlice = createSlice({
   name: "user",
   initialState,
