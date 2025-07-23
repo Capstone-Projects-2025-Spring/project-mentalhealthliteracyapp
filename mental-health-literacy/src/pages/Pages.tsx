@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import Welcome from "./Welcome";
-import Video from "./Video";
+//import Video from "./Video";
 import Resources from "./Resources";
 
 export interface RouteDef {
@@ -10,7 +10,7 @@ export interface RouteDef {
 
 export const routeList: Array<RouteDef> = [
   { path: "/", element: <Welcome /> },
-  { path: "/video", element: <Video /> },
+  //{ path: "/video", element: <Video /> },
   { path: "/resources", element: <Resources /> },
 ];
 
