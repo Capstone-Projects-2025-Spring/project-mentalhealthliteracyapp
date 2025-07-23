@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Onboarding.css";
 import CloseButton from "./CloseButton";
+import { useDispatch, useSelector } from "react-redux";
+import { savePreferences } from "src/context/features/user/userSlice";
 
 const INTERESTS = [
   "Art",
@@ -61,6 +63,10 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const [interests, setInterests] = useState<string[]>([]);
   const [traits, setTraits] = useState<string[]>([]);
   const [transitioning, setTransitioning] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<any>();
+  const user = useSelector((state: any) => state.user.user);
+
 
   useEffect(() => {
     const complete = localStorage.getItem("onboardingComplete");
@@ -70,13 +76,36 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   }, []);
 
   const persistPreferences = () => {
+    console.log("[Onboarding] Saving preferences to localStorage", { interests, traits });
     localStorage.setItem("onboardingComplete", "true");
     localStorage.setItem("userInterests", JSON.stringify(interests));
     localStorage.setItem("userTraits", JSON.stringify(traits));
   };
 
-  const closeOnboarding = () => {
+  const closeOnboarding = async () => {
     persistPreferences();
+    console.log("[Onboarding] User state on close:", user);
+    // If signed in user, dispatch savePreferences thunk
+    if (user && user !== "Guest") {
+      console.log("[Onboarding] Dispatching savePreferences thunk on close");
+      await dispatch(savePreferences([...interests, ...traits]));
+    } else {
+      console.log("[Onboarding] User not signed in, only saving to local storage.");
+    }
+    setVisible(false);
+    onComplete?.();
+  };
+
+  const handleFinish = async () => {
+    persistPreferences();
+    console.log("[Onboarding] User state on finish:", user);
+    // If signed in user, dispatch savePreferences thunk
+    if (user && user !== "Guest") {
+      console.log("[Onboarding] Dispatching savePreferences thunk on finish");
+      await dispatch(savePreferences([...interests, ...traits]));
+    } else {
+      console.log("[Onboarding] User not signed in, skipping backend save.");
+    }
     setVisible(false);
     onComplete?.();
   };
@@ -97,18 +126,17 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     }, 250);
   };
 
-  const handleFinish = () => {
-    persistPreferences();
-    setVisible(false);
-    onComplete?.();
-  };
-
   if (!visible) return null;
 
   return (
       <div className="overlay">
         <div className={"modal" + (transitioning ? " transitioning" : "")}>
           <CloseButton close={closeOnboarding} />
+          {error && (
+            <div className="stepContent">
+              <h2 className="heading2" style={{ color: 'red' }}>Error: {error}</h2>
+            </div>
+          )}
           {step === 0 && (
               <div className="stepContent">
                 <h1 className="heading">

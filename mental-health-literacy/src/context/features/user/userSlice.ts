@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import store from "src/context/global_store";
 import supabase from "src/lib/supabase";
+import {saveUserPreferences} from "src/api/preferences";
 
 // Initial user state is going to be email fetched from Supabase if they have an active session
 const initialState = {
@@ -43,6 +43,22 @@ export const signout = createAsyncThunk("user/signout", async () => {
   return null; // Return null to indicate user is signed out
 });
 
+// Thunk to save preferences to Supabase
+export const savePreferences = createAsyncThunk(
+  "user/savePreferences",
+  async (preferences: string[], { rejectWithValue }) => {
+    console.log("[Redux] savePreferences thunk called with:", preferences);
+    const result = await saveUserPreferences(preferences);
+    if (result.error) {
+      console.log("[Redux] savePreferences thunk error:", result.error);
+      return rejectWithValue(result.error);
+    }
+    console.log("[Redux] savePreferences thunk success:", result.message);
+    return result.message;
+  }
+);
+
+// Redux slice definition for user authentication state
 export const userSlice = createSlice({
   name: "user",
   initialState,
