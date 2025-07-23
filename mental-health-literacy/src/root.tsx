@@ -6,17 +6,21 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 import type { Route } from "./+types/root";
+import { Provider } from "react-redux";
 
 import appStylesHref from "./main.css?url";
 import logo from "./assets/logo.png?url";
+import { store } from "./context/global_store";
 import Onboarding from "./components/Onboarding";
+import { get_user } from "./context/features/user/userSlice";
 
 export default function App() {
+  store.dispatch(get_user());
   return (
-    <>
+    <Provider store={store}>
       <Onboarding />
       <Outlet />
-    </>
+    </Provider>
   );
 }
 
@@ -31,8 +35,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href={appStylesHref} />
-        <link rel="icon" href={logo} />
         <Links />
+        <link rel="icon" href={logo} />
       </head>
       <body>
         {children}

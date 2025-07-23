@@ -1,0 +1,40 @@
+.profile-sidebar {
+  display: flex;
+  position: relative;
+  margin: auto auto 0 0;
+  width: 100%;
+  max-width: 20rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  & .profile-sidebar-info {
+    flex: 1;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--ff-primary);
+    font-weight: var(--fw-md);
+    text-align: center;
+    white-space: nowrap;
+  }
+  & button {
+    max-width: 3rem;
+    margin-left: auto;
+  }
+}
+
+.profile-sidebar::before {
+  content: "";
+  position: absolute;
+  border-top: 1px solid var(--clr-separator);
+  margin: 0 auto;
+  height: 5px;
+  width: 90%;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+html:has(.profile-sidebar:hover) .profile-sidebar {
+  color: var(--clr-fc-secondary);
+  background-color: var(--clr-bg-300);
+}

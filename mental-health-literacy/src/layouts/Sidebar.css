@@ -1,16 +1,25 @@
 @import "../constants.css";
 
 #sidebar {
-  position: sticky;
   font-family: var(--ff-primary);
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   top: 0;
 }
 
-#sidebar::after {
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  overflow: hidden;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-container::after {
   content: "";
   position: absolute;
-  border-right: 1px solid var(--clr-separator);
+  border-right: 2px solid var(--clr-separator);
   margin: auto 0;
   height: 90%;
   width: 1px;
@@ -19,12 +28,12 @@
   bottom: 0;
 }
 
-#sidebar nav {
+.sidebar-container nav {
   background: hsl(0, 0%, 100%);
   position: relative;
 }
 
-#sidebar ul {
+.sidebar-container ul {
   display: grid;
   padding: 0;
   margin: 0 1rem;
@@ -32,7 +41,7 @@
   gap: 1rem;
 }
 
-#sidebar li a {
+.sidebar-container li a {
   font-size: 1.3rem;
   display: inline-block;
   width: 100%;
@@ -43,12 +52,12 @@
   transition: all 0.2s ease;
 }
 
-#sidebar li a:hover {
+.sidebar-container li a:hover {
   color: var(--clr-fc-hover);
   padding-left: 1rem;
 }
 
-#sidebar ul .active {
+.sidebar-container ul .active {
   background-color: var(--clr-bg-200);
   border-radius: 8px;
 }
@@ -85,6 +94,13 @@
   margin-top: auto;
   width: 100%;
 }
+.action-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-width: 3.5rem;
+  margin-right: 0.75rem;
+  margin-bottom: 3rem;
+}
 .user-actions a,
 button {
   flex: 1;
@@ -119,15 +135,17 @@ button:hover {
   color: var(--clr-fc-primary);
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 768px) {
   #sidebar {
-    position: absolute;
+    position: fixed;
     display: grid;
     grid-template-columns: 1fr;
     width: 100%;
+    max-width: 20rem;
+    top: 0;
+    left: 0;
     transition: transform 0.3s ease-in-out;
-    bottom: 0;
-    z-index: 1;
+    z-index: 9999;
     background: #fff;
   }
   #sidebar::after {
@@ -136,7 +154,6 @@ button:hover {
   #sidebar nav::before {
     content: "";
     position: absolute;
-    border-right: 1px solid hsl(0, 0%, 0%, 0.2);
     margin: auto 0;
     height: 90%;
     width: 1px;
@@ -155,7 +172,9 @@ button:hover {
     display: inline-block;
     height: fit-content;
     width: fit-content;
-    z-index: 2;
+    z-index: 99999;
+    top: 1rem;
+    left: 1rem;
     right: 0;
   }
 

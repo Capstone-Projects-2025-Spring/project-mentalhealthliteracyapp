@@ -8,7 +8,9 @@
   --clr-fc-secondary: hsl(0, 0%, 100%);
   --clr-fc-hover: hsl(277, 77%, 30%);
 
-  --clr-separator: hsl(0, 0%, 29%);
+  --clr-dark-500: hsl(0, 0%, 20%);
+
+  --clr-separator: hsl(0, 0%, 42%);
 
   --fs-l: 2rem;
   --fs-md: 1.3rem;

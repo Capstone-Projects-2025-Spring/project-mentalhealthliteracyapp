@@ -7,6 +7,8 @@ import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 
 import style from "./Sidebar.css?url";
+import { getUser } from "utils/GetUserHook";
+import ProfileSidebar from "src/components/ProfileSidebar";
 
 export function links() {
   return [
@@ -18,6 +20,7 @@ export function links() {
 }
 
 function Sidebar() {
+  const userEmail = getUser();
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
 
   const loginRef = useRef<HTMLDialogElement>(null);
@@ -49,7 +52,7 @@ function Sidebar() {
   };
 
   return (
-    <div id="root">
+    <div id="root" suppressHydrationWarning={true}>
       <dialog ref={loginRef} className="dialog dialog-centered">
         <Login
           close={() => {
@@ -81,57 +84,66 @@ function Sidebar() {
       </div>
 
       <aside id="sidebar" className={sidebarStatus ? "hidden" : "shown"}>
-        <nav>
-          <img src={logo}></img>
+        <div className="sidebar-container">
+          <nav>
+            <img src={logo}></img>
 
-          <ul>
-            <li
-              id="nav-welcome"
-              className={useLocation().pathname == "/" ? "active" : "inactive"}
-            >
-              <Link to="/">Welcome</Link>
-            </li>
-            <li
-              id="nav-video"
-              className={
-                useLocation().pathname == "/video" ? "active" : "inactive"
-              }
-            >
-              <Link to="/video">Video</Link>
-            </li>
-            <li
-              id="nav-resources"
-              className={
-                useLocation().pathname == "/resources" ? "active" : "inactive"
-              }
-            >
-              <Link to="/resources">Resources</Link>
-            </li>
-          </ul>
-        </nav>
-        <div id="user-actions">
-          {/* <Link id="nav-login" to="/login" className="signin-btn">
-            Sign-in
-          </Link>
-          <Link id="nav-signup" to="/signup" className="register-btn">
-            Register
-          </Link> */}
-          <button
-            className="signin-btn"
-            onClick={() => {
-              loginRef.current?.showModal();
-            }}
-          >
-            Sign-in
-          </button>
-          <button
-            className="register-btn"
-            onClick={() => {
-              registerRef.current?.showModal();
-            }}
-          >
-            Register
-          </button>
+            <ul>
+              <li
+                id="nav-welcome"
+                className={
+                  useLocation().pathname == "/" ? "active" : "inactive"
+                }
+              >
+                <Link to="/">Welcome</Link>
+              </li>
+              <li
+                id="nav-video"
+                className={
+                  useLocation().pathname == "/video" ? "active" : "inactive"
+                }
+              >
+                <Link to="/video">Video</Link>
+              </li>
+              <li
+                id="nav-resources"
+                className={
+                  useLocation().pathname == "/resources" ? "active" : "inactive"
+                }
+              >
+                <Link to="/resources">Resources</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <>
+            {userEmail ? (
+              <>
+                <ProfileSidebar />
+              </>
+            ) : (
+              <>
+                <div id="user-actions" suppressHydrationWarning>
+                  <button
+                    className="signin-btn"
+                    onClick={() => {
+                      loginRef.current?.showModal();
+                    }}
+                  >
+                    Sign-in
+                  </button>
+                  <button
+                    className="register-btn"
+                    onClick={() => {
+                      registerRef.current?.showModal();
+                    }}
+                  >
+                    Register
+                  </button>
+                </div>
+              </>
+            )}
+          </>
         </div>
       </aside>
 
