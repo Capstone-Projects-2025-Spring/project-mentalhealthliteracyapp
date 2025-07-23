@@ -6,9 +6,18 @@ import logo from "../assets/logo.png";
 import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 
-import "./Sidebar.css";
+import style from "./Sidebar.css?url";
 import { getUser } from "utils/GetUserHook";
 import ProfileSidebar from "src/components/ProfileSidebar";
+
+export function links() {
+  return [
+    {
+      rel: "stylesheet",
+      href: style,
+    },
+  ];
+}
 
 function Sidebar() {
   const userEmail = getUser();
@@ -43,7 +52,7 @@ function Sidebar() {
   };
 
   return (
-    <div id="root">
+    <div id="root" suppressHydrationWarning={true}>
       <dialog ref={loginRef} className="dialog dialog-centered">
         <Login
           close={() => {
@@ -114,7 +123,7 @@ function Sidebar() {
               </>
             ) : (
               <>
-                <div id="user-actions">
+                <div id="user-actions" suppressHydrationWarning>
                   <button
                     className="signin-btn"
                     onClick={() => {
