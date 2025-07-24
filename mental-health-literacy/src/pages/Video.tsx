@@ -1,55 +1,159 @@
-import VideoComponent from "src/components/VideoComponent";
-import "./Video.css";
+import { useState, useEffect, useRef } from "react";
+import VideoComponent from "../components/VideoComponent";
+import { videoService } from "../components/videoService";
+import type { Video } from "../components/videoService";
 
-const videos = [
-  {
-    id: 1,
-    playbackId: "yqxGVhVrrkaM6UvIKNEkTbcR8AIdWJ5Dfsvh43TS7sg",
-    username: "cbt_therapist",
-    title: "CBT Therapist",
-    description:
-      "Experience a one-on-one CBT therapy session. #CBT #TherapySession",
-    likes: 1200,
-    tags: [
-      { label: "CBT", url: "/resources/cbt" },
-      { label: "Group Therapy", url: "/resources/group-therapy" },
-    ],
-  },
-  {
-    id: 3,
-    playbackId: "XySCCoSeiLPRkasKAMi1GQtmZH78vOu9GKnSDEDUpQY",
-    username: "peer_supporter",
-    title: "Peer support",
-    description:
-      "Discover the Togetherall app: a safe, anonymous space for mental health peer support. #Togetherall #PeerSupport",
-    likes: 800,
-    tags: [
-      { label: "Peer Support", url: "/resources/peer-support" },
-      { label: "Apps", url: "/resources/apps" },
-    ],
-  },
-];
+import style from "./Video.css?url";
+
+export function links() {
+  return [
+    {
+      rel: "stylesheet",
+      href: style,
+    },
+  ];
+}
 
 function Video() {
-  return (
-    <div className="video-container">
-      <ul className="video-list">
-        {videos
-          .filter((vid) => vid.playbackId)
-          .map((vid) => {
-            return (
-              <VideoComponent
-                key={vid.id}
-                playbackId={vid.playbackId}
-                title={vid.title}
-                username={vid.username}
-                description={vid.description}
-                likes={vid.likes}
-                tags={vid.tags}
-              />
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+  const videoRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    loadVideos();
+  }, []);
+
+  const loadVideos = async () => {
+    try {
+      setLoading(true);
+      const fetchedVideos = await videoService.getVideos();
+      setVideos(fetchedVideos);
+    } catch (err) {
+      console.error('Error loading videos:', err);
+      // Fallback to hardcoded videos if database fails
+      setVideos(getFallbackVideos());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async (videoId: number) => {
+    try {
+      // Update local state optimistically
+      setVideos(prevVideos => 
+        prevVideos.map(video => 
+          video.id === videoId 
+            ? { ...video, likes: video.likes + 1 }
+            : video
+        )
+      );
+
+      // Update database
+      const video = videos.find(v => v.id === videoId);
+      if (video) {
+        await videoService.updateLikes(videoId, video.likes + 1);
+      }
+    } catch (err) {
+      console.error('Error updating like:', err);
+      // Revert optimistic update on error
+      await loadVideos();
+    }
+  };
+
+  // Fallback videos if database is not available
+  const getFallbackVideos = (): Video[] => [
+    {
+      id: 1,
+      playbackId: "yqxGVhVrrkaM6UvIKNEkTbcR8AIdWJ5Dfsvh43TS7sg",
+      username: "cbt_therapist",
+      description: "Experience a one-on-one CBT therapy session. #CBT #TherapySession",
+      likes: 1200,
+      tags: [
+        { label: "CBT", url: "/resources/cbt" },
+        { label: "Therapy", url: "/resources/therapy" },
+      ],
+    },
+    // ... add all your other videos here as fallback
+  ];
+
+  useEffect(() => {
+    // Intersection Observer to detect when a video is in view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = videoRefs.current.findIndex(
+              (ref) => ref === entry.target
             );
-          })}
-      </ul>
+            if (index !== -1) {
+              setCurrentVideoIndex(index);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: "0px",
+      }
+    );
+
+    // Observe each video ref
+    videoRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [videos]);
+
+  if (loading) {
+    return <div className="loading">Loading videos...</div>;
+  }
+
+  return (
+    <div className="video-feed">
+      {videos.map((video, index) => (
+        <div
+          key={video.id}
+          ref={(el) => {
+            videoRefs.current[index] = el;
+          }}
+          style={{ width: "100%", height: "100vh", scrollSnapAlign: "start" }}
+        >
+          {index === currentVideoIndex ? (
+            video.playbackId ? (
+              <VideoComponent
+                playbackId={video.playbackId}
+                title={video.username}
+                username={video.username}
+                description={video.description}
+                likes={video.likes}
+                tags={video.tags}
+              />
+            ) : (
+              <div className="video-placeholder">
+                <div style={{ textAlign: "center" }}>
+                  <div>No video available for @{video.username}</div>
+                </div>
+              </div>
+            )
+          ) : (
+            <div className="video-placeholder">
+              <div style={{ textAlign: "center" }}>
+                <div>@{video.username}</div>
+                <div style={{ fontSize: "14px", marginTop: "8px" }}>
+                  {video.description}
+                </div>
+                <div
+                  style={{ fontSize: "12px", marginTop: "16px", opacity: 0.7 }}
+                >
+                  Scroll to view video
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
