@@ -4,9 +4,15 @@ import {saveUserPreferences} from "src/api/preferences";
 
 // Initial user state is going to be email fetched from Supabase if they have an active session
 const initialState = {
-  user: "Guest" as string | null,
+  user: null as string | null,
   error: null as string | null,
 };
+
+const test = supabase()
+  .auth.getUser()
+  .then((response) => {
+    return response.data.user?.email ? response.data.user.email : null;
+  });
 
 export const get_user = createAsyncThunk("user/get", async () => {
   return await supabase()

@@ -10,7 +10,6 @@ import animalTherapy from "../assets/animal-therapy.png";
 import artTherapy from "../assets/art.png";
 import familyTherapy from "../assets/family-therapy.png";
 import helpIcon from "../assets/help.png";
-import isClientHook from "utils/IsClientHook";
 
 const Resources = () => {
   const [run, setRun] = useState(false);

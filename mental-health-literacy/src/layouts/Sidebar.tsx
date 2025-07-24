@@ -9,6 +9,7 @@ import SignUp from "../components/SignUp";
 import style from "./Sidebar.css?url";
 import { getUser } from "utils/GetUserHook";
 import ProfileSidebar from "src/components/ProfileSidebar";
+import useClientHook from "utils/useClientHook";
 
 export function links() {
   return [
@@ -21,6 +22,7 @@ export function links() {
 
 function Sidebar() {
   const userEmail = getUser();
+  const isClient = useClientHook();
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
 
   const loginRef = useRef<HTMLDialogElement>(null);
@@ -117,13 +119,13 @@ function Sidebar() {
           </nav>
 
           <>
-            {userEmail ? (
+            {userEmail && isClient ? (
               <>
                 <ProfileSidebar />
               </>
             ) : (
               <>
-                <div id="user-actions" suppressHydrationWarning>
+                <div id="user-actions">
                   <button
                     className="signin-btn"
                     onClick={() => {
