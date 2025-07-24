@@ -1,4 +1,4 @@
-import { getSupabaseClient } from '../lib/supabase';
+import supabase from '../lib/supabase';
 
 export interface Video {
   id: number;
@@ -12,7 +12,7 @@ export interface Video {
 }
 
 export class VideoService {
-  private supabase = getSupabaseClient();
+  private supabase = supabase();
 
   async getVideos(): Promise<Video[]> {
     if (!this.supabase) {
@@ -28,7 +28,7 @@ export class VideoService {
       if (error) throw error;
 
       // Map the database results to your Video interface
-      return videos.map(video => ({
+      return videos.map((video: any) => ({
         id: video.id,
         playbackId: video.playbackId,
         username: video.username,
