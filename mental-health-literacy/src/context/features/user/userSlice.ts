@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import store from "src/context/global_store";
 import supabase from "src/lib/supabase";
+import {saveUserPreferences} from "src/api/preferences";
 
 // Initial user state is going to be email fetched from Supabase if they have an active session
 const initialState = {
@@ -31,8 +31,22 @@ export const login = createAsyncThunk(
   "user/login",
   async (credentials: { email: string; password: string }) => {
     const { email, password } = credentials;
-    return (await supabase().auth.signInWithPassword({ email, password })).data
+    const user = (await supabase().auth.signInWithPassword({ email, password })).data
       .user?.email;
+
+    // Sync preferences to Supabase after login
+    if (user) {
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const userInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+      const userTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+      const preferences = [...userInterests, ...userTraits];
+      if (onboardingComplete && preferences.length > 0) {
+        console.log("[Login Thunk] Syncing preferences to Supabase after login:", preferences);
+        await saveUserPreferences(preferences);
+      }
+    }
+
+    return user;
   }
 );
 
@@ -48,6 +62,21 @@ export const signout = createAsyncThunk("user/signout", async () => {
   await supabase().auth.signOut();
   return null; // Return null to indicate user is signed out
 });
+
+// Thunk to save preferences to Supabase 
+export const savePreferences = createAsyncThunk(
+  "user/savePreferences",
+  async (preferences: string[], { rejectWithValue }) => {
+    console.log("[Redux] savePreferences thunk called with:", preferences);
+    const result = await saveUserPreferences(preferences); 
+    if (result.error) {
+      console.log("[Redux] savePreferences thunk error:", result.error);
+      return rejectWithValue(result.error);
+    }
+    console.log("[Redux] savePreferences thunk success:", result.message);
+    return result.message;
+  }
+);
 
 export const userSlice = createSlice({
   name: "user",
