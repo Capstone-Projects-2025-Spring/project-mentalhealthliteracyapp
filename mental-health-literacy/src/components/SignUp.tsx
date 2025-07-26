@@ -1,10 +1,10 @@
 import { useFetcher } from "react-router-dom";
 import CloseButton from "../components/CloseButton";
-import { getError } from "utils/GetErrorHook";
+import useUserError from "utils/useUserError";
 
 function SignUp(props: any) {
   const fetcher = useFetcher();
-  const error = getError();
+  const error = useUserError();
 
   if (fetcher.data?.status == 200 && !error) {
     props.close();
@@ -15,13 +15,16 @@ function SignUp(props: any) {
       <div className="login-form">
         <h1>Sign Up</h1>
         <fetcher.Form method="post" action="/api/register">
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-          />
+          <label>
+            <p>{error}</p>
+            Email:
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+          </label>
 
           <label>Password:</label>
           <input

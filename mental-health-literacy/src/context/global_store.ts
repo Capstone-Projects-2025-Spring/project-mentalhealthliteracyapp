@@ -1,6 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./features/user/userSlice";
 
+/**
+ * A global store that will store global context.
+ */
 export const store = configureStore({
   reducer: {
     user: userReducer,
