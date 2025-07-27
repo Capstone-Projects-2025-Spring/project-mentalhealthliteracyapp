@@ -13,34 +13,28 @@ function Login(props: any) {
     <>
       <CloseButton close={props.close}></CloseButton>
 
-      <div className="login-form">
+      <div className="auth-form">
         <h1>Login</h1>
         <fetcher.Form method="post" action="/api/login">
-          <label>
-            <p>{error}</p>
-            Email:
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              required
-            />
-          </label>
+          <p className="error">{error}</p>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
 
-          <label>
-            Password:
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              required
-            />
-          </label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
 
           <button type="submit">Log In</button>
         </fetcher.Form>
 
-        <p style={{ marginTop: "1rem", textAlign: "center" }}>
+        <p className="switch-container">
           Don’t have an account?{" "}
           <button className="switch-button" onClick={props.switch}>
             Sign Up
