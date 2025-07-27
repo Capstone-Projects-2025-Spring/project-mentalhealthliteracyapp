@@ -136,8 +136,8 @@
 }
 
 .dialog {
-  width: calc(min(40rem, 90%));
-  height: 30rem;
+  width: calc(min(35rem, 90%));
+  height: 25rem;
   padding: 3rem;
   border-radius: 20px;
   border: 2px dashed var(--clr-bg-200);
