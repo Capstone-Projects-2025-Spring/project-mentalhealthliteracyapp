@@ -3,6 +3,12 @@ import supabase from "src/lib/supabase";
 // Get user preferences
 export async function getUserPreferences(userId: string) {
     console.log("[getUserPreferences] Starting with userId:", userId);
+
+    // For non-authenticated users
+    if (userId === "localStorage_user") {
+        return await getLocalStoragePreferences();
+    }
+    
     try {
         const {data: userPrefs, error} = await supabase()
             .from("userPreferences")
@@ -24,6 +30,45 @@ export async function getUserPreferences(userId: string) {
         return preferenceIds;
     } catch (error) {
         console.log("[getUserPreferences] Error:", error);
+        return [];
+    }
+}
+
+// Get preferences from localStorage for non-authenticated users
+async function getLocalStoragePreferences(): Promise<number[]> {
+    try {
+        const interests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+        const traits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+        
+        console.log("[getLocalStoragePreferences] Interests:", interests, "Traits:", traits);
+        
+        if (interests.length === 0 && traits.length === 0) {
+            console.log("[getLocalStoragePreferences] No preferences found in localStorage");
+            return [];
+        }
+        
+        // Get preference IDs from database by name
+        const allPreferences = [...interests, ...traits];
+        const {data: preferenceRows, error} = await supabase()
+            .from("preferences")
+            .select("id, name")
+            .in("name", allPreferences);
+            
+        if (error) {
+            console.log("[getLocalStoragePreferences] Error fetching preferences:", error);
+            return [];
+        }
+        
+        if (!preferenceRows || preferenceRows.length === 0) {
+            console.log("[getLocalStoragePreferences] No matching preferences found in database");
+            return [];
+        }
+        
+        const preferenceIds = preferenceRows.map(pref => pref.id);
+        console.log("[getLocalStoragePreferences] Mapped to preference IDs:", preferenceIds);
+        return preferenceIds;
+    } catch (error) {
+        console.log("[getLocalStoragePreferences] Error:", error);
         return [];
     }
 }
@@ -108,11 +153,46 @@ export async function getCurrentUserId(userId: string | null = null) {
     try {
         const {data: {user}} = await supabase().auth.getUser();
         const currentUserId = user?.id || null;
-        console.log("[getCurrentUserId] Current user ID:", currentUserId);
-        return currentUserId;
+        
+        if (currentUserId) {
+            console.log("[getCurrentUserId] Current User ID:", currentUserId);
+            return currentUserId; // Authenticated users always use database preferences
+        } else {
+            // Only check localStorage for non-authenticated users
+            const hasLocalPreferences = checkLocalStoragePreferences();
+            if (hasLocalPreferences) {
+                console.log("[getCurrentUserId] Non-authenticated user with localStorage preferences");
+                return "localStorage_user";
+            }
+            console.log("[getCurrentUserId] No authenticated user and no localStorage preferences");
+            return null;
+        }
     } catch (error) {
         console.log("[getCurrentUserId] Error getting user:", error);
         return null;
+    }
+}
+
+// Check if user has preferences in localStorage
+function checkLocalStoragePreferences(): boolean {
+    try {
+        const interests = localStorage.getItem("userInterests");
+        const traits = localStorage.getItem("userTraits");
+
+        if (!interests && !traits) {
+            return false;
+        }
+
+        const interestsArray = interests ? JSON.parse(interests) : [];
+        const traitsArray = traits ? JSON.parse(traits) : [];
+        
+        const hasPreferences = interestsArray.length > 0 || traitsArray.length > 0;
+        console.log("[checkLocalStoragePreferences] Has preferences:", hasPreferences, "Interests:", interestsArray.length, "Traits:", traitsArray.length);
+        
+        return hasPreferences;
+    } catch (error) {
+        console.log("[checkLocalStoragePreferences] Error checking localStorage:", error);
+        return false;
     }
 }
 
@@ -123,7 +203,7 @@ export async function getRecommendedVideos(userId: string | null = null) {
         const authenticatedUserId = await getCurrentUserId(userId);
 
         if (!authenticatedUserId) {
-            console.log("[getRecommendedVideos] No authenticated user, getting all videos");
+            console.log("[getRecommendedVideos] No authenticated user and no localStorage preferences. Getting all videos");
             return await getAllVideos();
         }
 
@@ -151,7 +231,8 @@ export async function getRecommendedVideos(userId: string | null = null) {
             return await getAllVideos();
         }
 
-        console.log("[getRecommendedVideos] Successfully fetched recommended videos");
+        const userType = authenticatedUserId === "localStorage_user" ? "localStorage" : "authenticated";
+        console.log(`[getRecommendedVideos] Successfully fetched recommended videos for ${userType} user`);
         return recommendedVideos;
     } catch (error) {
         console.log("[getRecommendedVideos] Error in recommendation process:", error);
