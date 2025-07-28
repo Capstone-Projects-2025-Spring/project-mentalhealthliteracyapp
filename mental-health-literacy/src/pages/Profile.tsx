@@ -2,7 +2,7 @@ import { getUser } from "utils/GetUserHook";
 import ProtectedRoute from "src/components/ProtectedRoute";
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { saveUserPreferences } from "src/api/preferences";
+import { saveUserPreferences, fetchUserPreferences } from "src/api/preferences";
 
 const INTERESTS = [
   "Art", "Music", "Writing", "Nature", "Fitness", "Animals", "Reading", "Cooking", "Travel", "Fashion", "Gardening", "Meditation"
@@ -27,11 +27,29 @@ function Profile() {
   const [showConfirmClose, setShowConfirmClose] = useState(false);
 
   useEffect(() => {
-    const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
-    const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
-    setInterests(storedInterests);
-    setTraits(storedTraits);
-  }, []);
+    const loadPreferences = async () => {
+      console.log("[Profile] Loading preferences for user:", user);
+      
+      if (user && user !== "Guest") {
+        // If authenticated user, get preferences from Supabase
+        const result = await fetchUserPreferences();
+        
+        if (result.status === 200 && result.data) {
+          console.log("[Profile] Using user preferences:", result.data);
+          setInterests(result.data.interests);
+          setTraits(result.data.traits);
+          return;
+        }
+      }
+      // Fallback to localStorage for non-authenticated users or if database fetch fails
+      const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+      const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+      console.log("[Profile] Using localStorage preferences:", { storedInterests, storedTraits });
+      setInterests(storedInterests);
+      setTraits(storedTraits);
+    };
+    loadPreferences();
+  }, [user]);
 
 
   const handleEdit = () => {

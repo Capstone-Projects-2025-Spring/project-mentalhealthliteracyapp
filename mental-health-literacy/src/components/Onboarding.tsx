@@ -3,6 +3,7 @@ import "./Onboarding.css";
 import CloseButton from "./CloseButton";
 import { useDispatch, useSelector } from "react-redux";
 import { savePreferences } from "src/context/features/user/userSlice";
+import { fetchUserPreferences } from "src/api/preferences";
 
 const INTERESTS = [
   "Art",
@@ -72,8 +73,30 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     const complete = localStorage.getItem("onboardingComplete");
     if (!complete) {
       setVisible(true);
+      
+      // If user is authenticated, get existing preferences
+      if (user && user !== "Guest") {
+        loadExistingPreferences();
+      }
     }
-  }, []);
+  }, [user]);
+
+  const loadExistingPreferences = async () => {
+    try {
+      console.log("[Onboarding] Loading existing preferences from database");
+      const result = await fetchUserPreferences();
+      
+      if (result.status === 200 && result.data) {
+        console.log("[Onboarding] Found existing preferences:", result.data);
+        setInterests(result.data.interests);
+        setTraits(result.data.traits);
+      } else {
+        console.log("[Onboarding] No existing preferences found in database");
+      }
+    } catch (error) {
+      console.log("[Onboarding] Error loading existing preferences:", error);
+    }
+  };
 
   const persistPreferences = () => {
     console.log("[Onboarding] Saving preferences to localStorage", { interests, traits });

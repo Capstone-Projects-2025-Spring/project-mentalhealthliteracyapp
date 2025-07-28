@@ -11,7 +11,7 @@ export function getUser() {
     if (typeof window !== "undefined") {
       setUser(currentUser);
     }
-  }, [user, currentUser]);
+  }, [currentUser]);
 
   return user;
 }
