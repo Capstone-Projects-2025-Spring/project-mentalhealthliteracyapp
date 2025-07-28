@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import VideoComponent from "../components/VideoComponent";
 import { videoService } from "../components/videoService";
+import { getRecommendedVideos } from "../api/recommendations";
 import type { Video } from "../components/videoService";
 
 import style from "./Video.css?url";
@@ -27,7 +28,7 @@ function Video() {
   const loadVideos = async () => {
     try {
       setLoading(true);
-      const fetchedVideos = await videoService.getVideos();
+      const fetchedVideos = await getRecommendedVideos();
       setVideos(fetchedVideos);
     } catch (err) {
       console.error('Error loading videos:', err);
@@ -37,6 +38,7 @@ function Video() {
       setLoading(false);
     }
   };
+
 
   const handleLike = async (videoId: number) => {
     try {
@@ -97,12 +99,10 @@ function Video() {
         rootMargin: "0px",
       }
     );
-
     // Observe each video ref
     videoRefs.current.forEach((ref) => {
       if (ref) observer.observe(ref);
     });
-
     return () => observer.disconnect();
   }, [videos]);
 
