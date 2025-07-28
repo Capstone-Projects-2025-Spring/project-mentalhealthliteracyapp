@@ -31,7 +31,7 @@ const Resources = () => {
       setRun(false);
     }
     if (action === "next" && index === 0) {
-      navigate("/cbt?tour=true");
+      navigate("/resources/cbt?tour=true");
     }
   };
   return (
@@ -62,8 +62,7 @@ const Resources = () => {
         <div className="help-dialog-overlay">
           <div className="help-dialog">
             <div className="help-dialog-message">
-              Follow the highlighted dots for a guided tutorial of the resources
-              page!
+              Follow the highlighted dots for a guided tutorial of the resources page!
             </div>
             <button
               className="help-dialog-close"
@@ -79,23 +78,10 @@ const Resources = () => {
       )}
       <div className="section">
         <h2 className="section-title">Mental Health Conditions</h2>
-        <button
-          className="guided-tour-btn"
-          onClick={() => setRun(true)}
-          style={{ display: "none" }}
-        >
-          Tutorial
-        </button>
         <img
           src={helpIcon}
           alt="Help"
           className="help-icon"
-          style={{
-            width: 36,
-            height: 36,
-            cursor: "pointer",
-            marginBottom: "2rem",
-          }}
           onClick={() => setShowDialog(true)}
           title="Help"
         />
@@ -108,25 +94,38 @@ const Resources = () => {
             </div>
           </Link>
           <Link to="/resources/group-therapy" className="resource-card">
-            <img
-              src={groupTherapy}
-              alt="Group Therapy"
-              className="card-image"
-            />
+            <img src={groupTherapy} alt="Group Therapy" className="card-image" />
             <div className="resource-title">Group Therapy</div>
             <div className="resource-meta">
               Support for anxiety, depression, and PTSD.
             </div>
           </Link>
           <Link to="/resources/yoga" className="resource-card">
-            <img
-              src={therapeuticYoga}
-              alt="Therapeutic Yoga"
-              className="card-image"
-            />
+            <img src={therapeuticYoga} alt="Therapeutic Yoga" className="card-image" />
             <div className="resource-title">Therapeutic Yoga</div>
             <div className="resource-meta">
               Reduces stress and improves mood.
+            </div>
+          </Link>
+          <Link to="/resources/animal-therapy" className="resource-card">
+            <img src={animalTherapy} alt="Animal Assisted Therapy" className="card-image" />
+            <div className="resource-title">Animal Assisted Therapy</div>
+            <div className="resource-meta">
+              Comfort and support from therapy animals such as dogs and cats.
+            </div>
+          </Link>
+          <Link to="/resources/art-therapy" className="resource-card">
+            <img src={artTherapy} alt="Art Therapy" className="card-image" />
+            <div className="resource-title">Art Therapy</div>
+            <div className="resource-meta">
+              Integrates mental health, human services, and the creative process.
+            </div>
+          </Link>
+          <Link to="/resources/family-therapy" className="resource-card">
+            <img src={familyTherapy} alt="Family Therapy" className="card-image" />
+            <div className="resource-title">Family Therapy</div>
+            <div className="resource-meta">
+              Improves relationships and communication among family members.
             </div>
           </Link>
         </div>
@@ -134,4 +133,5 @@ const Resources = () => {
     </div>
   );
 };
+
 export default Resources;

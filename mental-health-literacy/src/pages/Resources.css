@@ -109,7 +109,6 @@
 }
 
 .guided-tour-btn {
-    margin-bottom: 2rem;
     background: var(--clr-bg-700);
     color: var(--clr-fc-secondary);
     border: 1px solid var(--clr-bg-300);
@@ -120,6 +119,7 @@
     font-family: var(--ff-primary);
     font-weight: var(--fw-md);
     transition: background 0.2s, color 0.2s;
+    margin-bottom: 2rem;
 }
 
 .guided-tour-btn:hover {
@@ -133,6 +133,9 @@
     margin-left: auto;
     margin-right: 0;
     transition: filter 0.2s;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
 }
 .help-icon:hover {
     filter: brightness(0.8);
@@ -172,8 +175,8 @@
     color: var(--clr-fc-secondary);
     border: none;
     border-radius: 8px;
-    padding: 0.5rem 1.2rem;
-    font-size: 0.98rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
     font-family: var(--ff-primary);
     font-weight: var(--fw-md);
@@ -183,4 +186,31 @@
 .help-dialog-close:hover {
     background: var(--clr-bg-300);
     color: var(--clr-fc-primary);
+}
+
+.help-dialog-x {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #495057;
+    font-weight: bold;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    z-index: 10;
+    line-height: 1;
+}
+
+.help-dialog-x:hover {
+    background-color: #e9ecef;
+    color: #212529;
+    border-color: #adb5bd;
 }

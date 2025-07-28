@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import supabase from "src/lib/supabase";
+import { saveUserPreferences } from "src/api/preferences";
 
 // Initial user state is going to be email fetched from Supabase if they have an active session
 const initialState = {
@@ -19,6 +20,24 @@ export const user_login = createAsyncThunk(
     const response = await supabase().auth.signInWithPassword(credentials);
     const user = response.data.user?.email;
     const user_error = response.error?.message;
+
+    // Sync preferences to Supabase after login
+    if (user) {
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const userInterests = JSON.parse(
+        localStorage.getItem("userInterests") || "[]"
+      );
+      const userTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+      const preferences = [...userInterests, ...userTraits];
+      if (onboardingComplete && preferences.length > 0) {
+        console.log(
+          "[Login Thunk] Syncing preferences to Supabase after login:",
+          preferences
+        );
+        await saveUserPreferences(preferences);
+      }
+    }
+
     return { user, user_error };
   }
 );
@@ -39,9 +58,22 @@ export const user_signout = createAsyncThunk("user/signout", async () => {
   const user_error = response.error?.message;
   return { user, user_error };
 });
-/**
- *  A user slice that will update user and set an error if there is any
- */
+
+// Thunk to save preferences to Supabase
+export const savePreferences = createAsyncThunk(
+  "user/savePreferences",
+  async (preferences: string[], { rejectWithValue }) => {
+    console.log("[Redux] savePreferences thunk called with:", preferences);
+    const result = await saveUserPreferences(preferences);
+    if (result.error) {
+      console.log("[Redux] savePreferences thunk error:", result.error);
+      return rejectWithValue(result.error);
+    }
+    console.log("[Redux] savePreferences thunk success:", result.message);
+    return result.message;
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
