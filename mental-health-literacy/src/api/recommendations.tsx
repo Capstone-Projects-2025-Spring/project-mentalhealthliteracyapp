@@ -197,6 +197,18 @@ function checkLocalStoragePreferences(): boolean {
     }
 }
 
+// Combine recommended videos with remaining videos for endless scroll
+function combineVideosForEndlessScroll(recommendedVideos: any[], allVideos: any[]) {
+    // Filter out videos that are already in recommendations
+    const recommendedVideoIds = new Set(recommendedVideos.map(v => v.id));
+    const remainingVideos = allVideos.filter(video => !recommendedVideoIds.has(video.id));
+    
+    // Combine: recommended videos first, then remaining videos by likes
+    const combinedVideos = [...recommendedVideos, ...remainingVideos];
+    console.log("[combineVideosForEndlessScroll] Combined recommendations + remaining videos:", combinedVideos);
+    return combinedVideos;
+}
+
 // Recommend videos based on user preferences
 export async function getRecommendedVideos(userId: string | null = null) {
     console.log("[getRecommendedVideos] Getting recommendations.. ");
@@ -232,9 +244,15 @@ export async function getRecommendedVideos(userId: string | null = null) {
             return await getAllVideos();
         }
 
+        // Get all videos to add after recommendations
+        const allVideos = await getAllVideos();
+
+        const combinedVideos = combineVideosForEndlessScroll(recommendedVideos, allVideos);
+        
         const userType = authenticatedUserId === "localStorage_user" ? "localStorage" : "authenticated";
-        console.log(`[getRecommendedVideos] Successfully fetched recommended videos for ${userType} user`);
-        return recommendedVideos;
+
+        console.log(`[getRecommendedVideos] Successfully fetched videos for ${userType} user`);
+        return combinedVideos;
     } catch (error) {
         console.log("[getRecommendedVideos] Error in recommendation process:", error);
         return await getAllVideos();
