@@ -121,8 +121,9 @@ export async function getVideosFromCategories(categoryIds: number[]) {
             return [];
         }
 
-        const videoIds = videoCategories.map(vc => vc.videoId);
-        console.log("[getVideosFromCategories] Mapped Categories:", videoCategories, "to Video IDs:", videoIds);
+        // Remove duplicate video IDs using Set
+        const videoIds = [...new Set(videoCategories.map(vc => vc.videoId))];
+        console.log("[getVideosFromCategories] Unique video IDs:", videoIds);
 
         // Get video data
         const {data: videos, error: videosError} = await supabase()
