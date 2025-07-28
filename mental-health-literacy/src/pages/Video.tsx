@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import VideoComponent from "../components/VideoComponent";
 import { videoService } from "../components/videoService";
+import { getRecommendedVideos } from "../api/recommendations";
 import type { Video } from "../components/videoService";
 
 import style from "./Video.css?url";
@@ -27,8 +28,13 @@ function Video() {
   const loadVideos = async () => {
     try {
       setLoading(true);
-      const fetchedVideos = await videoService.getVideos();
-      setVideos(fetchedVideos);
+      const fetchedVideos = await getRecommendedVideos();
+      // Apply tag generation to each video using videoService
+      const videosWithTags = fetchedVideos.map(video => ({
+        ...video,
+        tags: videoService.getTagsForVideo(video.description)
+      }));
+      setVideos(videosWithTags);
     } catch (err) {
       console.error('Error loading videos:', err);
       // Fallback to hardcoded videos if database fails
@@ -37,6 +43,7 @@ function Video() {
       setLoading(false);
     }
   };
+
 
   const handleLike = async (videoId: number) => {
     try {
@@ -97,12 +104,10 @@ function Video() {
         rootMargin: "0px",
       }
     );
-
     // Observe each video ref
     videoRefs.current.forEach((ref) => {
       if (ref) observer.observe(ref);
     });
-
     return () => observer.disconnect();
   }, [videos]);
 
@@ -129,6 +134,9 @@ function Video() {
                 description={video.description}
                 likes={video.likes}
                 tags={video.tags}
+                isActive={true}
+                videoId={video.id}
+                onLike={handleLike}
               />
             ) : (
               <div className="video-placeholder">

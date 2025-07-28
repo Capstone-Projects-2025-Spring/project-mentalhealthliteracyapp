@@ -62,7 +62,7 @@ export class VideoService {
   }
 
   // Helper function to generate tags based on video description
-  private getTagsForVideo(description: string): { label: string; url: string }[] {
+  public getTagsForVideo(description: string): { label: string; url: string }[] {
     const tags: { label: string; url: string }[] = [];
     
     if (description.toLowerCase().includes('cbt')) {
