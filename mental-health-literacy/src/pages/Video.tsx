@@ -129,6 +129,7 @@ function Video() {
                 description={video.description}
                 likes={video.likes}
                 tags={video.tags}
+                isActive={true}
               />
             ) : (
               <div className="video-placeholder">
