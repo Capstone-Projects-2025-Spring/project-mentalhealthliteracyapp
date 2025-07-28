@@ -29,7 +29,12 @@ function Video() {
     try {
       setLoading(true);
       const fetchedVideos = await getRecommendedVideos();
-      setVideos(fetchedVideos);
+      // Apply tag generation to each video using videoService
+      const videosWithTags = fetchedVideos.map(video => ({
+        ...video,
+        tags: videoService.getTagsForVideo(video.description)
+      }));
+      setVideos(videosWithTags);
     } catch (err) {
       console.error('Error loading videos:', err);
       // Fallback to hardcoded videos if database fails
@@ -130,6 +135,8 @@ function Video() {
                 likes={video.likes}
                 tags={video.tags}
                 isActive={true}
+                videoId={video.id}
+                onLike={handleLike}
               />
             ) : (
               <div className="video-placeholder">

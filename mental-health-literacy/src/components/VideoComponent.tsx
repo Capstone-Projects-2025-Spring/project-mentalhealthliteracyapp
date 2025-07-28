@@ -13,6 +13,8 @@ interface VideoInterface {
   likes: number;
   tags?: { label: string; url: string }[];
   isActive?: boolean;
+  videoId: number;
+  onLike: (videoId: number) => Promise<void>;
 }
 
 function VideoComponent({
@@ -23,6 +25,8 @@ function VideoComponent({
   likes,
   tags,
   isActive = false,
+  videoId,
+  onLike,
 }: VideoInterface) {
   const ref = useRef(null);
   const containerRef = useRef(null);
