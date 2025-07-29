@@ -3,7 +3,7 @@ import "./Resources.css";
 
 const GroupTherapy = () => {
   return (
-    <div className="group-therapy-container">
+    <div className="resources-container">
       <div className="section">
         <h2 className="section-title">Helpful Information</h2>
         <div className="card-grid">

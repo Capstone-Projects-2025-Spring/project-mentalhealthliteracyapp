@@ -77,7 +77,7 @@ const Resources = () => {
         </div>
       )}
       <div className="section">
-        <h2 className="section-title">Mental Health Conditions</h2>
+        <h2 className="section-title">Mental Health Resources</h2>
         <img
           src={helpIcon}
           alt="Help"
