@@ -1,12 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
-import { getUser } from "utils/GetUserHook";
+import useUser from "utils/useUser";
 
 function ProtectedRoute(props: { children: React.ReactNode }) {
-  const user = useSelector((state: any) => {
-    return state.user.user;
-  });
+  const user = useUser();
   // If user not signed in, redirect to main page
   return <>{user ? <>{props.children}</> : <Navigate to="/"></Navigate>}</>;
 }

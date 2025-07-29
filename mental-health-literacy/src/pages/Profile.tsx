@@ -1,4 +1,4 @@
-import { getUser } from "utils/GetUserHook";
+import useUser from "utils/useUser";
 import ProtectedRoute from "src/components/ProtectedRoute";
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
@@ -13,7 +13,7 @@ const TRAITS = [
 const MAX_SELECTIONS = 5;
 
 function Profile() {
-  const user = getUser();
+  const user = useUser();
   // If user not signed in, redirect to main page
 
   // localStorage preferences

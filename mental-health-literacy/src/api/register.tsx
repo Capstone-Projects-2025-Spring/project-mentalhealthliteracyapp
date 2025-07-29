@@ -1,6 +1,6 @@
 import store from "src/context/global_store";
 import type { Route } from "./+types/register";
-import { register } from "src/context/features/user/userSlice";
+import { user_register } from "src/context/features/user/userSlice";
 
 export async function clientAction({ params, request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -8,7 +8,7 @@ export async function clientAction({ params, request }: Route.ActionArgs) {
   const password = formData.get("password") as string;
 
   await store.dispatch(
-    register({
+    user_register({
       email,
       password,
     })

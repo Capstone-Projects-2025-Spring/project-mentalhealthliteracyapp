@@ -27,7 +27,7 @@
     "@react-router/node": "^7.6.3",
     "@react-router/serve": "^7.6.3",
     "@reduxjs/toolkit": "^2.8.2",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.3",
     "@tailwindcss/vite": "^4.1.11",
     "react": "^19.1.0",

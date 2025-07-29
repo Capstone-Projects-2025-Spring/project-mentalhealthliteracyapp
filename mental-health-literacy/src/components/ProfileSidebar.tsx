@@ -1,13 +1,13 @@
 import store from "src/context/global_store";
 import "./ProfileSidebar.css";
-import { signout } from "src/context/features/user/userSlice";
-import { getUser } from "utils/GetUserHook";
+import { user_signout } from "src/context/features/user/userSlice";
+import useUser from "utils/useUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
 function ProfileSidebar() {
-  const userEmail = getUser();
+  const userEmail = useUser();
   const nav = useNavigate();
   return (
     <div
@@ -29,7 +29,7 @@ function ProfileSidebar() {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          store.dispatch(signout());
+          store.dispatch(user_signout());
         }}
       >
         <FontAwesomeIcon icon={faRightFromBracket} />
