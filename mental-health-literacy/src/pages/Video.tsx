@@ -1,4 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
+import { useLocation } from "react-router-dom";
 import VideoComponent from "../components/VideoComponent";
 import type {Video} from "../components/videoService";
 import {videoService} from "../components/videoService";
@@ -16,6 +17,7 @@ export function links() {
 }
 
 function Video() {
+  const location = useLocation();
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +26,26 @@ function Video() {
   useEffect(() => {
     loadVideos();
   }, []);
+
+  // Navigate from Profile page to scroll to specific video
+  useEffect(() => {
+    const { scrollToVideoId } = location.state || {};
+    if (scrollToVideoId && videos.length > 0) {
+      const videoIndex = videos.findIndex(video => video.id === scrollToVideoId);
+      if (videoIndex !== -1) {
+        console.log(`[Video] Scrolling to video ${scrollToVideoId} at index ${videoIndex}`);
+        setCurrentVideoIndex(videoIndex);
+        
+        // Scroll to the video
+        setTimeout(() => {
+          videoRefs.current[videoIndex]?.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
+    }
+  }, [videos, location.state]);
 
   const loadVideos = useCallback(async () => {
     try {

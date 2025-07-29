@@ -54,8 +54,6 @@ export class VideoService {
         return videosWithTags;
       }
 
-      console.log('[VideoService] User likes fetched:', userLikes);
-
       // Update isLiked for videos user has liked
       if (userLikes && userLikes.length > 0) {
         const likedVideoIds = new Set(userLikes.map(like => like.videoId));
@@ -63,9 +61,6 @@ export class VideoService {
         videosWithTags.forEach(video => {
           const wasLiked = likedVideoIds.has(video.id);
           video.isLiked = wasLiked;
-          if (wasLiked) {
-            console.log(`[VideoService] Video ${video.id} marked as liked`);
-          }
         });
       }
       return videosWithTags;
@@ -135,7 +130,7 @@ export class VideoService {
         .single();
 
       if (videoError) {
-        console.error('[VideoService] Erro:', videoError);
+        console.error('[VideoService] Error:', videoError);
         throw videoError;
       }
 
@@ -190,6 +185,72 @@ export class VideoService {
     }
     
     return tags;
+  }
+
+  // Get videos that the current user has liked
+  async getLikedVideos(): Promise<Video[]> {
+    try {
+      const { data: { user } } = await this.supabase.auth.getUser();
+      if (!user) {
+        console.log('[VideoService] No authenticated user found for getLikedVideos');
+        return [];
+      }
+      console.log(`[VideoService] Fetching liked videos for user ${user.id}`);
+
+      // Get video IDs that user has liked
+      const { data: likedVideoIds, error: likesError } = await this.supabase
+        .from('userInteractions')
+        .select('videoId')
+        .eq('user_id', user.id)
+        .eq('like', true);
+
+      if (likesError) {
+        console.error('[VideoService] Error fetching liked video IDs:', likesError);
+        return [];
+      }
+
+      if (!likedVideoIds || likedVideoIds.length === 0) {
+        console.log('[VideoService] No liked videos found for user');
+        return [];
+      }
+
+      const videoIds = likedVideoIds.map(like => like.videoId);
+      console.log(`[VideoService] Found ${videoIds.length} liked video IDs:`, videoIds);
+
+      // Get video data for liked videos
+      const { data: videos, error: videosError } = await this.supabase
+        .from('videos')
+        .select('*')
+        .in('id', videoIds)
+        .order('id', { ascending: false });
+
+      if (videosError) {
+        console.error('[VideoService] Error fetching liked videos:', videosError);
+        return [];
+      }
+
+      if (!videos || videos.length === 0) {
+        console.log('[VideoService] No videos found in videos table for the liked IDs');
+        return [];
+      }
+
+      // Map to Video interface with tags and likes
+      const likedVideos = videos.map(video => ({
+        id: video.id,
+        playbackId: video.playbackId,
+        username: video.username,
+        description: video.description,
+        likes: video.likes,
+        tags: this.getTagsForVideo(video.description),
+        isLiked: true
+      }));
+
+      console.log(`[VideoService] Loaded ${likedVideos.length} liked videos for user`);
+      return likedVideos;
+    } catch (error) {
+      console.error('[VideoService] Error in getLikedVideos:', error);
+      return [];
+    }
   }
 }
 
