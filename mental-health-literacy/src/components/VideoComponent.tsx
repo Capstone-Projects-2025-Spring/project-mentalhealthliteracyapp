@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, memo, useCallback } from "react";
 import "./VideoComponent.css";
 import MuxPlayer from "@mux/mux-player-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 interface VideoInterface {
@@ -34,13 +34,25 @@ const VideoComponent = memo(function VideoComponent({
   
   const [paused, setPaused] = useState(true);
   const [isLiking, setIsLiking] = useState(false);
+  const [localLikes, setLocalLikes] = useState(likes);
+  const [localIsLiked, setLocalIsLiked] = useState(isLiked);
   const ref = useRef(null);
   const containerRef = useRef(null);
 
-  // When video becomes active, autoplay
+  // Update local state when props change
+  useEffect(() => {
+    setLocalLikes(likes);
+    setLocalIsLiked(isLiked);
+  }, [likes, isLiked]);
+
+  // When video becomes active, autoplay and unmute
   useEffect(() => {
     if (isActive && ref.current) {
       const player = ref.current as any;
+      
+      // Unmute the video when it becomes active
+      player.muted = false;
+      
       const playPromise = player.play();
 
       if (playPromise !== undefined) {
@@ -56,17 +68,23 @@ const VideoComponent = memo(function VideoComponent({
     
     try {
       setIsLiking(true);
+      
+      // Optimistically update the UI
+      setLocalLikes(prev => localIsLiked ? prev - 1 : prev + 1);
+      setLocalIsLiked(prev => !prev);
+      
       await onLike(videoId);
     } catch (error) {
       console.error('Error handling like:', error);
+      // Revert optimistic update on error
+      setLocalLikes(prev => localIsLiked ? prev + 1 : prev - 1);
+      setLocalIsLiked(prev => !prev);
     } finally {
       setIsLiking(false);
     }
-  }, [isLiking, videoId]);
+  }, [isLiking, videoId, localIsLiked]);
 
-  function showCommentModal() {
-    // TODO: Add a modal component to show comments
-  }
+
 
   return (
     <li className="video-component" ref={containerRef}>
@@ -77,7 +95,7 @@ const VideoComponent = memo(function VideoComponent({
         playbackId={playbackId}
         ref={ref}
         autoPlay={isActive}
-        muted={true}
+        muted={!isActive}
         loop={true}
         playsInline={true}
       />
@@ -97,18 +115,11 @@ const VideoComponent = memo(function VideoComponent({
         </span>
         <span className="video-buttons">
           <span
-            className={`video-like ${isLiked ? 'liked' : ''} ${isLiking ? 'liking' : ''}`}
+            className={`video-like ${localIsLiked ? 'liked' : ''} ${isLiking ? 'liking' : ''}`}
             onClick={handleLike}
           >
-            <FontAwesomeIcon icon={faThumbsUp} />
-            {isLiking ? '...' : likes}
-          </span>
-          <span
-            onClick={() => {
-              showCommentModal();
-            }}
-          >
-            <FontAwesomeIcon icon={faComment} />
+            <FontAwesomeIcon icon={faHeart} />
+            {isLiking ? '...' : localLikes}
           </span>
         </span>
       </div>

@@ -22,6 +22,7 @@ function Video() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const videoRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const videoFeedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadVideos();
@@ -46,6 +47,45 @@ function Video() {
       }
     }
   }, [videos, location.state]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (videos.length === 0) return;
+
+      switch (event.key) {
+        case 'ArrowUp':
+          event.preventDefault();
+          if (currentVideoIndex > 0) {
+            const newIndex = currentVideoIndex - 1;
+            setCurrentVideoIndex(newIndex);
+            videoRefs.current[newIndex]?.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+          break;
+        case 'ArrowDown':
+          event.preventDefault();
+          if (currentVideoIndex < videos.length - 1) {
+            const newIndex = currentVideoIndex + 1;
+            setCurrentVideoIndex(newIndex);
+            videoRefs.current[newIndex]?.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+          break;
+        case ' ':
+          event.preventDefault();
+          // Toggle play/pause for current video
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentVideoIndex, videos.length]);
 
   const loadVideos = useCallback(async () => {
     try {
@@ -146,14 +186,14 @@ function Video() {
   }
 
   return (
-    <div className="video-feed">
+    <div className="video-feed" ref={videoFeedRef}>
       {videos.map((video, index) => (
         <div
           key={video.id}
           ref={(el) => {
             videoRefs.current[index] = el;
           }}
-          style={{ width: "100%", height: "100vh", scrollSnapAlign: "start" }}
+          className="video-item"
         >
           {index === currentVideoIndex ? (
             video.playbackId ? (
@@ -171,14 +211,14 @@ function Video() {
               />
             ) : (
               <div className="video-placeholder">
-                <div style={{ textAlign: "center" }}>
+                <div>
                   <div>No video available for @{video.username}</div>
                 </div>
               </div>
             )
           ) : (
             <div className="video-placeholder">
-              <div style={{ textAlign: "center" }}>
+              <div>
                 <div>@{video.username}</div>
                 <div style={{ fontSize: "14px", marginTop: "8px" }}>
                   {video.description}
