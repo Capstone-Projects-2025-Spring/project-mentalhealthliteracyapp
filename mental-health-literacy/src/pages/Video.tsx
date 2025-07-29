@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import VideoComponent from "../components/VideoComponent";
-import { videoService } from "../components/videoService";
-import { getRecommendedVideos } from "../api/recommendations";
-import type { Video } from "../components/videoService";
+import type {Video} from "../components/videoService";
+import {videoService} from "../components/videoService";
+import {getRecommendedVideos} from "../api/recommendations";
 
 import style from "./Video.css?url";
 
@@ -25,16 +25,14 @@ function Video() {
     loadVideos();
   }, []);
 
-  const loadVideos = async () => {
+  const loadVideos = useCallback(async () => {
     try {
       setLoading(true);
       const fetchedVideos = await getRecommendedVideos();
-      // Apply tag generation to each video using videoService
-      const videosWithTags = fetchedVideos.map(video => ({
-        ...video,
-        tags: videoService.getTagsForVideo(video.description)
-      }));
-      setVideos(videosWithTags);
+      
+      // Process videos with likes and tags using videoService
+      const processedVideos = await videoService.processVideosWithLike(fetchedVideos);
+      setVideos(processedVideos);
     } catch (err) {
       console.error('Error loading videos:', err);
       // Fallback to hardcoded videos if database fails
@@ -42,31 +40,40 @@ function Video() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-
-  const handleLike = async (videoId: number) => {
+  const handleLike = useCallback(async (videoId: number) => {
     try {
       // Update local state optimistically
-      setVideos(prevVideos => 
-        prevVideos.map(video => 
-          video.id === videoId 
-            ? { ...video, likes: video.likes + 1 }
-            : video
-        )
-      );
+      setVideos(prevVideos => {
+        return prevVideos.map(video =>
+            video.id === videoId
+                ? {
+                  ...video,
+                  likes: video.isLiked ? video.likes - 1 : video.likes + 1,
+                  isLiked: !video.isLiked
+                }
+                : video
+        );
+      });
 
       // Update database
-      const video = videos.find(v => v.id === videoId);
-      if (video) {
-        await videoService.updateLikes(videoId, video.likes + 1);
+      const result = await videoService.updateLike(videoId);
+
+      // Reload videos if supabase update fails
+      if (!result.success) {
+        console.log('[Video] Like update failed, reloading videos');
+        const fetchedVideos = await getRecommendedVideos();
+        const processedVideos = await videoService.processVideosWithLike(fetchedVideos);
+        setVideos(processedVideos);
       }
     } catch (err) {
-      console.error('Error updating like:', err);
-      // Revert optimistic update on error
-      await loadVideos();
+      console.log('[handleLike] Error:', err);
+      const fetchedVideos = await getRecommendedVideos();
+      const processedVideos = await videoService.processVideosWithLike(fetchedVideos);
+      setVideos(processedVideos);
     }
-  };
+  }, []);
 
   // Fallback videos if database is not available
   const getFallbackVideos = (): Video[] => [
@@ -76,6 +83,7 @@ function Video() {
       username: "cbt_therapist",
       description: "Experience a one-on-one CBT therapy session. #CBT #TherapySession",
       likes: 1200,
+      isLiked: false,
       tags: [
         { label: "CBT", url: "/resources/cbt" },
         { label: "Therapy", url: "/resources/therapy" },
@@ -137,6 +145,7 @@ function Video() {
                 isActive={true}
                 videoId={video.id}
                 onLike={handleLike}
+                isLiked={video.isLiked}
               />
             ) : (
               <div className="video-placeholder">
