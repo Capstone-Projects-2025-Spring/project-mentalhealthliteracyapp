@@ -1,10 +1,10 @@
 import "./Login.css";
 import CloseButton from "./CloseButton";
-import { Form, useFetcher } from "react-router-dom";
-import { getError } from "utils/GetErrorHook";
+import { useFetcher } from "react-router-dom";
+import useUserError from "utils/useUserError";
 function Login(props: any) {
   const fetcher = useFetcher();
-  const error = getError();
+  const error = useUserError();
 
   if (fetcher.data?.status == 200 && !error) {
     props.close();
@@ -13,33 +13,28 @@ function Login(props: any) {
     <>
       <CloseButton close={props.close}></CloseButton>
 
-      <div className="login-form">
+      <div className="auth-form">
         <h1>Login</h1>
         <fetcher.Form method="post" action="/api/login">
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              required
-            />
-          </label>
+          <p className="error">{error}</p>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
 
-          <label>
-            Password:
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              required
-            />
-          </label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
 
           <button type="submit">Log In</button>
         </fetcher.Form>
 
-        <p style={{ marginTop: "1rem", textAlign: "center" }}>
+        <p className="switch-container">
           Don’t have an account?{" "}
           <button className="switch-button" onClick={props.switch}>
             Sign Up

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-export function useClientHook() {
+export default function useClient() {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
   return isClient;
 }
-export default useClientHook;

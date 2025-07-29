@@ -1,6 +1,6 @@
 .close-button {
   position: absolute;
-  top: 2rem;
+  top: 3rem;
   left: 2rem;
   background: var(--clr-bg-700);
   color: hsl(0, 0%, 100%);
@@ -12,4 +12,11 @@
   cursor: pointer;
   box-shadow: 0 4px 8px hsl(0, 0%, 0%, 0.2);
   transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .close-button {
+    top: 1rem;
+    left: 1rem;
+  }
 }
