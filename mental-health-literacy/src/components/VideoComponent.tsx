@@ -12,6 +12,9 @@ interface VideoInterface {
   description: string;
   likes: number;
   tags?: { label: string; url: string }[];
+  isActive?: boolean;
+  videoId: number;
+  onLike: (videoId: number) => Promise<void>;
 }
 
 function VideoComponent({
@@ -21,10 +24,26 @@ function VideoComponent({
   description,
   likes,
   tags,
+  isActive = false,
+  videoId,
+  onLike,
 }: VideoInterface) {
-  const [paused, setPaused] = useState(true);
   const ref = useRef(null);
   const containerRef = useRef(null);
+
+  // When video becomes active, autoplay
+  useEffect(() => {
+    if (isActive && ref.current) {
+      const player = ref.current as any;
+      const playPromise = player.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch((error: any) => {
+          console.log("[VideoComponent] Autoplay failed:", error);
+        });
+      }
+    }
+  }, [isActive]);
 
   function handleLike() {
     // TODO: Add Supabase integration
@@ -37,9 +56,13 @@ function VideoComponent({
       <h1>{title}</h1>
       <MuxPlayer
         className="mux-video"
-        paused={paused}
+        paused={!isActive}
         playbackId={playbackId}
         ref={ref}
+        autoPlay={isActive}
+        muted={true}
+        loop={true}
+        playsInline={true}
       />
       <div className="video-actions">
         <span className="video-info">
