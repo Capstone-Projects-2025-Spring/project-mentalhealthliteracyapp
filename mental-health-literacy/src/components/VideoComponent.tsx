@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, memo, useCallback } from "react";
 import "./VideoComponent.css";
 import MuxPlayer from "@mux/mux-player-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,22 +12,28 @@ interface VideoInterface {
   description: string;
   likes: number;
   tags?: { label: string; url: string }[];
-  isActive?: boolean;
   videoId: number;
   onLike: (videoId: number) => Promise<void>;
+  isLiked?: boolean; // Add this to track if current user has liked
+  isActive?: boolean;
 }
 
-function VideoComponent({
+const VideoComponent = memo(function VideoComponent({
   playbackId,
   title,
   username,
   description,
   likes,
   tags,
-  isActive = false,
   videoId,
   onLike,
+  isLiked = false,
+  isActive = false,
 }: VideoInterface) {
+  console.log(`[VideoComponent] Rendering video ${videoId}, isLiked: ${isLiked}, likes: ${likes}`);
+  
+  const [paused, setPaused] = useState(true);
+  const [isLiking, setIsLiking] = useState(false);
   const ref = useRef(null);
   const containerRef = useRef(null);
 
@@ -45,12 +51,23 @@ function VideoComponent({
     }
   }, [isActive]);
 
-  function handleLike() {
-    // TODO: Add Supabase integration
-  }
+  const handleLike = useCallback(async () => {
+    if (isLiking) return;
+    
+    try {
+      setIsLiking(true);
+      await onLike(videoId);
+    } catch (error) {
+      console.error('Error handling like:', error);
+    } finally {
+      setIsLiking(false);
+    }
+  }, [isLiking, videoId]);
+
   function showCommentModal() {
     // TODO: Add a modal component to show comments
   }
+
   return (
     <li className="video-component" ref={containerRef}>
       <h1>{title}</h1>
@@ -79,9 +96,12 @@ function VideoComponent({
           </span>
         </span>
         <span className="video-buttons">
-          <span className="video-like" onClick={() => handleLike()}>
+          <span
+            className={`video-like ${isLiked ? 'liked' : ''} ${isLiking ? 'liking' : ''}`}
+            onClick={handleLike}
+          >
             <FontAwesomeIcon icon={faThumbsUp} />
-            {likes}
+            {isLiking ? '...' : likes}
           </span>
           <span
             onClick={() => {
@@ -94,6 +114,14 @@ function VideoComponent({
       </div>
     </li>
   );
-}
+}, (prevProps, nextProps) => {
+  // Check props that should trigger re-renders
+  return (
+    prevProps.videoId === nextProps.videoId &&
+    prevProps.likes === nextProps.likes &&
+    prevProps.isLiked === nextProps.isLiked &&
+    prevProps.isActive === nextProps.isActive
+  );
+});
 
 export default VideoComponent;
