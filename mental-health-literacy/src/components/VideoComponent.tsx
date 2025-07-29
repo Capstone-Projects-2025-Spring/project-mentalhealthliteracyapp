@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./VideoComponent.css";
 import MuxPlayer from "@mux/mux-player-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
