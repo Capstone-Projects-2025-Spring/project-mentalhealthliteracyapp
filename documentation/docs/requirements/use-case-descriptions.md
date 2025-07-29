@@ -32,27 +32,29 @@ sidebar_position: 5
 
 **As a user with an active account, I want to watch short-form videos that educate me on mental health and therapy options.** 
 
-1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
-2. The user clicks on "Videos" and is brought to an infinite-scroll video feed.
-3. The user is able to like and share videos.
+1. The user goes on the Mental Health Literacy app.
+2. The user clicks on the "Videos" tab and is brought to an infinite-scroll video feed.
+3. The user is able to like and comment on videos.
+4. The user can click on a video tag to learn more about resources.
 
 ## Use Case 4 - Educational Resources
 
-**As a user with an active account, I want to learn more about mental health and therapy.** 
+**As a user with an active account, I want to learn more about a specific modality after watching a video about it.** 
 
-1. The user goes on the Mental Health Literacy website on their personal computer, presses the Sign In button, and enters their credentials.
-2. The user clicks on the "Resources" tab.
-3. The user is met with cards displaying different mental health modules. 
-4. The user clicks on a module.
-5. The user has access to helpful information and contact information regarding the topic.
+1. The user goes on the the Mental Health Literacy app.
+2. The user clicks on "Videos", scrolls, and finds a video that they find helpful.
+3. The user clicks on a video tag to learn more about resources.
+4. The user is brought to the resource page about that specific modality.
+5. The user clicks on helpful that will lead them to an external website.
+6. The user views contact information and finds a link to schedule an appointment. 
 
 ## Use Case 5 - Liking Videos
 
-**As a user watching a video, I want to like a video so I can save content that resonates with me** 
+**As a user watching a video, I want to like a video so I can save content that resonates with me.** 
 
-1. The user goes on the the Mental Health Literacy website on their personal computer, presses the Sign in button, and enters their credentials.
-2. The user clicks on "Videos", scrolls finds one that they find helpful.
-3. The video displays a “Like” button beneath or overlaid on the video, and the user clicks it. 
+1. The user goes on the the Mental Health Literacy app.
+2. The user clicks on "Videos", scrolls, and finds a video that they find helpful.
+3. The video displays a “Like” button on the side of the video and the user clicks it. 
 4. The app visually confirms this with a heart and saves the liked video to the user's account in the database.
 5. The user is able to access their liked videos via the "Profile" tab
 
@@ -64,3 +66,7 @@ sidebar_position: 5
 2. The user clicks the "Profile" tab in the navigation bar.
 3. The user sees sections for "Account Management", "Liked Videos", and "User Preferences".
 4. The user can view previously liked videos and update any previously stored preferences or account details.
+
+
+
+
