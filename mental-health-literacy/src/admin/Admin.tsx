@@ -1,6 +1,6 @@
 import { Admin, Resource, Layout } from 'react-admin';
-import { UserList, UserShow, UserEdit, UserCreate } from './resources/users';
-import { ProfileList, ProfileShow, ProfileEdit, ProfileCreate } from './resources/profiles';
+import { VideoList, VideoShow, VideoEdit, VideoCreate } from './resources/videos';
+import { CategoryList, CategoryShow, CategoryEdit, CategoryCreate } from './resources/categories';
 import dataProvider from './dataProvider';
 import authProvider from './authProvider';
 
@@ -13,16 +13,12 @@ const Dashboard = () => (
     <h1>Mental Health Literacy Admin</h1>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '20px' }}>
       <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-        <h3>Users</h3>
-        <p>Manage user accounts and authentication</p>
+        <h3>Videos</h3>
+        <p>Manage video content and metadata</p>
       </div>
       <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-        <h3>Profiles</h3>
-        <p>Manage user profiles and onboarding status</p>
-      </div>
-      <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-        <h3>Resources</h3>
-        <p>Manage mental health resources and content</p>
+        <h3>Categories</h3>
+        <p>Manage video categories and topics</p>
       </div>
     </div>
   </div>
@@ -38,18 +34,18 @@ export const AdminApp = () => (
     title="Mental Health Literacy Admin"
   >
     <Resource
-      name="users"
-      list={UserList}
-      show={UserShow}
-      edit={UserEdit}
-      create={UserCreate}
+      name="videos"
+      list={VideoList}
+      show={VideoShow}
+      edit={VideoEdit}
+      create={VideoCreate}
     />
     <Resource
-      name="profiles"
-      list={ProfileList}
-      show={ProfileShow}
-      edit={ProfileEdit}
-      create={ProfileCreate}
+      name="categories"
+      list={CategoryList}
+      show={CategoryShow}
+      edit={CategoryEdit}
+      create={CategoryCreate}
     />
   </Admin>
 );
