@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
   });
   useEffect(() => {
     if (typeof window !== "undefined") {
-      console.log("new error," + currentError);
       setError(currentError);
     }
   }, [error, currentError]);
