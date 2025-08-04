@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.3.2">
 <title data-rh="true">Backend Unit Tests | Project Mentalhealthliteracyapp</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/backend-unit-testing"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Backend Unit Tests | Project Mentalhealthliteracyapp"><meta data-rh="true" name="description" content="Unit Testing Library Explanation"><meta data-rh="true" property="og:description" content="Unit Testing Library Explanation"><link data-rh="true" rel="icon" href="/project-mentalhealthliteracyapp/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/backend-unit-testing"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/backend-unit-testing" hreflang="en"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-mentalhealthliteracyapp/docs/testing/backend-unit-testing" hreflang="x-default"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><link rel="stylesheet" href="/project-mentalhealthliteracyapp/assets/css/styles.a93c73f5.css">
-<script src="/project-mentalhealthliteracyapp/assets/js/runtime~main.ce06e0c9.js" defer="defer"></script>
+<script src="/project-mentalhealthliteracyapp/assets/js/runtime~main.bca3312e.js" defer="defer"></script>
 <script src="/project-mentalhealthliteracyapp/assets/js/main.168c822a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -28,60 +28,271 @@
 <p>A test case consists of input parameter values and expected results.</p>
 <p>All external classes should be stubbed using mock objects.</p>
 <hr>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="example-unit-tests">Example Unit Tests<a href="#example-unit-tests" class="hash-link" aria-label="Direct link to Example Unit Tests" title="Direct link to Example Unit Tests">​</a></h2>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="user-authentication">User Authentication<a href="#user-authentication" class="hash-link" aria-label="Direct link to User Authentication" title="Direct link to User Authentication">​</a></h3>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="api-unit-tests">API Unit Tests<a href="#api-unit-tests" class="hash-link" aria-label="Direct link to API Unit Tests" title="Direct link to API Unit Tests">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="apilogin">api/login<a href="#apilogin" class="hash-link" aria-label="Direct link to api/login" title="Direct link to api/login">​</a></h3>
 <ul>
-<li><strong>Test:</strong> Valid login credentials<!-- -->
+<li><strong>Test:</strong> Extract form data and call Redux with credentials<!-- -->
 <ul>
-<li><strong>Input:</strong> username = &#x27;user1&#x27;, password = &#x27;correctpassword&#x27;</li>
-<li><strong>Expected Result:</strong> Authentication succeeds, user token returned</li>
+<li><strong>Input:</strong> email = &#x27;<a href="mailto:test@example.com" target="_blank" rel="noopener noreferrer">test@example.com</a>&#x27;, password = &#x27;password123&#x27;</li>
+<li><strong>Expected Result:</strong> Form data extracted, Redux action dispatched, success response returned</li>
 </ul>
 </li>
-<li><strong>Test:</strong> Invalid login credentials<!-- -->
+<li><strong>Test:</strong> Handle various form data scenarios<!-- -->
 <ul>
-<li><strong>Input:</strong> username = &#x27;user1&#x27;, password = &#x27;wrongpassword&#x27;</li>
-<li><strong>Expected Result:</strong> Authentication fails, error message returned</li>
+<li><strong>Input:</strong> Test cases including valid credentials, empty data, malformed email</li>
+<li><strong>Expected Result:</strong> All scenarios processed, Redux dispatch called, success response returned</li>
 </ul>
 </li>
-</ul>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="video-metadata-retrieval">Video Metadata Retrieval<a href="#video-metadata-retrieval" class="hash-link" aria-label="Direct link to Video Metadata Retrieval" title="Direct link to Video Metadata Retrieval">​</a></h3>
+<li><strong>Test:</strong> Handle empty form data<!-- -->
 <ul>
-<li><strong>Test:</strong> Fetch metadata for existing video<!-- -->
-<ul>
-<li><strong>Input:</strong> video_id = &#x27;abc123&#x27;</li>
-<li><strong>Expected Result:</strong> Metadata object with title, description, and URL is returned</li>
+<li><strong>Input:</strong> FormData with no fields appended</li>
+<li><strong>Expected Result:</strong> Form data extraction works, Redux still called, success response returned</li>
 </ul>
 </li>
-<li><strong>Test:</strong> Fetch metadata for non-existent video<!-- -->
+<li><strong>Test:</strong> Verify API function signature and return type<!-- -->
 <ul>
-<li><strong>Input:</strong> video_id = &#x27;notfound&#x27;</li>
-<li><strong>Expected Result:</strong> Error or null result</li>
+<li><strong>Input:</strong>  Valid form data</li>
+<li><strong>Expected Result:</strong> Function exists, returns object with status (number) and message (string) properties</li>
 </ul>
 </li>
 </ul>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="resource-lookup">Resource Lookup<a href="#resource-lookup" class="hash-link" aria-label="Direct link to Resource Lookup" title="Direct link to Resource Lookup">​</a></h3>
+<p><em>Note: Tests return success response as validation and authentication logic are handled by FE and Redux layer. API focuses on form data extraction and Redux action dispatching</em></p>
+<img width="1146" height="367" alt="Screenshot 2025-08-01 000354" src="https://github.com/user-attachments/assets/a9f5bd4e-6186-4314-ada2-182fc0da40ac">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="apipreferences">api/preferences<a href="#apipreferences" class="hash-link" aria-label="Direct link to api/preferences" title="Direct link to api/preferences">​</a></h3>
 <ul>
-<li><strong>Test:</strong> Lookup resource by valid topic<!-- -->
+<li><strong>Test:</strong> <em>saveUserPreferences</em> : Save user preferences successfully<!-- -->
 <ul>
-<li><strong>Input:</strong> topic = &#x27;anxiety&#x27;</li>
-<li><strong>Expected Result:</strong> List of resource objects related to &#x27;anxiety&#x27;</li>
+<li><strong>Input:</strong> Authenticated user, preferences = [&#x27;Art&#x27;, &#x27;Introverted&#x27;]</li>
+<li><strong>Expected Result:</strong> Preferences saved to database, success response returned</li>
 </ul>
 </li>
-<li><strong>Test:</strong> Lookup resource by invalid topic<!-- -->
+<li><strong>Test:</strong> <em>saveUserPreferences</em> : Return error when user is not authenticated<!-- -->
 <ul>
-<li><strong>Input:</strong> topic = &#x27;unknown-topic&#x27;</li>
-<li><strong>Expected Result:</strong> Empty list or not found response</li>
+<li><strong>Input:</strong> Unauthenticated user, preferences = [&#x27;Art&#x27;, &#x27;Introverted&#x27;]</li>
+<li><strong>Expected Result:</strong> Authentication error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>saveUserPreferences</em> : Return error when fetching preferences fails<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user, database error on preferences lookup</li>
+<li><strong>Expected Result:</strong> Database error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>saveUserPreferences</em> : Return error when no matching preferences found<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user, non-existent preference names</li>
+<li><strong>Expected Result:</strong> &quot;No matching preferences found&quot; error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>saveUserPreferences</em> : Return error when deleting existing preferences fails<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user, database error on delete operation</li>
+<li><strong>Expected Result:</strong> &quot;Error updating preferences&quot; error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>saveUserPreferences</em> : Return error when inserting new preferences fails<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user, database error on insert operation</li>
+<li><strong>Expected Result:</strong> &quot;Error saving preferences&quot; error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>fetchUserPreferences</em> : Fetch user preferences successfully<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user with existing preferences</li>
+<li><strong>Expected Result:</strong> Preferences separated into interests and traits, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>fetchUserPreferences</em> : Return error when user is not authenticated<!-- -->
+<ul>
+<li><strong>Input:</strong> Unauthenticated user</li>
+<li><strong>Expected Result:</strong> Authentication error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>fetchUserPreferences</em> : Return error when fetching user preferences fails<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user, database error on preferences query</li>
+<li><strong>Expected Result:</strong> &quot;Error fetching preferences&quot; error returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>fetchUserPreferences</em> : Return empty arrays when no preferences found<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user with no saved preferences</li>
+<li><strong>Expected Result:</strong> Empty interests and traits arrays, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>fetchUserPreferences</em> : Separate interests and traits correctly<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user with mixed preference types</li>
+<li><strong>Expected Result:</strong> Preferences correctly categorized by type, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>fetchUserPreferences</em> : Handle preferences with missing or invalid type<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user with invalid preference types</li>
+<li><strong>Expected Result:</strong> Valid preferences processed, invalid ones ignored, success response returned</li>
 </ul>
 </li>
 </ul>
-<hr>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="test-case-examples">Test Case Examples<a href="#test-case-examples" class="hash-link" aria-label="Direct link to Test Case Examples" title="Direct link to Test Case Examples">​</a></h4>
+<img width="1572" height="557" alt="Screenshot 2025-08-01 004534" src="https://github.com/user-attachments/assets/359d9414-9893-4239-bd97-a27bcb9075ea">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="apirecommendations">api/recommendations<a href="#apirecommendations" class="hash-link" aria-label="Direct link to api/recommendations" title="Direct link to api/recommendations">​</a></h3>
 <ul>
-<li><code>getUserVideos(userId)</code> should return a list of video metadata</li>
-<li><code>validateUploadFile(file)</code> should return false if type is unsupported</li>
+<li><strong>Test:</strong> <em>getUserPreferences</em> : Get user preferences successfully for authenticated user<!-- -->
+<ul>
+<li><strong>Input:</strong> User ID = &#x27;1&#x27;</li>
+<li><strong>Expected Result:</strong> Array of preference IDs returned</li>
 </ul>
+</li>
+<li><strong>Test:</strong> <em>getUserPreferences</em> : Get localStorage preferences for non-authenticated user<!-- -->
+<ul>
+<li><strong>Input:</strong> User ID = &#x27;localStorage_user&#x27;, localStorage contains interests and traits</li>
+<li><strong>Expected Result:</strong> Preference names converted to IDs, array returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getUserPreferences</em> : Return empty array when database error occurs<!-- -->
+<ul>
+<li><strong>Input:</strong> User ID = &#x27;1&#x27;, database error</li>
+<li><strong>Expected Result:</strong> Empty array returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getCategoryPreferences</em> : Get category preferences successfully<!-- -->
+<ul>
+<li><strong>Input:</strong> Preference IDs = [1, 2, 3]</li>
+<li><strong>Expected Result:</strong> Array of category IDs returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getCategoryPreferences</em> : Return empty array when no preference IDs provided<!-- -->
+<ul>
+<li><strong>Input:</strong> Empty preference IDs array</li>
+<li><strong>Expected Result:</strong> Empty array returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getVideosFromCategories</em> : Get videos from categories successfully<!-- -->
+<ul>
+<li><strong>Input:</strong> Category IDs = [1, 2]</li>
+<li><strong>Expected Result:</strong> Array of video objects ordered by likes returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getVideosFromCategories</em> : Return empty array when no video categories found<!-- -->
+<ul>
+<li><strong>Input:</strong> Category IDs with no matching videos</li>
+<li><strong>Expected Result:</strong> Empty array returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getCurrentUserId</em> : Return authenticated user ID when user is logged in<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user session</li>
+<li><strong>Expected Result:</strong> User ID returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getCurrentUserId</em> : Return localStorage_user when no authenticated user but has localStorage preferences<!-- -->
+<ul>
+<li><strong>Input:</strong> No authenticated user, localStorage contains preferences</li>
+<li><strong>Expected Result:</strong> &#x27;localStorage_user&#x27; returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getAllVideos</em> : Get all videos successfully<!-- -->
+<ul>
+<li><strong>Input:</strong> No specific parameters</li>
+<li><strong>Expected Result:</strong> Array of all videos ordered by likes returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getAllVideos</em> : Return empty array when database error occurs<!-- -->
+<ul>
+<li><strong>Input:</strong> Database error on videos query</li>
+<li><strong>Expected Result:</strong> Empty array returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getRecommendedVideos</em> : Get recommended videos successfully for authenticated user<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user with preferences</li>
+<li><strong>Expected Result:</strong> Combined array of recommended videos and remaining videos returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> <em>getRecommendedVideos</em> : Fallback to all videos when no user preferences found<!-- -->
+<ul>
+<li><strong>Input:</strong> Authenticated user with no preferences</li>
+<li><strong>Expected Result:</strong> Array of all videos returned</li>
+</ul>
+</li>
+</ul>
+<img width="1814" height="611" alt="Screenshot 2025-08-01 012904" src="https://github.com/user-attachments/assets/f03d8975-830d-49b5-ab7a-20acf7de1d82">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="apiregister">api/register<a href="#apiregister" class="hash-link" aria-label="Direct link to api/register" title="Direct link to api/register">​</a></h3>
+<ul>
+<li><strong>Test:</strong> Extract form data and call Redux with registration credentials<!-- -->
+<ul>
+<li><strong>Input:</strong> email = &#x27;<a href="mailto:newuser@example.com" target="_blank" rel="noopener noreferrer">newuser@example.com</a>&#x27;, password = &#x27;newpassword123&#x27;</li>
+<li><strong>Expected Result:</strong> Form data extracted, user_register action dispatched, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Handle various registration form data scenarios<!-- -->
+<ul>
+<li><strong>Input:</strong> Test cases including valid credentials, empty data, special email characters</li>
+<li><strong>Expected Result:</strong> All scenarios processed, Redux dispatch called, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Handle empty form data gracefully<!-- -->
+<ul>
+<li><strong>Input:</strong> FormData with no fields appended</li>
+<li><strong>Expected Result:</strong> Form data extraction completed, Redux action dispatched with empty strings, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Handle missing email field gracefully<!-- -->
+<ul>
+<li><strong>Input:</strong> FormData with only password field</li>
+<li><strong>Expected Result:</strong> Form data extracted, Redux dispatch called with undefined email, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Handle missing password field gracefully<!-- -->
+<ul>
+<li><strong>Input:</strong> FormData with only email field</li>
+<li><strong>Expected Result:</strong> Form data extracted successfully, Redux dispatch called with undefined password, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Verify API function signature and return type consistency<!-- -->
+<ul>
+<li><strong>Input:</strong> Valid form data</li>
+<li><strong>Expected Result:</strong> Function exists and returns properly structured response object with status and message properties</li>
+</ul>
+</li>
+</ul>
+<p><em>Note: Tests return success response as validation and authentication logic are handled by FE and Redux layer. API focuses on form data extraction and Redux action dispatching</em></p>
+<img width="1351" height="405" alt="Screenshot 2025-08-01 015239" src="https://github.com/user-attachments/assets/fbf6d3bc-91bc-4616-9f93-9cb6bef9e6bf">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="apisignout">api/signout<a href="#apisignout" class="hash-link" aria-label="Direct link to api/signout" title="Direct link to api/signout">​</a></h3>
+<ul>
+<li><strong>Test:</strong> Successful signout with no errors<!-- -->
+<ul>
+<li><strong>Input:</strong> useUserError returns null</li>
+<li><strong>Expected Result:</strong> reset_error and user_signout actions dispatched, success response returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Signout with error returns error response<!-- -->
+<ul>
+<li><strong>Input:</strong> useUserError returns &quot;Signout failed&quot;</li>
+<li><strong>Expected Result:</strong> Both actions dispatched, error response with error message returned</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Verify order of actions<!-- -->
+<ul>
+<li><strong>Input:</strong> No error scenario</li>
+<li><strong>Expected Result:</strong> reset_error called first, then user_signout called second</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Handle various error message types<!-- -->
+<ul>
+<li><strong>Input:</strong> Multiple error scenarios (strings, null, undefined, empty string)</li>
+<li><strong>Expected Result:</strong> Proper status codes and appropriate messages</li>
+</ul>
+</li>
+<li><strong>Test:</strong> Verify API function signature and return type<!-- -->
+<ul>
+<li><strong>Input:</strong> No error scenario</li>
+<li><strong>Expected Result:</strong> Function exists, returns object with status and message properties</li>
+</ul>
+</li>
+</ul>
+<img width="1095" height="378" alt="Screenshot 2025-08-01 022039" src="https://github.com/user-attachments/assets/2cfc531e-748b-4001-98a8-f614652f6b1d">
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="test-coverage-report">Test Coverage Report<a href="#test-coverage-report" class="hash-link" aria-label="Direct link to Test Coverage Report" title="Direct link to Test Coverage Report">​</a></h3>
-<p>Vitest (or Jest) can generate an HTML coverage report. To make this available in Docusaurus, export the report and place it in the <code>static</code> folder. For automation, set up a CI pipeline to run tests, generate the report, and move it to <code>static</code> on each update.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp/edit/main/documentation/docs/testing/backend-unit-testing.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>GustavoBenitez1</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-mentalhealthliteracyapp/docs/category/test-procedures"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Test Procedures</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-mentalhealthliteracyapp/docs/testing/frontend-unit-testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Frontend Unit Tests</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#unit-testing-library-explanation" class="table-of-contents__link toc-highlight">Unit Testing Library Explanation</a></li><li><a href="#example-unit-tests" class="table-of-contents__link toc-highlight">Example Unit Tests</a><ul><li><a href="#user-authentication" class="table-of-contents__link toc-highlight">User Authentication</a></li><li><a href="#video-metadata-retrieval" class="table-of-contents__link toc-highlight">Video Metadata Retrieval</a></li><li><a href="#resource-lookup" class="table-of-contents__link toc-highlight">Resource Lookup</a></li><li><a href="#test-coverage-report" class="table-of-contents__link toc-highlight">Test Coverage Report</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-mentalhealthliteracyapp/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU"></div><div class="footer__copyright">Copyright © 2025 Project Mentalhealthliteracyapp, Inc. Built with Docusaurus.</div></div></div></footer></div>
+<p>Vitest (or Jest) can generate an HTML coverage report. To make this available in Docusaurus, export the report and place it in the <code>static</code> folder. For automation, set up a CI pipeline to run tests, generate the report, and move it to <code>static</code> on each update.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp/edit/main/documentation/docs/testing/backend-unit-testing.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>GustavoBenitez1</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-mentalhealthliteracyapp/docs/category/test-procedures"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Test Procedures</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-mentalhealthliteracyapp/docs/testing/frontend-unit-testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Frontend Unit Tests</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#unit-testing-library-explanation" class="table-of-contents__link toc-highlight">Unit Testing Library Explanation</a></li><li><a href="#api-unit-tests" class="table-of-contents__link toc-highlight">API Unit Tests</a><ul><li><a href="#apilogin" class="table-of-contents__link toc-highlight">api/login</a></li><li><a href="#apipreferences" class="table-of-contents__link toc-highlight">api/preferences</a></li><li><a href="#apirecommendations" class="table-of-contents__link toc-highlight">api/recommendations</a></li><li><a href="#apiregister" class="table-of-contents__link toc-highlight">api/register</a></li><li><a href="#apisignout" class="table-of-contents__link toc-highlight">api/signout</a></li><li><a href="#test-coverage-report" class="table-of-contents__link toc-highlight">Test Coverage Report</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-mentalhealthliteracyapp/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-mentalhealthliteracyapp" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU"></div><div class="footer__copyright">Copyright © 2025 Project Mentalhealthliteracyapp, Inc. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
