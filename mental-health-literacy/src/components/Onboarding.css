@@ -74,6 +74,22 @@
   margin-bottom: 1rem;
   margin-top: 1rem;
   font-family: var(--ff-primary);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .brand {
+    text-align: center;
+    display: inline-block;
+  }
 }
 .heading2 {
   font-size: 1.4rem;

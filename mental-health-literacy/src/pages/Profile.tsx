@@ -1,8 +1,14 @@
 import useUser from "utils/useUser";
 import ProtectedRoute from "src/components/ProtectedRoute";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import "./Profile.css";
-import { saveUserPreferences } from "src/api/preferences";
+import { saveUserPreferences, fetchUserPreferences } from "src/api/preferences";
+import { videoService } from "src/components/videoService";
+import type { Video } from "src/components/videoService";
+import LikedVideoCard from "src/components/LikedVideoCard";
 
 const INTERESTS = [
   "Art", "Music", "Writing", "Nature", "Fitness", "Animals", "Reading", "Cooking", "Travel", "Fashion", "Gardening", "Meditation"
@@ -14,8 +20,8 @@ const MAX_SELECTIONS = 5;
 
 function Profile() {
   const user = useUser();
-  // If user not signed in, redirect to main page
-
+  const navigate = useNavigate();
+  
   // localStorage preferences
   const [interests, setInterests] = useState<string[]>([]);
   const [traits, setTraits] = useState<string[]>([]);
@@ -25,13 +31,54 @@ function Profile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmClose, setShowConfirmClose] = useState(false);
+  
+  // Liked videos state
+  const [likedVideos, setLikedVideos] = useState<Video[]>([]);
+  const [loadingLikedVideos, setLoadingLikedVideos] = useState(true);
+  const [showAllLikedVideos, setShowAllLikedVideos] = useState(false);
 
   useEffect(() => {
-    const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
-    const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
-    setInterests(storedInterests);
-    setTraits(storedTraits);
-  }, []);
+    const loadPreferences = async () => {
+      if (user && user !== "Guest") {
+        // If authenticated user, get preferences from Supabase
+        const result = await fetchUserPreferences();
+        
+        if (result.status === 200 && result.data) {
+          setInterests(result.data.interests);
+          setTraits(result.data.traits);
+          return;
+        }
+      }
+      // Fallback to localStorage for non-authenticated users or if database fetch fails
+      const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+      const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+      setInterests(storedInterests);
+      setTraits(storedTraits);
+    };
+    loadPreferences();
+  }, [user]);
+
+  // Load liked videos when user changes
+  useEffect(() => {
+    const loadLikedVideos = async () => {
+      if (user && user !== "Guest") {
+        try {
+          setLoadingLikedVideos(true);
+          const videos = await videoService.getLikedVideos();
+          setLikedVideos(videos);
+        } catch (error) {
+          setLikedVideos([]);
+        } finally {
+          setLoadingLikedVideos(false);
+        }
+      } else {
+        setLikedVideos([]);
+        setLoadingLikedVideos(false);
+      }
+    };
+    
+    loadLikedVideos();
+  }, [user]);
 
 
   const handleEdit = () => {
@@ -85,6 +132,21 @@ function Profile() {
     setShowConfirmClose(false);
   };
 
+  const handleVideoClick = (videoId: number) => {
+    // Navigate to videos tab and scroll to specific video
+    navigate('/video', { 
+      state: { scrollToVideoId: videoId } 
+    });
+  };
+
+  const toggleLikedVideos = () => {
+    setShowAllLikedVideos(!showAllLikedVideos);
+  };
+
+  // Get videos to display
+  const displayedVideos = showAllLikedVideos ? likedVideos : likedVideos.slice(0, 3);
+  const hasMoreVideos = likedVideos.length > 3;
+
   return (
     <div className="profile-page">
       <ProtectedRoute>
@@ -95,9 +157,34 @@ function Profile() {
           
           <div className="profile-liked-videos">
             <h2>Liked Videos</h2>
-            <div className="thumbnail-list">
-              {/* TODO: Add a fetcher to get all liked videos associated with the user*/}
-              <p>No liked videos yet.</p>
+            <div className="liked-videos-grid">
+              {loadingLikedVideos ? (
+                <div className="loading-liked-videos">
+                  <p>Loading your liked videos...</p>
+                </div>
+              ) : likedVideos.length === 0 ? (
+                <div className="no-liked-videos">
+                  <p>No liked videos yet. Start exploring the Videos tab to find content you love!</p>
+                </div>
+              ) : (
+                <>
+                  {displayedVideos.map((video) => (
+                    <LikedVideoCard 
+                      key={video.id}
+                      video={video}
+                      onVideoClick={() => handleVideoClick(video.id)}
+                    />
+                  ))}
+                  {hasMoreVideos && (
+                    <div className="expand-videos-card" onClick={toggleLikedVideos}>
+                      <FontAwesomeIcon 
+                        icon={showAllLikedVideos ? faChevronUp : faChevronDown} 
+                        className="expand-icon"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
 

@@ -7,6 +7,7 @@ import {
 } from "react-router";
 import type { Route } from "./+types/root";
 import { Provider } from "react-redux";
+import { useEffect } from "react";
 
 import appStylesHref from "./main.css?url";
 import logo from "./assets/logo.png?url";
@@ -14,12 +15,24 @@ import { store } from "./context/global_store";
 import Onboarding from "./components/Onboarding";
 import { update_user } from "./context/features/user/userSlice";
 
-export default function App() {
-  store.dispatch(update_user());
+function AppContent() {
+  useEffect(() => {
+    // Initialize user state
+    store.dispatch(update_user());
+  }, []);
+
   return (
-    <Provider store={store}>
+    <>
       <Onboarding />
       <Outlet />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
     </Provider>
   );
 }
