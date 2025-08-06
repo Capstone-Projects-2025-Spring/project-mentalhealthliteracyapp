@@ -2,6 +2,7 @@ import { Admin, Resource, Layout } from 'react-admin';
 import { VideoList, VideoShow, VideoEdit, VideoCreate } from './resources/videos';
 import { CategoryList, CategoryShow, CategoryEdit, CategoryCreate } from './resources/categories';
 import { UserList, UserShow, UserEdit, UserCreate } from './resources/users';
+import { PreferenceList, PreferenceShow, PreferenceEdit, PreferenceCreate } from './resources/preferences';
 import dataProvider from './dataProvider';
 import authProvider from './authProvider';
 
@@ -18,12 +19,16 @@ const Dashboard = () => (
         <p>Manage user accounts and profiles</p>
       </div>
       <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+        <h3>Preferences</h3>
+        <p>Manage user preference options (Art, Music, Writing, etc.)</p>
+      </div>
+      <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
         <h3>Videos</h3>
         <p>Manage video content and metadata</p>
       </div>
       <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
         <h3>Categories</h3>
-        <p>Manage video categories and topics</p>
+        <p>Manage therapy modalities and categories</p>
       </div>
     </div>
   </div>
@@ -47,6 +52,14 @@ export const AdminApp = () => (
       options={{ label: 'Users' }}
     />
     <Resource
+      name="preferences"
+      list={PreferenceList}
+      show={PreferenceShow}
+      edit={PreferenceEdit}
+      create={PreferenceCreate}
+      options={{ label: 'Preferences' }}
+    />
+    <Resource
       name="videos"
       list={VideoList}
       show={VideoShow}
@@ -60,6 +73,10 @@ export const AdminApp = () => (
       edit={CategoryEdit}
       create={CategoryCreate}
     />
+    {/* Hidden resources for relationships */}
+    <Resource name="userPreferences" />
+    <Resource name="userInteractions" />
+    <Resource name="categoryPreferences" />
   </Admin>
 );
 

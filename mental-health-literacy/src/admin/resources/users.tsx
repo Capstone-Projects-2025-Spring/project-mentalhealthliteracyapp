@@ -47,28 +47,60 @@ export const UserShow = () => (
       <DateField source="created_at" label="Joined" showTime />
       
       <ReferenceManyField
-        label="User Preferences"
+        label="Selected Preferences (Art, Music, Writing, Nature, Fitness, etc.)"
         reference="userPreferences"
         target="user_id"
+        sort={{ field: 'preference_id', order: 'ASC' }}
       >
-        <Datagrid>
-          <ReferenceField source="preference_id" reference="preferences">
+        <Datagrid bulkActionButtons={false}>
+          <ReferenceField source="preference_id" reference="preferences" label="Preference">
             <TextField source="name" />
+          </ReferenceField>
+          <ReferenceField source="preference_id" reference="preferences" label="Type">
+            <TextField source="type" />
           </ReferenceField>
         </Datagrid>
       </ReferenceManyField>
       
       <ReferenceManyField
-        label="User Interactions"
+        label="Liked Videos"
         reference="userInteractions"
         target="user_id"
+        filter={{ like: true }}
+        sort={{ field: 'videoId', order: 'DESC' }}
       >
-        <Datagrid>
-          <ReferenceField source="videoId" reference="videos">
-            <TextField source="username" />
+        <Datagrid bulkActionButtons={false}>
+          <ReferenceField source="videoId" reference="videos" label="Video">
+            <FunctionField render={(record: any) => 
+              `${record.username || 'Unknown'} - ${record.description ? record.description.substring(0, 50) + '...' : 'No description'}`
+            } />
           </ReferenceField>
-          <BooleanField source="like" />
+          <ReferenceField source="videoId" reference="videos" label="Likes">
+            <TextField source="likes" />
+          </ReferenceField>
         </Datagrid>
+      </ReferenceManyField>
+      
+      <ReferenceManyField
+        label="Preferred Therapy Categories"
+        reference="userPreferences"
+        target="user_id"
+        perPage={100}
+      >
+        <FunctionField render={(records: any) => {
+          if (!records || records.length === 0) return "No preferences selected";
+          
+          // This would show categories based on the user's preferences
+          // We'd need to join through categoryPreferences table
+          return (
+            <div>
+              <p>User has selected {records.length} preference(s)</p>
+              <p style={{ fontSize: '0.9em', color: '#666' }}>
+                Categories are determined based on selected preferences
+              </p>
+            </div>
+          );
+        }} />
       </ReferenceManyField>
     </SimpleShowLayout>
   </Show>
