@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install
-        run: cd documentation && npm install
+        run: cd documentation && yarn install
 
       - name: Deploy
         run: |
@@ -23,4 +23,4 @@ jobs:
           export PROJECT_NAME=$(echo ${GITHUB_REPOSITORY#*/})
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
-          cd documentation && NODE_ENV="production" npm deploy
+          cd documentation && NODE_ENV="production" yarn deploy
