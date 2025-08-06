@@ -11,7 +11,6 @@ import {
 
 import useClient from "utils/useClient";
 import useUser from "utils/useUser";
-import { useLocation } from "react-router-dom";
 const router = createMemoryRouter(
   createRoutesFromElements(<Route path="/" element={<Sidebar />} />),
   {
