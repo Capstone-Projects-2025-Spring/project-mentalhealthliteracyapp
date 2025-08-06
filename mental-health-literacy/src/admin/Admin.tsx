@@ -1,6 +1,7 @@
 import { Admin, Resource, Layout } from 'react-admin';
 import { VideoList, VideoShow, VideoEdit, VideoCreate } from './resources/videos';
 import { CategoryList, CategoryShow, CategoryEdit, CategoryCreate } from './resources/categories';
+import { UserList, UserShow, UserEdit, UserCreate } from './resources/users';
 import dataProvider from './dataProvider';
 import authProvider from './authProvider';
 
@@ -12,6 +13,10 @@ const Dashboard = () => (
   <div style={{ padding: '20px' }}>
     <h1>Mental Health Literacy Admin</h1>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '20px' }}>
+      <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+        <h3>Users</h3>
+        <p>Manage user accounts and profiles</p>
+      </div>
       <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
         <h3>Videos</h3>
         <p>Manage video content and metadata</p>
@@ -33,6 +38,14 @@ export const AdminApp = () => (
     layout={AdminLayout}
     title="Mental Health Literacy Admin"
   >
+    <Resource
+      name="user"
+      list={UserList}
+      show={UserShow}
+      edit={UserEdit}
+      create={UserCreate}
+      options={{ label: 'Users' }}
+    />
     <Resource
       name="videos"
       list={VideoList}
