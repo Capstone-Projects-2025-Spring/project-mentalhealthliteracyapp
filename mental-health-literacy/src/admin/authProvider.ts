@@ -22,7 +22,17 @@ const authProvider: AuthProvider = {
         throw new Error('No user returned from login');
       }
       
-      console.log('Login successful for user:', data.user.email);
+      // Check if user has admin role
+      const userRole = data.user.app_metadata?.role;
+      console.log('User role:', userRole);
+      
+      if (userRole !== 'admin') {
+        console.error('Access denied: User does not have admin role');
+        await supabase().auth.signOut(); // Sign out non-admin user
+        throw new Error('Access denied. Admin privileges required.');
+      }
+      
+      console.log('Login successful for admin user:', data.user.email);
       return Promise.resolve();
     } catch (error) {
       console.error('Login failed:', error);
@@ -48,7 +58,14 @@ const authProvider: AuthProvider = {
       return Promise.reject('Not authenticated');
     }
     
-    console.log('Auth check passed for user:', user.email);
+    // Check if user has admin role
+    const userRole = user.app_metadata?.role;
+    if (userRole !== 'admin') {
+      console.log('Auth check failed: User does not have admin role');
+      return Promise.reject('Admin privileges required');
+    }
+    
+    console.log('Auth check passed for admin user:', user.email);
     return Promise.resolve();
   },
 
@@ -67,10 +84,17 @@ const authProvider: AuthProvider = {
       throw new Error('User not authenticated');
     }
     
+    // Verify admin role
+    const userRole = user.app_metadata?.role;
+    if (userRole !== 'admin') {
+      throw new Error('Admin privileges required');
+    }
+    
     return {
       id: user.id,
       fullName: user.user_metadata?.full_name || user.email,
       avatar: user.user_metadata?.avatar_url,
+      role: userRole,
     };
   },
 
