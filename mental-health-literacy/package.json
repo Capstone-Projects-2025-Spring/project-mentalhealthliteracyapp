@@ -29,7 +29,6 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.3",
-    "@tailwindcss/vite": "^4.1.11",
     "jsdom": "^26.1.0",
     "ra-supabase": "^3.5.0",
     "react": "^19.1.0",
