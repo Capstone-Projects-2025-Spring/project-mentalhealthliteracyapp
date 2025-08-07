@@ -51,6 +51,7 @@ export const CategoryShow = () => (
         label="Videos in this Category"
         reference="videoCategories"
         target="categoryId"
+        sort={{ field: 'videoId', order: 'DESC' }}
       >
         <Datagrid>
           <ReferenceField source="videoId" reference="videos" label="Video">
