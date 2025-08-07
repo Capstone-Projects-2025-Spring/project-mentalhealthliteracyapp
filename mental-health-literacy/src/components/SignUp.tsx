@@ -1,17 +1,31 @@
 import { useFetcher } from "react-router-dom";
 import CloseButton from "../components/CloseButton";
 import useUserError from "utils/useUserError";
+import { useEffect, useRef } from "react";
 
-function SignUp(props: any) {
+function SignUp({
+  openLogin,
+  close,
+}: {
+  openLogin: () => void; // function to open the login modal
+  close: () => void; // function to close all modals
+}) {
   const fetcher = useFetcher();
   const error = useUserError();
-
+  const registerRef = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    registerRef.current?.showModal();
+  }, []);
   if (fetcher.data?.status == 200 && !error) {
-    props.close();
+    close();
   }
   return (
-    <>
-      <CloseButton close={props.close}></CloseButton>
+    <dialog
+      ref={registerRef}
+      className="dialog dialog-centered"
+      onClose={() => close()}
+    >
+      <CloseButton close={close}></CloseButton>
       <div className="auth-form">
         <h1>Sign Up</h1>
         <fetcher.Form method="post" action="/api/register">
@@ -35,12 +49,12 @@ function SignUp(props: any) {
 
         <p className="switch-container">
           Already have an account?{" "}
-          <button className="switch-button" onClick={props.switch}>
+          <button className="switch-button" onClick={() => openLogin()}>
             Log In
           </button>
         </p>
       </div>
-    </>
+    </dialog>
   );
 }
 

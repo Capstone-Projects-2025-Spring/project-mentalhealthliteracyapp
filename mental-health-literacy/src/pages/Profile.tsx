@@ -5,18 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import "./Profile.css";
-import { saveUserPreferences, fetchUserPreferences } from "src/api/preferences";
+import { saveUserPreferences, fetchUserPreferences, fetchAllPreferences } from "src/api/preferences";
 import { videoService } from "src/components/videoService";
 import type { Video } from "src/components/videoService";
 import LikedVideoCard from "src/components/LikedVideoCard";
 
-const INTERESTS = [
-  "Art", "Music", "Writing", "Nature", "Fitness", "Animals", "Reading", "Cooking", "Travel", "Fashion", "Gardening", "Meditation"
-];
-const TRAITS = [
-  "Introverted", "Extroverted", "Calm", "Spontaneous", "Talkative", "Quiet", "Goal-Driven", "Sensitive", "Independent", "Reserved", "Analytical", "Empathetic", "Curious", "Adventurous", "Supportive"
-];
 const MAX_SELECTIONS = 5;
+
+interface Preference {
+  id: number;
+  name: string;
+}
 
 function Profile() {
   const user = useUser();
@@ -25,35 +24,77 @@ function Profile() {
   // localStorage preferences
   const [interests, setInterests] = useState<string[]>([]);
   const [traits, setTraits] = useState<string[]>([]);
+  const [availableInterests, setAvailableInterests] = useState<Preference[]>([]);
+  const [availableTraits, setAvailableTraits] = useState<Preference[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editInterests, setEditInterests] = useState<string[]>([]);
   const [editTraits, setEditTraits] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const [loadingPreferences, setLoadingPreferences] = useState(true);
+  const [loadingAvailablePreferences, setLoadingAvailablePreferences] = useState(true);
   
   // Liked videos state
   const [likedVideos, setLikedVideos] = useState<Video[]>([]);
   const [loadingLikedVideos, setLoadingLikedVideos] = useState(true);
   const [showAllLikedVideos, setShowAllLikedVideos] = useState(false);
 
+  // Load available preferences from database
+  useEffect(() => {
+    const loadAvailablePreferences = async () => {
+      try {
+        setLoadingAvailablePreferences(true);
+        const result = await fetchAllPreferences();
+        
+        if (result.status === 200 && result.data) {
+          setAvailableInterests(result.data.interests);
+          setAvailableTraits(result.data.traits);
+        } else {
+          console.log("[Profile] Error loading available preferences:", result.error);
+        }
+      } catch (error) {
+        console.log("[Profile] Error loading available preferences:", error);
+      } finally {
+        setLoadingAvailablePreferences(false);
+      }
+    };
+
+    loadAvailablePreferences();
+  }, []);
+
   useEffect(() => {
     const loadPreferences = async () => {
+      setLoadingPreferences(true);
+      
       if (user && user !== "Guest") {
         // If authenticated user, get preferences from Supabase
         const result = await fetchUserPreferences();
         
         if (result.status === 200 && result.data) {
+          // Always use Supabase data for authenticated users, even if empty
           setInterests(result.data.interests);
           setTraits(result.data.traits);
-          return;
+        } else {
+          // Supabase fetch failed, but user is authenticated
+          // Don't fall back to localStorage for authenticated users
+          // This prevents showing stale localStorage data
+          setInterests([]);
+          setTraits([]);
         }
+      } else if (user === null) {
+        // User is still loading, don't show anything yet
+        setInterests([]);
+        setTraits([]);
+      } else {
+        // Only use localStorage for non-authenticated users (Guest)
+        const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+        const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+        setInterests(storedInterests);
+        setTraits(storedTraits);
       }
-      // Fallback to localStorage for non-authenticated users or if database fetch fails
-      const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
-      const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
-      setInterests(storedInterests);
-      setTraits(storedTraits);
+      
+      setLoadingPreferences(false);
     };
     loadPreferences();
   }, [user]);
@@ -100,13 +141,20 @@ function Profile() {
     setSaving(true);
     setError(null);
     try {
-      // Save to localStorage
-      localStorage.setItem("userInterests", JSON.stringify(editInterests));
-      localStorage.setItem("userTraits", JSON.stringify(editTraits));
+      if (user && user !== "Guest") {
+        // For authenticated users, save to Supabase and clear localStorage
+        await saveUserPreferences([...editInterests, ...editTraits]);
+        // Clear localStorage to prevent conflicts
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userTraits");
+      } else {
+        // For non-authenticated users, save to localStorage only
+        localStorage.setItem("userInterests", JSON.stringify(editInterests));
+        localStorage.setItem("userTraits", JSON.stringify(editTraits));
+      }
+      
       setInterests(editInterests);
       setTraits(editTraits);
-      // Save to Supabase
-      await saveUserPreferences([...editInterests, ...editTraits]);
       setModalOpen(false);
     } catch (err: any) {
       setError(err.message || "Failed to save preferences");
@@ -190,35 +238,43 @@ function Profile() {
 
           <div className="profile-preferences-container">
             <h2>Your Preferences</h2>
-            <div>
-              <strong>Interests:</strong>
-              <div className="profile-pill-list">
-                {interests.length === 0 ? (
-                  <span className="profile-pill-empty">No interests selected.</span>
-                ) : (
-                  interests.map((interest) => (
-                    <span key={interest} className="profile-pill">
-                      {interest}
-                    </span>
-                  ))
-                )}
+            {loadingPreferences ? (
+              <div className="loading-preferences">
+                <p>Loading your preferences...</p>
               </div>
-            </div>
-            <div>
-              <strong>Traits:</strong>
-              <div className="profile-pill-list">
-                {traits.length === 0 ? (
-                  <span className="profile-pill-empty">No traits selected.</span>
-                ) : (
-                  traits.map((trait) => (
-                    <span key={trait} className="profile-pill">
-                      {trait}
-                    </span>
-                  ))
-                )}
-              </div>
-            </div>
-            <button className="profile-edit-button" onClick={handleEdit}>Edit Preferences</button>
+            ) : (
+              <>
+                <div>
+                  <strong>Interests:</strong>
+                  <div className="profile-pill-list">
+                    {interests.length === 0 ? (
+                      <span className="profile-pill-empty">No interests selected.</span>
+                    ) : (
+                      interests.map((interest) => (
+                        <span key={interest} className="profile-pill">
+                          {interest}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <strong>Traits:</strong>
+                  <div className="profile-pill-list">
+                    {traits.length === 0 ? (
+                      <span className="profile-pill-empty">No traits selected.</span>
+                    ) : (
+                      traits.map((trait) => (
+                        <span key={trait} className="profile-pill">
+                          {trait}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+                <button className="profile-edit-button" onClick={handleEdit}>Edit Preferences</button>
+              </>
+            )}
           </div>
 
           {modalOpen && (
@@ -234,44 +290,56 @@ function Profile() {
 
                 <div className="edit-preferences-section">
                   <strong className="edit-preferences-label">Interests:</strong>
-                  <div className="edit-preferences-grid edit-preferences-grid-interests">
-                    {INTERESTS.map((interest) => (
-                      <button
-                        key={interest}
-                        className={
-                          "modal-pill" + (editInterests.includes(interest) ? " modal-pill-selected" : "")
-                        }
-                        onClick={() => toggleEditSelection(interest, editInterests, setEditInterests)}
-                        type="button"
-                        disabled={
-                          editInterests.length >= MAX_SELECTIONS && !editInterests.includes(interest)
-                        }
-                      >
-                        {interest}
-                      </button>
-                    ))}
-                  </div>
+                  {loadingAvailablePreferences ? (
+                    <div className="loading-preferences">
+                      <p>Loading interests...</p>
+                    </div>
+                  ) : (
+                    <div className="edit-preferences-grid edit-preferences-grid-interests">
+                      {availableInterests.map((interest) => (
+                        <button
+                          key={interest.id}
+                          className={
+                            "modal-pill" + (editInterests.includes(interest.name) ? " modal-pill-selected" : "")
+                          }
+                          onClick={() => toggleEditSelection(interest.name, editInterests, setEditInterests)}
+                          type="button"
+                          disabled={
+                            editInterests.length >= MAX_SELECTIONS && !editInterests.includes(interest.name)
+                          }
+                        >
+                          {interest.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="edit-preferences-section edit-preferences-section-traits">
                   <strong className="edit-preferences-label">Traits:</strong>
-                  <div className="edit-preferences-grid edit-preferences-grid-traits">
-                    {TRAITS.map((trait) => (
-                      <button
-                        key={trait}
-                        className={
-                          "modal-pill" + (editTraits.includes(trait) ? " modal-pill-selected" : "")
-                        }
-                        onClick={() => toggleEditSelection(trait, editTraits, setEditTraits)}
-                        type="button"
-                        disabled={
-                          editTraits.length >= MAX_SELECTIONS && !editTraits.includes(trait)
-                        }
-                      >
-                        {trait}
-                      </button>
-                    ))}
-                  </div>
+                  {loadingAvailablePreferences ? (
+                    <div className="loading-preferences">
+                      <p>Loading traits...</p>
+                    </div>
+                  ) : (
+                    <div className="edit-preferences-grid edit-preferences-grid-traits">
+                      {availableTraits.map((trait) => (
+                        <button
+                          key={trait.id}
+                          className={
+                            "modal-pill" + (editTraits.includes(trait.name) ? " modal-pill-selected" : "")
+                          }
+                          onClick={() => toggleEditSelection(trait.name, editTraits, setEditTraits)}
+                          type="button"
+                          disabled={
+                            editTraits.length >= MAX_SELECTIONS && !editTraits.includes(trait.name)
+                          }
+                        >
+                          {trait.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {error && <div className="edit-preferences-error">{error}</div>}

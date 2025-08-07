@@ -2,44 +2,85 @@
 
 This section provides an overview of the class diagrams used in the system architecture. Diagrams illustrate key classes, their properties, methods, and relationships.
 
-## Front-End Class Diagram — Quick Overview
-![alt text](FrontEnd.png)
-This diagram shows the high-level skeleton of the React application:
+## Authentication Class Diagram
+<img alt="Authentication" src="https://github.com/user-attachments/assets/c09ed77c-7a91-4aa4-9b92-61671c86f56d" />
 
-- **App** is the root component. It renders shared chrome (e.g., Header) and the main feature area (VideoFeed).
+### **UI Components**
+- **Sidebar**: Main layout, contains auth modals and ProfileSidebar
+- **Login/SignUp**: Form handling, validation, modal management
+- **ProfileSidebar**: User display, direct Redux logout dispatch
+- **ProtectedRoute**: Authentication checking, route protection
 
-- **Header** is a purely presentational component that shows the site title, user avatar, etc.
+### **API Layer**
+- **LoginAPI/RegisterAPI**: Form data extraction, Redux dispatch
+- **SignoutAPI**: Error reset, signout dispatch, error checking via useUserError hook
 
-- **VideoFeed** owns the infinite-scroll timeline. It fetches paged video metadata via react-query and renders a list of VideoCard instances.
+### **State Management**
+- **GlobalStore**: Central Redux store
+- **UserSlice**: Authentication state, async operations
 
-- **VideoCard** is the atomic UI unit for playback and engagement (like, share, etc.). Clicking a card can open the Resource Page for deeper help.
+### **Utility Hooks**
+- **UseUser**: User state subscription
+- **UseUserError**: Error state subscription
 
-- **AuthProvider** centralises Supabase auth; any component can call its signIn / signOut.
+### **Database**
+- **SupabaseClient**: Authentication operations
 
-Arrows convey runtime composition, e.g., "App → VideoFeed" means the feed appears inside the App tree, while "VideoFeed → * VideoCard" shows many cards per feed.
+## Video Components Class Diagram
+<img alt="Videos" src="https://github.com/user-attachments/assets/1e095869-86da-484d-a021-1dc5f70b61c0" />
 
-This keeps the top-level view to five or six boxes—clear enough to grasp in seconds.
+### **Video (Main Page)**
+- **Video Management**: Manages list of videos and current index
+- **Loading State**: Handles loading and error states
+- **Navigation**: Keyboard and scroll navigation
+- **Data Fetching**: Coordinates with Recommendations and VideoService
 
-## Video Component Internals — Quick Overview
-![alt text](VideoComponent.png)
-Here we zoom into how a single VideoCard works:
+### **VideoComponent**
+- **Video Display**: Renders individual video with MuxPlayer
+- **Like Handling**: Manages like state and optimistic updates
+- **Auto-play**: Handles video playback when active
+- **Tag Display**: Shows relevant resource tags
 
-- **VideoCard** orchestrates everything: it holds the current video prop and exposes interaction handlers (play, pause, toggleLike).
+### **VideoService**
+- **Data Processing**: Processes raw video data with like status
+- **Like Management**: Handles like/unlike operations in Supabase
+- **Tag Generation**: Creates tags based on video content
+- **Liked Videos**: Retrieves user's liked videos
 
-- **VideoPlayer** wraps the HTML5 `<video>` element (or a library player) and provides imperative controls (play, pause).
+### **Recommendations**
+- **User Preferences**: Fetches user preferences from database/localStorage
+- **Category Matching**: Matches preferences to video categories
+- **Video Filtering**: Filters videos based on user interests
+- **Fallback Logic**: Provides all videos when no preferences exist
 
-- **LikeButton** handles optimistic likes via a react-query mutation.
+### **Preferences**
+- **Preference Storage**: Saves user interests and traits
+- **Preference Retrieval**: Fetches stored user preferences
+- **Authentication**: Validates user authentication status
+- **Data Management**: Manages preferences in Supabase
 
 
-## Resource Page Diagram — Quick Overview
-![alt text](resourcePage.png)
-This diagram models the page that surfaces professional help links instead of videos:
+## Resource Components Class Diagram
+<img alt="Resources" src="https://github.com/user-attachments/assets/a4d3c37b-5968-49fa-b954-3fb08fa23973" />
 
-- **ResourcePage** is routed by topic (e.g., "/resources/anxiety"). It loads a ResourceList and hands it ready-to-render data.
+### **Resources (Main Page)**
+- **Resource Display**: Shows grid of resource cards
+- **Navigation**: Handles routing to individual resource pages
+- **State Management**: Manages component states
 
-- **ResourceList** maps over an array of ExternalResource objects, producing one ResourceCard per item.
+### **Individual Resource Pages**
+- **Content Display**: Shows specific resource information
+- **Navigation**: Provides back button for navigation
+- **Responsive Design**: Adapts to different screen sizes
 
-- **ResourceCard** is a small tile that shows title, short description, and an outbound link (open()).
+### **ResourceCard**
+- **Visual Display**: Shows resource image, title, and description
+- **Navigation**: Links to specific resource pages
+- **Hover Effects**: Provides interactive feedback
+- **Responsive Layout**: Adapts to grid layout
 
-- **ExternalResource** is a light domain object or TypeScript interface capturing metadata for each help link (provider name, URL, description).
-
+### **BackButton**
+- **Navigation**: Handles back navigation logic
+- **History Management**: Checks browser history
+- **Fallback**: Redirects to home if no history
+- **Visual Feedback**: Provides hover and focus states
