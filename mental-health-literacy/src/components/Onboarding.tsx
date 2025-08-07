@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./Onboarding.css";
 import CloseButton from "./CloseButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,6 +68,63 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const dispatch = useDispatch<any>();
   const user = useSelector((state: any) => state.user.user);
 
+  // Function to handle triggering onboarding from external sources
+  const handleTriggerOnboarding = useCallback(async () => {
+    console.log("[Onboarding] Received triggerOnboarding event");
+    
+    // Load existing preferences from localStorage first
+    const existingInterests = localStorage.getItem("userInterests");
+    const existingTraits = localStorage.getItem("userTraits");
+    
+    let currentInterests: string[] = [];
+    let currentTraits: string[] = [];
+    
+    // Parse existing preferences from localStorage
+    if (existingInterests) {
+      try {
+        currentInterests = JSON.parse(existingInterests);
+        console.log("[Onboarding] Loaded existing interests from localStorage:", currentInterests);
+      } catch (error) {
+        console.error("[Onboarding] Error parsing existing interests:", error);
+      }
+    }
+    
+    if (existingTraits) {
+      try {
+        currentTraits = JSON.parse(existingTraits);
+        console.log("[Onboarding] Loaded existing traits from localStorage:", currentTraits);
+      } catch (error) {
+        console.error("[Onboarding] Error parsing existing traits:", error);
+      }
+    }
+    
+    // If user is authenticated, also try to load from database
+    if (user && user !== "Guest") {
+      try {
+        console.log("[Onboarding] Loading existing preferences from database");
+        const result = await fetchUserPreferences();
+        
+        if (result.status === 200 && result.data) {
+          console.log("[Onboarding] Found existing preferences in database:", result.data);
+          // Merge database preferences with localStorage preferences (avoid duplicates)
+          const dbInterests = result.data.interests || [];
+          const dbTraits = result.data.traits || [];
+          
+          // Combine and remove duplicates
+          currentInterests = [...new Set([...currentInterests, ...dbInterests])];
+          currentTraits = [...new Set([...currentTraits, ...dbTraits])];
+        }
+      } catch (error) {
+        console.log("[Onboarding] Error loading existing preferences from database:", error);
+      }
+    }
+    
+    // Set the loaded preferences
+    setInterests(currentInterests);
+    setTraits(currentTraits);
+    setVisible(true);
+    setStep(0);
+  }, [user]);
 
   useEffect(() => {
     const complete = localStorage.getItem("onboardingComplete");
@@ -79,7 +136,20 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         loadExistingPreferences();
       }
     }
-  }, [user]);
+
+    // Add event listener for custom onboarding trigger
+    const eventHandler = () => {
+      handleTriggerOnboarding().catch(error => {
+        console.error("[Onboarding] Error in handleTriggerOnboarding:", error);
+      });
+    };
+    
+    window.addEventListener('triggerOnboarding', eventHandler);
+
+    return () => {
+      window.removeEventListener('triggerOnboarding', eventHandler);
+    };
+  }, [user, handleTriggerOnboarding]);
 
   const loadExistingPreferences = async () => {
     try {
