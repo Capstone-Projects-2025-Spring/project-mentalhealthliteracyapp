@@ -11,7 +11,6 @@ import ProfileSidebar from "src/components/ProfileSidebar";
 import useClient from "utils/useClient";
 import useUser from "utils/useUser";
 import { useDispatch } from "react-redux";
-import { reset_error } from "src/context/features/user/userSlice";
 
 export function links() {
   return [
@@ -25,7 +24,6 @@ export function links() {
 function Sidebar() {
   const userEmail = useUser();
   const isClient = useClient();
-  const dispatch = useDispatch();
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
 
   const loginRef = useRef<HTMLDialogElement>(null);

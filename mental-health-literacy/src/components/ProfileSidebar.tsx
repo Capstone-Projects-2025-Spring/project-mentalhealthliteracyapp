@@ -4,7 +4,7 @@ import { user_signout } from "src/context/features/user/userSlice";
 import useUser from "utils/useUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function ProfileSidebar() {
   const userEmail = useUser();
