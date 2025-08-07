@@ -13,13 +13,13 @@ export async function saveUserPreferences(preferences: string[]) {
         }
 
         // Delete existing preferences for user first
-        const { error: deleteError } = await supabase()
+        const deleteResult = await supabase()
             .from("userPreferences")
             .delete()
             .eq("user_id", user.id);
 
-        if (deleteError) {
-            console.log("[Preferences] Error deleting existing preferences:", deleteError);
+        if (deleteResult && deleteResult.error) {
+            console.log("[Preferences] Error deleting existing preferences:", deleteResult.error);
             return { error: "Error updating preferences", status: 500 };
         }
 
@@ -30,15 +30,17 @@ export async function saveUserPreferences(preferences: string[]) {
         }
 
         // Get preference IDs from preferences table with type
-        const { data: prefRows, error: prefError } = await supabase()
+        const prefResult = await supabase()
             .from("preferences")
             .select("id, name, type")
             .in("name", preferences);
 
-        if (prefError) {
-            console.log("[Preferences] Error fetching preferences:", prefError);
+        if (!prefResult || prefResult.error) {
+            console.log("[Preferences] Error fetching preferences:", prefResult?.error);
             return { error: "Error fetching preferences", status: 400 };
         }
+
+        const prefRows = prefResult.data;
 
         if (!prefRows || prefRows.length === 0) {
             console.log("[Preferences] No matching preferences found");
@@ -54,12 +56,12 @@ export async function saveUserPreferences(preferences: string[]) {
         }));
 
         // Insert new preferences
-        const { error: insertError } = await supabase()
+        const insertResult = await supabase()
             .from("userPreferences")
             .insert(userPreferences);
 
-        if (insertError) {
-            console.log("[Preferences] Error saving preferences:", insertError);
+        if (insertResult && insertResult.error) {
+            console.log("[Preferences] Error saving preferences:", insertResult.error);
             return { error: "Error saving preferences", status: 500 };
         }
 
@@ -84,7 +86,7 @@ export async function fetchUserPreferences() {
         }
 
         // Get user preferences with preference details using join
-        const { data: userPrefs, error: prefError } = await supabase()
+        const prefResult = await supabase()
             .from("userPreferences")
             .select(`
                 preference_id,
@@ -96,10 +98,12 @@ export async function fetchUserPreferences() {
             `)
             .eq("user_id", user.id);
 
-        if (prefError) {
-            console.log("[Preferences] Error fetching user preferences:", prefError);
+        if (!prefResult || prefResult.error) {
+            console.log("[Preferences] Error fetching user preferences:", prefResult?.error);
             return { error: "Error fetching preferences", status: 400 };
         }
+
+        const userPrefs = prefResult.data;
 
         if (!userPrefs || userPrefs.length === 0) {
             console.log("[Preferences] No preferences found for user");
@@ -135,15 +139,17 @@ export async function fetchAllPreferences() {
         console.log("[Preferences] Fetching all available preferences");
         
         // Get all preferences from the database
-        const { data: allPrefs, error: prefError } = await supabase()
+        const prefResult = await supabase()
             .from("preferences")
             .select("id, name, type")
             .order("name");
 
-        if (prefError) {
-            console.log("[Preferences] Error fetching all preferences:", prefError);
+        if (!prefResult || prefResult.error) {
+            console.log("[Preferences] Error fetching all preferences:", prefResult?.error);
             return { error: "Error fetching preferences", status: 400 };
         }
+
+        const allPrefs = prefResult.data;
 
         if (!allPrefs || allPrefs.length === 0) {
             console.log("[Preferences] No preferences found in database");
