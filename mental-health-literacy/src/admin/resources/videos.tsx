@@ -14,6 +14,10 @@ import {
   ReferenceInput,
   SelectInput,
   FunctionField,
+  ReferenceManyField,
+  ReferenceField,
+  ReferenceArrayInput,
+  SelectArrayInput,
 } from 'react-admin';
 
 const VideoFilter = (props: any) => (
@@ -51,6 +55,39 @@ export const VideoShow = () => (
       <TextField source="username" />
       <TextField source="description" />
       <NumberField source="likes" />
+      
+      <ReferenceManyField
+        label="Assigned Categories"
+        reference="videoCategories"
+        target="videoId"
+        sort={{ field: 'categoryId', order: 'ASC' }}
+      >
+        <Datagrid>
+          <ReferenceField source="categoryId" reference="categories" label="Category">
+            <TextField source="name" />
+          </ReferenceField>
+          <ReferenceField source="categoryId" reference="categories" label="URL">
+            <TextField source="url" />
+          </ReferenceField>
+        </Datagrid>
+      </ReferenceManyField>
+      
+      <ReferenceManyField
+        label="Users Who Liked This Video"
+        reference="userInteractions"
+        target="videoId"
+        filter={{ like: true }}
+        sort={{ field: 'user_id', order: 'DESC' }}
+      >
+        <Datagrid>
+          <ReferenceField source="user_id" reference="user" label="User">
+            <TextField source="display_name" />
+          </ReferenceField>
+          <ReferenceField source="user_id" reference="user" label="Email">
+            <TextField source="email" />
+          </ReferenceField>
+        </Datagrid>
+      </ReferenceManyField>
     </SimpleShowLayout>
   </Show>
 );

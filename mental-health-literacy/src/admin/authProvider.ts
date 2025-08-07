@@ -3,18 +3,14 @@ import supabase from '../lib/supabase';
 
 const authProvider: AuthProvider = {
   login: async (params) => {
-    console.log('Login attempt with params:', params);
-    
     try {
       const { data, error } = await supabase().auth.signInWithPassword({
         email: params.email || params.username, // Handle both email and username
         password: params.password
       });
       
-      console.log('Supabase login response:', { data, error });
-      
       if (error) {
-        console.error('Supabase login error:', error);
+        console.error('Login error:', error.message);
         throw new Error(error.message);
       }
       
@@ -22,7 +18,14 @@ const authProvider: AuthProvider = {
         throw new Error('No user returned from login');
       }
       
-      console.log('Login successful for user:', data.user.email);
+      // Check if user has admin role
+      const userRole = data.user.app_metadata?.role;
+      
+      if (userRole !== 'admin') {
+        await supabase().auth.signOut(); // Sign out non-admin user
+        throw new Error('Access denied. Admin privileges required.');
+      }
+      
       return Promise.resolve();
     } catch (error) {
       console.error('Login failed:', error);
@@ -31,10 +34,9 @@ const authProvider: AuthProvider = {
   },
 
   logout: async () => {
-    console.log('Logout attempt');
     const { error } = await supabase().auth.signOut();
     if (error) {
-      console.error('Logout error:', error);
+      console.error('Logout error:', error.message);
       throw new Error(error.message);
     }
     return Promise.resolve();
@@ -44,11 +46,15 @@ const authProvider: AuthProvider = {
     const { data: { user }, error } = await supabase().auth.getUser();
     
     if (error || !user) {
-      console.log('Auth check failed:', error);
       return Promise.reject('Not authenticated');
     }
     
-    console.log('Auth check passed for user:', user.email);
+    // Check if user has admin role
+    const userRole = user.app_metadata?.role;
+    if (userRole !== 'admin') {
+      return Promise.reject('Admin privileges required');
+    }
+    
     return Promise.resolve();
   },
 
@@ -67,10 +73,17 @@ const authProvider: AuthProvider = {
       throw new Error('User not authenticated');
     }
     
+    // Verify admin role
+    const userRole = user.app_metadata?.role;
+    if (userRole !== 'admin') {
+      throw new Error('Admin privileges required');
+    }
+    
     return {
       id: user.id,
       fullName: user.user_metadata?.full_name || user.email,
       avatar: user.user_metadata?.avatar_url,
+      role: userRole,
     };
   },
 
