@@ -106,7 +106,7 @@ Discuss what you need to develop this project. This includes background informat
     </td>
     <td align="center">
         <a href="https://github.com/tuq69747">
-            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="LernerLana"/>
+            <img src="https://avatars.githubusercontent.com/u/179741451?v=4" width="100;" alt="LernerLana"/>
             <br />
             <sub><b>Lana Lerner</b></sub>
         </a>
