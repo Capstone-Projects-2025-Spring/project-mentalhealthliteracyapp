@@ -68,5 +68,10 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"
+  },
+  "overrides": {
+    "@gilbarbara/hooks": {
+      "react": "^19.1.0"
+    }
   }
 }
