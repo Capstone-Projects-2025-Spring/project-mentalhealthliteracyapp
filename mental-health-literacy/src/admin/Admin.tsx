@@ -77,6 +77,7 @@ export const AdminApp = () => (
     <Resource name="userPreferences" />
     <Resource name="userInteractions" />
     <Resource name="categoryPreferences" />
+    <Resource name="videoCategories" />
   </Admin>
 );
 

@@ -20,6 +20,16 @@ const addVirtualId = (data: any[], resource: string) => {
       ...item,
       id: `${item.user_id}_${item.videoId}`, // Create composite id
     }));
+  } else if (resource === 'categoryPreferences') {
+    return data.map(item => ({
+      ...item,
+      id: `${item.categoryId}_${item.preferenceId}`, // Create composite id
+    }));
+  } else if (resource === 'videoCategories') {
+    return data.map(item => ({
+      ...item,
+      id: `${item.videoId}_${item.categoryId}`, // Create composite id
+    }));
   }
   return data;
 };
@@ -30,13 +40,19 @@ const dataProvider = {
   
   getManyReference: async (resource: string, params: any) => {
     // For tables with composite keys, we need to handle sorting differently
-    if (resource === 'userPreferences' || resource === 'userInteractions') {
+    const compositeKeyTables = ['userPreferences', 'userInteractions', 'categoryPreferences', 'videoCategories'];
+    
+    if (compositeKeyTables.includes(resource)) {
       // Remove the default 'id' sort if it exists
       if (params.sort && params.sort.field === 'id') {
         // Use a different field for sorting based on the table
         if (resource === 'userPreferences') {
           params.sort.field = 'preference_id';
         } else if (resource === 'userInteractions') {
+          params.sort.field = 'videoId';
+        } else if (resource === 'categoryPreferences') {
+          params.sort.field = 'preferenceId';
+        } else if (resource === 'videoCategories') {
           params.sort.field = 'videoId';
         }
       }
@@ -45,7 +61,7 @@ const dataProvider = {
     const response = await baseDataProvider.getManyReference(resource, params);
     
     // Add virtual id field for composite key tables
-    if (resource === 'userPreferences' || resource === 'userInteractions') {
+    if (compositeKeyTables.includes(resource)) {
       return {
         ...response,
         data: addVirtualId(response.data, resource),
@@ -57,11 +73,17 @@ const dataProvider = {
   
   getList: async (resource: string, params: any) => {
     // Handle composite key tables
-    if (resource === 'userPreferences' || resource === 'userInteractions') {
+    const compositeKeyTables = ['userPreferences', 'userInteractions', 'categoryPreferences', 'videoCategories'];
+    
+    if (compositeKeyTables.includes(resource)) {
       if (params.sort && params.sort.field === 'id') {
         if (resource === 'userPreferences') {
           params.sort.field = 'preference_id';
         } else if (resource === 'userInteractions') {
+          params.sort.field = 'videoId';
+        } else if (resource === 'categoryPreferences') {
+          params.sort.field = 'preferenceId';
+        } else if (resource === 'videoCategories') {
           params.sort.field = 'videoId';
         }
       }
@@ -70,7 +92,7 @@ const dataProvider = {
     const response = await baseDataProvider.getList(resource, params);
     
     // Add virtual id field for composite key tables
-    if (resource === 'userPreferences' || resource === 'userInteractions') {
+    if (compositeKeyTables.includes(resource)) {
       return {
         ...response,
         data: addVirtualId(response.data, resource),
@@ -81,7 +103,9 @@ const dataProvider = {
   },
   
   getOne: async (resource: string, params: any) => {
-    if (resource === 'userPreferences' || resource === 'userInteractions') {
+    const compositeKeyTables = ['userPreferences', 'userInteractions', 'categoryPreferences', 'videoCategories'];
+    
+    if (compositeKeyTables.includes(resource)) {
       // For composite keys, we can't use getOne directly
       // This would need special handling based on your needs
       console.warn(`getOne not fully supported for ${resource} with composite keys`);
@@ -94,6 +118,10 @@ const dataProvider = {
       response.data.id = `${response.data.user_id}_${response.data.preference_id}`;
     } else if (resource === 'userInteractions') {
       response.data.id = `${response.data.user_id}_${response.data.videoId}`;
+    } else if (resource === 'categoryPreferences') {
+      response.data.id = `${response.data.categoryId}_${response.data.preferenceId}`;
+    } else if (resource === 'videoCategories') {
+      response.data.id = `${response.data.videoId}_${response.data.categoryId}`;
     }
     
     return response;
