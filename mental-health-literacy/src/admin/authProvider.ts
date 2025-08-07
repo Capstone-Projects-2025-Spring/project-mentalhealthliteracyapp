@@ -3,18 +3,14 @@ import supabase from '../lib/supabase';
 
 const authProvider: AuthProvider = {
   login: async (params) => {
-    console.log('Login attempt with params:', params);
-    
     try {
       const { data, error } = await supabase().auth.signInWithPassword({
         email: params.email || params.username, // Handle both email and username
         password: params.password
       });
       
-      console.log('Supabase login response:', { data, error });
-      
       if (error) {
-        console.error('Supabase login error:', error);
+        console.error('Login error:', error.message);
         throw new Error(error.message);
       }
       
@@ -24,15 +20,12 @@ const authProvider: AuthProvider = {
       
       // Check if user has admin role
       const userRole = data.user.app_metadata?.role;
-      console.log('User role:', userRole);
       
       if (userRole !== 'admin') {
-        console.error('Access denied: User does not have admin role');
         await supabase().auth.signOut(); // Sign out non-admin user
         throw new Error('Access denied. Admin privileges required.');
       }
       
-      console.log('Login successful for admin user:', data.user.email);
       return Promise.resolve();
     } catch (error) {
       console.error('Login failed:', error);
@@ -41,10 +34,9 @@ const authProvider: AuthProvider = {
   },
 
   logout: async () => {
-    console.log('Logout attempt');
     const { error } = await supabase().auth.signOut();
     if (error) {
-      console.error('Logout error:', error);
+      console.error('Logout error:', error.message);
       throw new Error(error.message);
     }
     return Promise.resolve();
@@ -54,18 +46,15 @@ const authProvider: AuthProvider = {
     const { data: { user }, error } = await supabase().auth.getUser();
     
     if (error || !user) {
-      console.log('Auth check failed:', error);
       return Promise.reject('Not authenticated');
     }
     
     // Check if user has admin role
     const userRole = user.app_metadata?.role;
     if (userRole !== 'admin') {
-      console.log('Auth check failed: User does not have admin role');
       return Promise.reject('Admin privileges required');
     }
     
-    console.log('Auth check passed for admin user:', user.email);
     return Promise.resolve();
   },
 

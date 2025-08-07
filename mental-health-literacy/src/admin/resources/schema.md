@@ -1,5 +1,5 @@
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
+-- Note: This schema is for reference only and is not meant to be executed directly.
+-- Table order and constraints may need adjustment for actual database setup.
 
 CREATE TABLE public.categories (
   id bigint NOT NULL,

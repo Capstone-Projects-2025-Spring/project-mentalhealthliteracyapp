@@ -90,8 +90,6 @@ export const UserShow = () => (
         <FunctionField render={(records: any) => {
           if (!records || records.length === 0) return "No preferences selected";
           
-          // This would show categories based on the user's preferences
-          // We'd need to join through categoryPreferences table
           return (
             <div>
               <p>User has selected {records.length} preference(s)</p>

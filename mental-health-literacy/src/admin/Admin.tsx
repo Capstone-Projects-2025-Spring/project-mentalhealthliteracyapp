@@ -23,7 +23,7 @@ import {
   TableHead,
   TableRow
 } from '@mui/material';
-import Grid from '@mui/material/Grid'; // Grid2 for MUI v7
+import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 import {
   People as PeopleIcon,
@@ -109,7 +109,7 @@ const Dashboard = () => {
           topVideos,
           recentUsers,
           userGrowth,
-          videoGrowth: 0, // Could calculate if you track video creation dates
+          videoGrowth: 0,
           categoryStats: categories.data
         });
       } catch (error) {

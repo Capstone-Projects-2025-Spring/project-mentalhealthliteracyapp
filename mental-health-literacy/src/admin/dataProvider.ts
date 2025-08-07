@@ -13,33 +13,33 @@ const addVirtualId = (data: any[], resource: string) => {
   if (resource === 'userPreferences') {
     return data.map(item => ({
       ...item,
-      id: `${item.user_id}_${item.preference_id}`, // Create composite id
+      id: `${item.user_id}_${item.preference_id}`,
     }));
   } else if (resource === 'userInteractions') {
     return data.map(item => ({
       ...item,
-      id: `${item.user_id}_${item.videoId}`, // Create composite id
+      id: `${item.user_id}_${item.videoId}`,
     }));
   } else if (resource === 'categoryPreferences') {
     return data.map(item => ({
       ...item,
-      id: `${item.categoryId}_${item.preferenceId}`, // Create composite id
+      id: `${item.categoryId}_${item.preferenceId}`,
     }));
   } else if (resource === 'videoCategories') {
     return data.map(item => ({
       ...item,
-      id: `${item.videoId}_${item.categoryId}`, // Create composite id
+      id: `${item.videoId}_${item.categoryId}`, 
     }));
   }
   return data;
 };
 
-// Enhanced data provider that handles composite key tables
+//data provider that handles composite key tables
 const dataProvider = {
   ...baseDataProvider,
   
   getManyReference: async (resource: string, params: any) => {
-    // For tables with composite keys, we need to handle sorting differently
+
     const compositeKeyTables = ['userPreferences', 'userInteractions', 'categoryPreferences', 'videoCategories'];
     
     if (compositeKeyTables.includes(resource)) {
@@ -72,7 +72,7 @@ const dataProvider = {
   },
   
   getList: async (resource: string, params: any) => {
-    // Handle composite key tables
+
     const compositeKeyTables = ['userPreferences', 'userInteractions', 'categoryPreferences', 'videoCategories'];
     
     if (compositeKeyTables.includes(resource)) {
@@ -91,7 +91,7 @@ const dataProvider = {
     
     const response = await baseDataProvider.getList(resource, params);
     
-    // Add virtual id field for composite key tables
+
     if (compositeKeyTables.includes(resource)) {
       return {
         ...response,
@@ -106,14 +106,12 @@ const dataProvider = {
     const compositeKeyTables = ['userPreferences', 'userInteractions', 'categoryPreferences', 'videoCategories'];
     
     if (compositeKeyTables.includes(resource)) {
-      // For composite keys, we can't use getOne directly
-      // This would need special handling based on your needs
-      console.warn(`getOne not fully supported for ${resource} with composite keys`);
+      console.warn(`getOne operation for ${resource} may have limited functionality due to composite keys`);
     }
     
     const response = await baseDataProvider.getOne(resource, params);
     
-    // Add virtual id if needed
+    // Add virtual id for composite key tables
     if (resource === 'userPreferences') {
       response.data.id = `${response.data.user_id}_${response.data.preference_id}`;
     } else if (resource === 'userInteractions') {
