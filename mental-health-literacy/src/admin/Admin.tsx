@@ -124,13 +124,13 @@ const Dashboard = () => {
   if (stats.loading) return <Loading />;
 
   return (
-    <Box sx={{ padding: 3, backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+    <Box sx={{ padding: 3, minHeight: '100vh' }}>
       {/* Header */}
       <Box sx={{ marginBottom: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a1a1a', marginBottom: 1 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, marginBottom: 1 }}>
           Admin Dashboard
         </Typography>
-        <Typography variant="body1" sx={{ color: '#666' }}>
+        <Typography variant="body1" color="text.secondary">
           Mental Health Literacy Platform Overview
         </Typography>
       </Box>
@@ -147,10 +147,10 @@ const Dashboard = () => {
             <CardContent sx={{ padding: 2.5 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#666', marginBottom: 0.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0.5 }}>
                     Total Users
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a1a1a' }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
                     {stats.users.toLocaleString()}
                   </Typography>
                   <Typography variant="body2" sx={{ color: '#4caf50', marginTop: 1 }}>
@@ -173,13 +173,13 @@ const Dashboard = () => {
             <CardContent sx={{ padding: 2.5 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#666', marginBottom: 0.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0.5 }}>
                     Total Videos
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a1a1a' }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
                     {stats.videos.toLocaleString()}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#666', marginTop: 1 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
                     Active content
                   </Typography>
                 </Box>
@@ -199,13 +199,13 @@ const Dashboard = () => {
             <CardContent sx={{ padding: 2.5 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#666', marginBottom: 0.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0.5 }}>
                     Total Engagement
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a1a1a' }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
                     {stats.totalLikes.toLocaleString()}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#666', marginTop: 1 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
                     {stats.avgLikesPerVideo} avg/video
                   </Typography>
                 </Box>
@@ -225,13 +225,13 @@ const Dashboard = () => {
             <CardContent sx={{ padding: 2.5 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#666', marginBottom: 0.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0.5 }}>
                     Categories
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a1a1a' }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
                     {stats.categories}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#666', marginTop: 1 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
                     {stats.preferences} preferences
                   </Typography>
                 </Box>
@@ -303,7 +303,7 @@ const Dashboard = () => {
                             sx={{ 
                               height: 6, 
                               borderRadius: 3,
-                              backgroundColor: '#e0e0e0',
+                              backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : '#e0e0e0',
                               '& .MuiLinearProgress-bar': {
                                 backgroundColor: video.likes > stats.avgLikesPerVideo ? '#4caf50' : '#ff9800'
                               }
@@ -346,14 +346,14 @@ const Dashboard = () => {
                     alignItems: 'center',
                     padding: 1.5,
                     borderRadius: 1,
-                    backgroundColor: '#fafafa',
-                    '&:hover': { backgroundColor: '#f5f5f5' }
+                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : '#fafafa',
+                    '&:hover': { backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#f5f5f5' }
                   }}
                 >
                   <Typography variant="body2" sx={{ fontWeight: 500 }}>
                     {user.display_name || user.email?.split('@')[0] || 'Anonymous'}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: '#999' }}>
+                  <Typography variant="caption" color="text.disabled">
                     {new Date(user.created_at).toLocaleDateString()}
                   </Typography>
                 </Box>
