@@ -2,40 +2,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import "./Onboarding.css";
 import CloseButton from "./CloseButton";
 import { useDispatch, useSelector } from "react-redux";
-import { savePreferences } from "src/context/features/user/userSlice";
-import { fetchUserPreferences } from "src/api/preferences";
-
-const INTERESTS = [
-  "Art",
-  "Music",
-  "Writing",
-  "Nature",
-  "Fitness",
-  "Animals",
-  "Reading",
-  "Cooking",
-  "Travel",
-  "Fashion",
-  "Gardening",
-  "Meditation",
-];
-const TRAITS = [
-  "Introverted",
-  "Extroverted",
-  "Calm",
-  "Spontaneous",
-  "Talkative",
-  "Quiet",
-  "Goal-Driven",
-  "Sensitive",
-  "Independent",
-  "Reserved",
-  "Analytical",
-  "Empathetic",
-  "Curious",
-  "Adventurous",
-  "Supportive",
-];
+import { savePreferences, syncOnboardingPreferences } from "src/context/features/user/userSlice";
+import { fetchUserPreferences, fetchAllPreferences } from "src/api/preferences";
 
 const MAX_SELECTIONS = 5;
 
@@ -43,6 +11,11 @@ type Step = 0 | 1 | 2;
 
 interface OnboardingProps {
   onComplete?: () => void;
+}
+
+interface Preference {
+  id: number;
+  name: string;
 }
 
 const toggleSelection = (
@@ -63,6 +36,9 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const [step, setStep] = useState<Step>(0);
   const [interests, setInterests] = useState<string[]>([]);
   const [traits, setTraits] = useState<string[]>([]);
+  const [availableInterests, setAvailableInterests] = useState<Preference[]>([]);
+  const [availableTraits, setAvailableTraits] = useState<Preference[]>([]);
+  const [loadingPreferences, setLoadingPreferences] = useState(true);
   const [transitioning, setTransitioning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch<any>();
@@ -126,6 +102,29 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     setStep(0);
   }, [user]);
 
+  // Load available preferences from database
+  useEffect(() => {
+    const loadAvailablePreferences = async () => {
+      try {
+        setLoadingPreferences(true);
+        const result = await fetchAllPreferences();
+        
+        if (result.status === 200 && result.data) {
+          setAvailableInterests(result.data.interests);
+          setAvailableTraits(result.data.traits);
+        } else {
+          console.log("[Onboarding] Error loading available preferences:", result.error);
+        }
+      } catch (error) {
+        console.log("[Onboarding] Error loading available preferences:", error);
+      } finally {
+        setLoadingPreferences(false);
+      }
+    };
+
+    loadAvailablePreferences();
+  }, []);
+
   useEffect(() => {
     const complete = localStorage.getItem("onboardingComplete");
     if (!complete) {
@@ -171,17 +170,34 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const persistPreferences = () => {
     console.log("[Onboarding] Saving preferences to localStorage", { interests, traits });
     localStorage.setItem("onboardingComplete", "true");
-    localStorage.setItem("userInterests", JSON.stringify(interests));
-    localStorage.setItem("userTraits", JSON.stringify(traits));
+    // Only save to localStorage for non-authenticated users
+    if (!user || user === "Guest") {
+      localStorage.setItem("userInterests", JSON.stringify(interests));
+      localStorage.setItem("userTraits", JSON.stringify(traits));
+    }
   };
 
   const closeOnboarding = async () => {
     persistPreferences();
     console.log("[Onboarding] User state on close:", user);
-    // If signed in user, dispatch savePreferences thunk
+    
     if (user && user !== "Guest") {
-      console.log("[Onboarding] Dispatching savePreferences thunk on close");
-      await dispatch(savePreferences([...interests, ...traits]));
+      // Check if this is a new user (has onboarding preferences to sync)
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const hasOnboardingPrefs = onboardingComplete && (interests.length > 0 || traits.length > 0);
+      
+      if (hasOnboardingPrefs) {
+        // New user during registration - sync onboarding preferences
+        console.log("[Onboarding] New user, syncing onboarding preferences");
+        await dispatch(syncOnboardingPreferences());
+      } else {
+        // Existing user updating preferences
+        console.log("[Onboarding] Existing user, saving updated preferences");
+        await dispatch(savePreferences([...interests, ...traits]));
+        // Clear localStorage to prevent conflicts
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userTraits");
+      }
     } else {
       console.log("[Onboarding] User not signed in, only saving to local storage.");
     }
@@ -192,10 +208,24 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const handleFinish = async () => {
     persistPreferences();
     console.log("[Onboarding] User state on finish:", user);
-    // If signed in user, dispatch savePreferences thunk
+    
     if (user && user !== "Guest") {
-      console.log("[Onboarding] Dispatching savePreferences thunk on finish");
-      await dispatch(savePreferences([...interests, ...traits]));
+      // Check if this is a new user (has onboarding preferences to sync)
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const hasOnboardingPrefs = onboardingComplete && (interests.length > 0 || traits.length > 0);
+      
+      if (hasOnboardingPrefs) {
+        // New user during registration - sync onboarding preferences
+        console.log("[Onboarding] New user, syncing onboarding preferences");
+        await dispatch(syncOnboardingPreferences());
+      } else {
+        // Existing user updating preferences
+        console.log("[Onboarding] Existing user, saving updated preferences");
+        await dispatch(savePreferences([...interests, ...traits]));
+        // Clear localStorage to prevent conflicts
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userTraits");
+      }
     } else {
       console.log("[Onboarding] User not signed in, skipping backend save.");
     }
@@ -248,33 +278,39 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
               <div className="stepContent">
                 <h2 className="heading2">Choose your interests</h2>
                 <p className="subtext">Let's personalize the videos you see.</p>
-                <div className="pillGrid">
-                  {INTERESTS.map((interest) => (
-                      <button
-                          key={interest}
-                          className={
-                              "pill" +
-                              (interests.includes(interest) ? " pillSelected" : "")
-                          }
-                          onClick={() =>
-                              toggleSelection(interest, interests, MAX_SELECTIONS, setInterests)
-                          }
-                          type="button"
-                          disabled={
+                {loadingPreferences ? (
+                  <div className="loading-preferences">
+                    <p>Loading interests...</p>
+                  </div>
+                ) : (
+                  <div className="pillGrid">
+                    {availableInterests.map((interest) => (
+                        <button
+                            key={interest.id}
+                            className={
+                                "pill" +
+                                (interests.includes(interest.name) ? " pillSelected" : "")
+                            }
+                            onClick={() =>
+                                toggleSelection(interest.name, interests, MAX_SELECTIONS, setInterests)
+                            }
+                            type="button"
+                            disabled={
+                                interests.length >= MAX_SELECTIONS &&
+                                !interests.includes(interest.name)
+                            }
+                            style={
                               interests.length >= MAX_SELECTIONS &&
-                              !interests.includes(interest)
-                          }
-                          style={
-                            interests.length >= MAX_SELECTIONS &&
-                            !interests.includes(interest)
-                                ? { cursor: "not-allowed", opacity: 0.6 }
-                                : {}
-                          }
-                      >
-                        {interest}
-                      </button>
-                  ))}
-                </div>
+                              !interests.includes(interest.name)
+                                  ? { cursor: "not-allowed", opacity: 0.6 }
+                                  : {}
+                            }
+                        >
+                          {interest.name}
+                        </button>
+                    ))}
+                  </div>
+                )}
                 <div className="buttonRow">
                   <button className="secondaryButton" onClick={handleBack}>
                     Back
@@ -282,7 +318,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                   <button
                       className="ctaButton"
                       onClick={handleNext}
-                      disabled={interests.length === 0}
+                      disabled={interests.length === 0 || loadingPreferences}
                   >
                     Next
                   </button>
@@ -293,30 +329,36 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
               <div className="stepContent">
                 <h2 className="heading2">What describes you?</h2>
                 <p className="subtext">Help us understand your vibe.</p>
-                <div className="pillGrid">
-                  {TRAITS.map((trait) => (
-                      <button
-                          key={trait}
-                          className={
-                              "pill" + (traits.includes(trait) ? " pillSelected" : "")
-                          }
-                          onClick={() =>
-                              toggleSelection(trait, traits, MAX_SELECTIONS, setTraits)
-                          }
-                          type="button"
-                          disabled={
-                              traits.length >= MAX_SELECTIONS && !traits.includes(trait)
-                          }
-                          style={
-                            traits.length >= MAX_SELECTIONS && !traits.includes(trait)
-                                ? { cursor: "not-allowed", opacity: 0.6 }
-                                : {}
-                          }
-                      >
-                        {trait}
-                      </button>
-                  ))}
-                </div>
+                {loadingPreferences ? (
+                  <div className="loading-preferences">
+                    <p>Loading traits...</p>
+                  </div>
+                ) : (
+                  <div className="pillGrid">
+                    {availableTraits.map((trait) => (
+                        <button
+                            key={trait.id}
+                            className={
+                                "pill" + (traits.includes(trait.name) ? " pillSelected" : "")
+                            }
+                            onClick={() =>
+                                toggleSelection(trait.name, traits, MAX_SELECTIONS, setTraits)
+                            }
+                            type="button"
+                            disabled={
+                                traits.length >= MAX_SELECTIONS && !traits.includes(trait.name)
+                            }
+                            style={
+                              traits.length >= MAX_SELECTIONS && !traits.includes(trait.name)
+                                  ? { cursor: "not-allowed", opacity: 0.6 }
+                                  : {}
+                            }
+                        >
+                          {trait.name}
+                        </button>
+                    ))}
+                  </div>
+                )}
                 <div className="buttonRow">
                   <button className="secondaryButton" onClick={handleBack}>
                     Back
@@ -324,7 +366,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                   <button
                       className="ctaButton"
                       onClick={handleFinish}
-                      disabled={traits.length === 0}
+                      disabled={traits.length === 0 || loadingPreferences}
                   >
                     Finish
                   </button>

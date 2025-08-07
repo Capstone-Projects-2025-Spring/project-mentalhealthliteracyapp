@@ -2,17 +2,31 @@ import "./Login.css";
 import CloseButton from "./CloseButton";
 import { useFetcher } from "react-router-dom";
 import useUserError from "utils/useUserError";
-function Login(props: any) {
+import { useEffect, useRef } from "react";
+function Login({
+  openSignUp,
+  openResetPassword,
+  close,
+}: {
+  openSignUp: () => void; // function to open the signup modal
+  openResetPassword: () => void; // function to bring up reset password modal
+  close: () => void; // function to close all modals
+}) {
   const fetcher = useFetcher();
   const error = useUserError();
 
+  const loginRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    loginRef.current?.showModal();
+  }, []);
+
   if (fetcher.data?.status == 200 && !error) {
-    props.close();
+    close();
   }
   return (
-    <>
-      <CloseButton close={props.close}></CloseButton>
-
+    <dialog ref={loginRef} className="dialog dialog-centered" onClose={close}>
+      <CloseButton close={close}></CloseButton>
       <div className="auth-form">
         <h1>Login</h1>
         <fetcher.Form method="post" action="/api/login">
@@ -34,14 +48,25 @@ function Login(props: any) {
           <button type="submit">Log In</button>
         </fetcher.Form>
 
-        <p className="switch-container">
-          Don’t have an account?{" "}
-          <button className="switch-button" onClick={props.switch}>
-            Sign Up
-          </button>
-        </p>
+        <div className="switch-container">
+          <div>
+            Forgot your password?{" "}
+            <button
+              className="switch-button"
+              onClick={() => openResetPassword()}
+            >
+              Reset Password
+            </button>
+          </div>
+          <div>
+            Don’t have an account?{" "}
+            <button className="switch-button" onClick={openSignUp}>
+              Sign Up
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+    </dialog>
   );
 }
 

@@ -10,7 +10,7 @@ import style from "./Sidebar.css?url";
 import ProfileSidebar from "src/components/ProfileSidebar";
 import useClient from "utils/useClient";
 import useUser from "utils/useUser";
-import { useDispatch } from "react-redux";
+import ResetPassword from "src/components/ResetPassword";
 
 export function links() {
   return [
@@ -25,56 +25,58 @@ function Sidebar() {
   const userEmail = useUser();
   const isClient = useClient();
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(true);
+  /**
+   * Sets which dialog is active
+   * @param index -
+   *
+   *
+   * 0 - Login
+   *
+   * 1 - Signup
+   *
+   * 2 - Reset Password
+   *
+   *
+   */
+  function setDialogIndex(index: number) {
+    let newArray = new Array(dialogList.length).fill(0);
+    newArray[index] = 1;
+    setDialogState(newArray);
+  }
+  /**Closes all dialogs */
+  function closeAllDialogs() {
+    let newArray = new Array(dialogList.length).fill(0);
+    setDialogState(newArray);
+  }
 
-  const loginRef = useRef<HTMLDialogElement>(null);
-  const registerRef = useRef<HTMLDialogElement>(null);
+  const dialogList = [
+    <Login
+      key={"login"}
+      openSignUp={() => setDialogIndex(1)}
+      openResetPassword={() => setDialogIndex(2)}
+      close={closeAllDialogs}
+    />,
+    <SignUp
+      key={"signup"}
+      openLogin={() => setDialogIndex(0)}
+      close={closeAllDialogs}
+    />,
+    <ResetPassword
+      key={"reset-password"}
+      openLogin={() => setDialogIndex(0)}
+      close={closeAllDialogs}
+    />,
+  ];
+  const [dialogState, setDialogState] = useState(
+    new Array(dialogList.length).fill(0)
+  );
 
-  const Close = function (type: string) {
-    switch (type) {
-      case "Login":
-        loginRef.current?.close();
-        break;
-      case "Signup":
-        registerRef.current?.close();
-        break;
-    }
-  };
-
-  const SwitchTo = function (type: string) {
-    Close(type);
-    switch (type) {
-      case "Login":
-        registerRef.current?.close();
-        loginRef.current?.showModal();
-        break;
-      case "Signup":
-        loginRef.current?.close();
-        registerRef.current?.showModal();
-        break;
-    }
-  };
-
+  const activeDialog = dialogList.filter((val, index) => {
+    if (dialogState[index] == 1) return val;
+  });
   return (
     <div id="root" suppressHydrationWarning={true}>
-      <dialog ref={loginRef} className="dialog dialog-centered">
-        <Login
-          close={() => {
-            Close("Login");
-          }}
-          switch={() => SwitchTo("Signup")}
-        />
-      </dialog>
-
-      <dialog ref={registerRef} className="dialog dialog-centered">
-        <SignUp
-          close={() => {
-            Close("Signup");
-          }}
-          switch={() => {
-            SwitchTo("Login");
-          }}
-        />
-      </dialog>
+      {activeDialog}
 
       <div id="menu-toggle">
         <button
@@ -130,7 +132,7 @@ function Sidebar() {
                   <button
                     className="signin-btn"
                     onClick={() => {
-                      loginRef.current?.showModal();
+                      setDialogIndex(0);
                     }}
                   >
                     Sign-in
@@ -138,7 +140,7 @@ function Sidebar() {
                   <button
                     className="register-btn"
                     onClick={() => {
-                      registerRef.current?.showModal();
+                      setDialogIndex(1);
                     }}
                   >
                     Register
