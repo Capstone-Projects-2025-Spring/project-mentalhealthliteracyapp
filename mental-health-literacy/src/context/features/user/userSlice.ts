@@ -59,6 +59,15 @@ export const user_signout = createAsyncThunk("user/signout", async () => {
   return { user, user_error };
 });
 
+export const user_reset_password = createAsyncThunk(
+  "user/reset_password",
+  async ({ email }: { email: string }) => {
+    const response = await supabase().auth.resetPasswordForEmail(email);
+    const user_error = response.error?.message;
+    return { user_error };
+  }
+);
+
 // Thunk to save preferences to Supabase
 export const savePreferences = createAsyncThunk(
   "user/savePreferences",
@@ -96,6 +105,9 @@ export const userSlice = createSlice({
     });
     builder.addCase(user_signout.fulfilled, (state, action) => {
       state.user = action.payload.user || null;
+      state.user_error = action.payload.user_error || null;
+    });
+    builder.addCase(user_reset_password.fulfilled, (state, action) => {
       state.user_error = action.payload.user_error || null;
     });
   },
