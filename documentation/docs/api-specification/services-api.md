@@ -1,321 +1,365 @@
 ---
-sidebar_position: 6
-title: Services and Utilities API
-description: Complete API documentation for service layers and utility functions in the Mental Health Literacy App
+sidebar_position: 2
+title: Services API
+description: API endpoints for authentication, preferences, and video services
 ---
 
-# Services and Utilities API Documentation
+# Services API Documentation
 
-This document provides comprehensive API documentation for all service layers, utility functions, and helper modules in the Mental Health Literacy application, following the Design Document - Part II API requirements.
+## Authentication
 
-## Services Architecture Overview
+### POST /api/login
+Authenticate user with email and password.
 
-The Mental Health Literacy App uses a modular service architecture with:
-- **Database Services**: Supabase client configuration and management
-- **Authentication Utilities**: User authentication helpers
-- **External Integrations**: Third-party service connections
-
----
-
-## supabase.ts - Database Service
-
-### Purpose
-Manages the Supabase client configuration and provides a centralized access point for all database operations. Handles environment-based configuration and error states.
-
-### Import
-```typescript
-import { getSupabaseClient } from '../lib/supabase';
-```
-
-### Dependencies
-```typescript
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-```
-
-### Environment Variables
-| Variable | Type | Required | Purpose |
-|----------|------|----------|---------|
-| VITE_SUPABASE_URL | string | Yes | Supabase project URL |
-| VITE_SUPABASE_ANON_KEY | string | Yes | Supabase anonymous/public key |
-
-### Functions
-
-#### getSupabaseClient
-
-```typescript
-export function getSupabaseClient(): SupabaseClient | null
-```
-
-##### Purpose
-Creates and returns a configured Supabase client instance for database operations, or null if configuration is missing.
-
-##### Pre-conditions
-- Environment variables must be set in `.env` file
-- Application must be built with Vite to access `import.meta.env`
-
-##### Post-conditions
-- Returns configured SupabaseClient if credentials are valid
-- Returns null if credentials are missing
-- Logs error to console if configuration fails
-
-##### Parameters
-None
-
-##### Return Value
-- **Type**: `SupabaseClient | null`
-- **Success**: Configured Supabase client instance
-- **Failure**: null
-
-##### Error Handling
-- Missing credentials: Logs "Missing Supabase credentials" to console
-- Returns null instead of throwing to allow graceful degradation
-- Calling code must check for null return value
-
-##### Usage Example
-```typescript
-const supabase = getSupabaseClient();
-if (!supabase) {
-  // Handle missing database connection
-  showError("Database connection unavailable");
-  return;
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
 }
-// Proceed with database operations
 ```
 
-##### Security Considerations
-- Uses anonymous key (safe for client-side)
-- Never expose service role key in client code
-- Row Level Security (RLS) should be configured in Supabase
+**Response:**
+```json
+{
+  "status": 200,
+  "message": "Login successful"
+}
+```
+
+**Error Response:**
+```json
+{
+  "status": 401,
+  "error": "Invalid credentials"
+}
+```
 
 ---
 
-## RequestAuth.ts - Authentication Utility
+### POST /api/register
+Create new user account.
 
-### Purpose
-Placeholder utility for handling authentication requests. Designed to process form submissions and integrate with the authentication system.
-
-### Import
-```typescript
-import { RequestAuth } from '../utils/RequestAuth';
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
 ```
 
-### Dependencies
-```typescript
-import type { FormEvent } from "react";
+**Response:**
+```json
+{
+  "status": 200,
+  "message": "Registration successful"
+}
 ```
 
-### Functions
-
-#### RequestAuth
-
-```typescript
-export async function RequestAuth(event?: FormEvent): Promise<void>
+**Error Response:**
+```json
+{
+  "status": 400,
+  "error": "Email already registered"
+}
 ```
 
-##### Purpose
-Handles authentication-related requests, particularly form submissions for login/signup operations.
+---
 
-##### Pre-conditions
-- Can be called with or without a form event
-- If called with event, expects a valid React FormEvent
+### POST /api/signout
+Sign out current user.
 
-##### Post-conditions
-- Prevents default form submission if event provided
-- Will query server for authentication (not yet implemented)
+**Request:** No body required
 
-##### Parameters
-| Parameter | Type | Required | Purpose |
-|-----------|------|----------|---------|
-| event | FormEvent | No | Form submission event to handle |
+**Response:**
+```json
+{
+  "status": 200,
+  "message": "Signout successful"
+}
+```
 
-##### Return Value
-- **Type**: `Promise<void>`
-- **Current**: No return value (async function)
-- **Future**: Should return authentication result
+---
 
-##### Current Implementation Status
-- Function skeleton only
-- Prevents form submission
-- TODO: Implement server authentication query
+### POST /api/reset-password
+Request password reset email.
 
-##### Planned Implementation
-```typescript
-export async function RequestAuth(event?: FormEvent) {
-  if (event) {
-    event.preventDefault();
-    
-    // Extract form data
-    const formData = new FormData(event.target as HTMLFormElement);
-    const email = formData.get('email');
-    const password = formData.get('password');
-    
-    // Validate inputs
-    if (!email || !password) {
-      throw new Error("Email and password are required");
-    }
-    
-    // Query authentication service
-    const supabase = getSupabaseClient();
-    if (!supabase) {
-      throw new Error("Authentication service unavailable");
-    }
-    
-    // Perform authentication
-    const { data, error } = await supabase.auth.signIn({
-      email,
-      password
-    });
-    
-    if (error) {
-      throw new Error(error.message);
-    }
-    
-    return data;
+**Request Body:**
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "status": 200,
+  "message": "Password reset email sent"
+}
+```
+
+---
+
+## Preferences
+
+### POST /api/preferences/save
+Save user preferences (interests and traits).
+
+**Request Body:**
+```json
+{
+  "preferences": ["Anxiety", "Stress Management", "Mindfulness"]
+}
+```
+
+**Response:**
+```json
+{
+  "status": 200,
+  "message": "Preferences saved"
+}
+```
+
+**Error Response:**
+```json
+{
+  "status": 401,
+  "error": "User not authenticated"
+}
+```
+
+---
+
+### GET /api/preferences/fetch
+Get current user's preferences.
+
+**Response:**
+```json
+{
+  "status": 200,
+  "data": {
+    "interests": ["Anxiety", "Depression"],
+    "traits": ["Student", "Young Adult"]
   }
 }
 ```
 
-##### Error Handling (Planned)
-- Invalid credentials: "Invalid email or password"
-- Network errors: "Unable to connect to authentication service"
-- Missing fields: "Please provide both email and password"
-- Service unavailable: "Authentication service is temporarily unavailable"
-
 ---
 
-## Error Handling Best Practices
+### GET /api/preferences/all
+Get all available preferences.
 
-### Service Layer Errors
-
-1. **Database Connection Errors**
-   ```typescript
-   if (!supabase) {
-     console.error("Database connection failed");
-     // Notify user with friendly message
-     return { error: "Unable to connect to database. Please try again later." };
-   }
-   ```
-
-2. **Authentication Errors**
-   ```typescript
-   try {
-     const result = await RequestAuth(event);
-   } catch (error) {
-     if (error.message.includes("Invalid")) {
-       showError("Please check your email and password");
-     } else {
-       showError("An unexpected error occurred. Please try again.");
-     }
-   }
-   ```
-
-3. **Network Errors**
-   ```typescript
-   if (error.code === 'NETWORK_ERROR') {
-     return "Please check your internet connection and try again.";
-   }
-   ```
-
----
-
-## Future Service Modules
-
-### Planned Services
-
-1. **UserService**
-   - User profile management
-   - Preferences storage
-   - Activity tracking
-
-2. **ContentService**
-   - Video metadata management
-   - Comment operations
-   - Like/interaction tracking
-
-3. **ResourceService**
-   - External resource management
-   - Content curation
-   - Search functionality
-
-4. **AnalyticsService**
-   - User behavior tracking
-   - Content performance metrics
-   - Health insights generation
-
-### Service Interface Pattern
-```typescript
-interface ServiceResponse<T> {
-  data?: T;
-  error?: string;
-  loading?: boolean;
-}
-
-interface BaseService {
-  initialize(): Promise<void>;
-  healthCheck(): Promise<boolean>;
-  cleanup(): void;
+**Response:**
+```json
+{
+  "status": 200,
+  "data": {
+    "interests": [
+      {"id": 1, "name": "Anxiety"},
+      {"id": 2, "name": "Depression"},
+      {"id": 3, "name": "Stress Management"}
+    ],
+    "traits": [
+      {"id": 4, "name": "Student"},
+      {"id": 5, "name": "Parent"},
+      {"id": 6, "name": "Professional"}
+    ]
+  }
 }
 ```
 
 ---
 
-## Configuration Management
+## Videos
 
-### Environment Configuration
-```typescript
-interface AppConfig {
-  supabase: {
-    url: string;
-    anonKey: string;
-  };
-  features: {
-    enableComments: boolean;
-    enableAnalytics: boolean;
-  };
-  api: {
-    timeout: number;
-    retryAttempts: number;
-  };
+### GET /api/recommendations
+Get personalized video recommendations based on user preferences.
+
+**Query Parameters:**
+- `userId` (optional): Override current user
+
+**Response:**
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "playbackId": "mux_playback_id",
+      "username": "creator123",
+      "description": "Understanding anxiety and coping strategies",
+      "likes": 42,
+      "tags": [
+        {"label": "Anxiety", "url": "/resources/anxiety"},
+        {"label": "CBT", "url": "/resources/cbt"}
+      ],
+      "isLiked": false
+    }
+  ]
 }
 ```
 
-### Configuration Validation
-- All services should validate configuration on initialization
-- Missing required config should fail fast with clear errors
-- Optional features should degrade gracefully
+**Logic Flow:**
+1. Check for authenticated user or localStorage preferences
+2. Get user's preference IDs
+3. Match preferences to categories
+4. Fetch videos from matching categories
+5. Append remaining videos for endless scroll
+6. Return sorted by relevance and likes
 
 ---
 
-## Testing Considerations
+### GET /api/videos/all
+Get all videos sorted by popularity.
 
-### Unit Testing Services
-1. Mock external dependencies (Supabase, network calls)
-2. Test error conditions and edge cases
-3. Verify proper error messages
-4. Test configuration validation
-
-### Integration Testing
-1. Test actual Supabase connections in dev environment
-2. Verify authentication flow end-to-end
-3. Test error recovery mechanisms
-4. Validate data persistence
-
----
-
-## Performance Guidelines
-
-1. **Singleton Pattern**: Services should be initialized once
-2. **Lazy Loading**: Initialize services only when needed
-3. **Caching**: Implement appropriate caching strategies
-4. **Connection Pooling**: Reuse database connections
-5. **Error Recovery**: Implement exponential backoff for retries
+**Response:**
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "playbackId": "mux_playback_id",
+      "username": "creator123",
+      "description": "Mental health basics",
+      "likes": 100
+    }
+  ]
+}
+```
 
 ---
 
-## Security Guidelines
+### POST /api/videos/like
+Toggle like status for a video.
 
-1. **API Keys**: Never expose sensitive keys in client code
-2. **Input Validation**: Validate all user inputs before service calls
-3. **Authentication**: Always verify user authentication state
-4. **Data Sanitization**: Sanitize data before database operations
-5. **HTTPS**: Ensure all external calls use HTTPS
+**Request Body:**
+```json
+{
+  "videoId": 1
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "newLikeCount": 43,
+  "isLiked": true
+}
+```
+
+**Error Response:**
+```json
+{
+  "status": 401,
+  "error": "User must be authenticated to like videos"
+}
+```
+
+---
+
+### GET /api/videos/liked
+Get all videos liked by current user.
+
+**Response:**
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "playbackId": "mux_playback_id",
+      "username": "creator123",
+      "description": "My favorite mental health video",
+      "likes": 42,
+      "isLiked": true
+    }
+  ]
+}
+```
+
+---
+
+## Database Tables
+
+### users
+- Managed by Supabase Auth
+
+### videos
+| Column | Type | Description |
+|--------|------|-------------|
+| id | integer | Primary key |
+| playbackId | string | Mux video ID |
+| username | string | Creator name |
+| description | string | Video caption |
+
+### preferences
+| Column | Type | Description |
+|--------|------|-------------|
+| id | integer | Primary key |
+| name | string | Preference name |
+| type | string | 'interest' or 'trait' |
+
+### userPreferences
+| Column | Type | Description |
+|--------|------|-------------|
+| user_id | uuid | Foreign key to users |
+| preference_id | integer | Foreign key to preferences |
+
+### categories
+| Column | Type | Description |
+|--------|------|-------------|
+| id | integer | Primary key |
+| name | string | Category name |
+
+### categoryPreferences
+| Column | Type | Description |
+|--------|------|-------------|
+| categoryId | integer | Foreign key to categories |
+| preferenceId | integer | Foreign key to preferences |
+
+### videoCategories
+| Column | Type | Description |
+|--------|------|-------------|
+| videoId | integer | Foreign key to videos |
+| categoryId | integer | Foreign key to categories |
+
+### userInteractions
+| Column | Type | Description |
+|--------|------|-------------|
+| user_id | uuid | Foreign key to users |
+| videoId | integer | Foreign key to videos |
+| like | boolean | Like status |
+
+---
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| 200 | Success |
+| 400 | Bad Request - Invalid parameters |
+| 401 | Unauthorized - Authentication required |
+| 404 | Not Found - Resource doesn't exist |
+| 500 | Server Error - Internal error |
+
+---
+
+## Implementation Notes
+
+### Authentication
+- Uses Supabase Auth for user management
+- Sessions stored in Redux state
+- JWT tokens handled by Supabase
+
+### Preferences Storage
+- Authenticated users: Stored in database
+- Non-authenticated users: Stored in localStorage
+- Preference matching uses junction tables for many-to-many relationships
+
+### Video Service
+- Like counts calculated from userInteractions table
+- Tags generated dynamically from video descriptions
+- Recommendations prioritize preference matches, then sort by likes
