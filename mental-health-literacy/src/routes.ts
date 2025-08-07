@@ -22,11 +22,12 @@ export default [
       route("/animal-therapy", "pages/AnimalTherapy.tsx"),
     ]),
   ]),
-  
+
   route("/admin/*", "pages/Admin.tsx"),
   ...prefix("/api", [
     route("/login", "api/login.tsx"),
     route("/register", "api/register.tsx"),
     route("/signout", "api/signout.tsx"),
+    route("/reset-password", "api/reset-password.tsx"),
   ]),
 ] satisfies RouteConfig;
