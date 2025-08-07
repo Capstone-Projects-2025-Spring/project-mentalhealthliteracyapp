@@ -128,3 +128,45 @@ export async function fetchUserPreferences() {
         return { error: err.message, status: 500 };
     }
 }
+
+// Fetch all available preferences from the database
+export async function fetchAllPreferences() {
+    try {
+        console.log("[Preferences] Fetching all available preferences");
+        
+        // Get all preferences from the database
+        const { data: allPrefs, error: prefError } = await supabase()
+            .from("preferences")
+            .select("id, name, type")
+            .order("name");
+
+        if (prefError) {
+            console.log("[Preferences] Error fetching all preferences:", prefError);
+            return { error: "Error fetching preferences", status: 400 };
+        }
+
+        if (!allPrefs || allPrefs.length === 0) {
+            console.log("[Preferences] No preferences found in database");
+            return { data: { interests: [], traits: [] }, status: 200 };
+        }
+
+        // Separate interests and traits
+        const interests: { id: number; name: string }[] = [];
+        const traits: { id: number; name: string }[] = [];
+
+        allPrefs.forEach((pref: any) => {
+            if (pref.type === 'interest') {
+                interests.push({ id: pref.id, name: pref.name });
+            } else if (pref.type === 'trait') {
+                traits.push({ id: pref.id, name: pref.name });
+            }
+        });
+
+        console.log("[Preferences] Fetched all preferences:", { interests, traits });
+        return { data: { interests, traits }, status: 200 };
+
+    } catch (err: any) {
+        console.log("[Preferences] Error:", err);
+        return { error: err.message, status: 500 };
+    }
+}
