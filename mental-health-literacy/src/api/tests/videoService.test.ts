@@ -5,6 +5,7 @@ import { VideoService, type Video } from '../../components/videoService';
 const mockSupabase = vi.hoisted(() => ({
   auth: {
     getUser: vi.fn(),
+    getSession: vi.fn(),
   },
   from: vi.fn(),
 }));
@@ -84,6 +85,15 @@ describe('VideoService - Unit Tests', () => {
     it('should process videos and add tags when user is not authenticated', async () => {
       mockSupabase.auth.getUser.mockResolvedValue({ data: { user: null } });
 
+      // Mock the from().select().eq() chain for getting all likes
+      const mockSelect = vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+      });
+      
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
+
       const result = await videoService.processVideosWithLike(mockVideos);
 
       expect(result).toHaveLength(2);
@@ -92,7 +102,7 @@ describe('VideoService - Unit Tests', () => {
         playbackId: 'test-playback-1',
         username: 'user1',
         description: 'CBT therapy session',
-        likes: 10,
+        likes: 0, // Likes are calculated from userInteractions, so 0 when no likes
         tags: [{ label: 'CBT', url: '/resources/cbt' }, { label: 'Therapy', url: '/resources/therapy' }],
         isLiked: false,
       });
@@ -101,7 +111,7 @@ describe('VideoService - Unit Tests', () => {
         playbackId: 'test-playback-2',
         username: 'user2',
         description: 'Yoga for stress relief',
-        likes: 5,
+        likes: 0, // Likes are calculated from userInteractions, so 0 when no likes
         tags: [{ label: 'Stress', url: '/resources/stress' }, { label: 'Yoga', url: '/resources/yoga' }],
         isLiked: false,
       });
@@ -167,6 +177,10 @@ describe('VideoService - Unit Tests', () => {
 
     beforeEach(() => {
       mockSupabase.auth.getUser.mockResolvedValue({ data: { user: mockUser } });
+      mockSupabase.auth.getSession.mockResolvedValue({ 
+        data: { session: { user: mockUser } }, 
+        error: null 
+      });
     });
 
     it('should like a video when user has not liked it before', async () => {
@@ -180,89 +194,81 @@ describe('VideoService - Unit Tests', () => {
       // Mock insert interaction
       const mockInsert = vi.fn().mockResolvedValue({ error: null });
       
-      // Mock get current video likes
+      // Mock count likes for this video (should return 1 after like)
       const mockSelect2 = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: { likes: 5 }, error: null }),
+          eq: vi.fn().mockResolvedValue({ data: [{ videoId: 1, like: true }], error: null }),
         }),
-      });
-      
-      // Mock update video likes
-      const mockUpdate = vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
       });
 
       mockSupabase.from
         .mockReturnValueOnce({ select: mockSelect1 })
         .mockReturnValueOnce({ insert: mockInsert })
-        .mockReturnValueOnce({ select: mockSelect2 })
-        .mockReturnValueOnce({ update: mockUpdate });
+        .mockReturnValueOnce({ select: mockSelect2 });
 
       const result = await videoService.updateLike(1);
 
       expect(result).toEqual({
         success: true,
-        newLikeCount: 6,
+        newLikeCount: 1,
         isLiked: true,
       });
     });
 
     it('should unlike a video when user has already liked it', async () => {
-      // Mock existing interactions (already liked)
+      // Mock existing interactions (user has already liked)
       const mockSelect1 = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({ data: [{ like: true }], error: null }),
+          eq: vi.fn().mockResolvedValue({ data: [{ id: 1, videoId: 1, like: true }], error: null }),
         }),
       });
       
       // Mock update interaction
-      const mockUpdate1 = vi.fn().mockReturnValue({
+      const mockUpdate = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({ error: null }),
         }),
       });
       
-      // Mock get current video likes
+      // Mock count likes for this video (should return 0 after unlike)
       const mockSelect2 = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: { likes: 6 }, error: null }),
+          eq: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
-      });
-      
-      // Mock update video likes
-      const mockUpdate2 = vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
       });
 
       mockSupabase.from
         .mockReturnValueOnce({ select: mockSelect1 })
-        .mockReturnValueOnce({ update: mockUpdate1 })
-        .mockReturnValueOnce({ select: mockSelect2 })
-        .mockReturnValueOnce({ update: mockUpdate2 });
+        .mockReturnValueOnce({ update: mockUpdate })
+        .mockReturnValueOnce({ select: mockSelect2 });
 
       const result = await videoService.updateLike(1);
 
       expect(result).toEqual({
         success: true,
-        newLikeCount: 5,
+        newLikeCount: 0,
         isLiked: false,
       });
     });
 
     it('should throw error when user is not authenticated', async () => {
-      mockSupabase.auth.getUser.mockResolvedValue({ data: { user: null } });
+      mockSupabase.auth.getSession.mockResolvedValue({ 
+        data: { session: null }, 
+        error: null 
+      });
 
       await expect(videoService.updateLike(1))
         .rejects.toThrow('User must be authenticated to like videos');
     });
 
     it('should handle database errors gracefully', async () => {
+      // Mock database error
       const mockSelect = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({ data: null, error: 'Database error' }),
         }),
       });
-      
+
       mockSupabase.from.mockReturnValue({
         select: mockSelect,
       });
@@ -282,63 +288,68 @@ describe('VideoService - Unit Tests', () => {
     it('should return liked videos for authenticated user', async () => {
       const mockLikedVideoIds = [{ videoId: 1 }, { videoId: 2 }];
       const mockVideos = [
-        {
-          id: 1,
-          playbackId: 'test-playback-1',
-          username: 'user1',
-          description: 'CBT therapy session',
-          likes: 10,
-        },
-        {
-          id: 2,
-          playbackId: 'test-playback-2',
-          username: 'user2',
-          description: 'Yoga for stress relief',
-          likes: 5,
-        },
+        { id: 1, playbackId: 'test-1', title: 'Video 1', description: 'Test video 1', username: 'user1', likes: 10 },
+        { id: 2, playbackId: 'test-2', title: 'Video 2', description: 'Test video 2', username: 'user2', likes: 5 },
       ];
 
-      // Mock get liked video IDs
+      // Mock getting liked video IDs
       const mockSelect1 = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({ data: mockLikedVideoIds, error: null }),
         }),
       });
 
-      // Mock get video data
+      // Mock getting video details
       const mockSelect2 = vi.fn().mockReturnValue({
         in: vi.fn().mockReturnValue({
           order: vi.fn().mockResolvedValue({ data: mockVideos, error: null }),
         }),
       });
 
+      // Mock getting all likes for like count calculation
+      const mockSelect3 = vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: [{ videoId: 1, like: true }, { videoId: 2, like: true }], error: null }),
+      });
+
       mockSupabase.from
         .mockReturnValueOnce({ select: mockSelect1 })
-        .mockReturnValueOnce({ select: mockSelect2 });
+        .mockReturnValueOnce({ select: mockSelect2 })
+        .mockReturnValueOnce({ select: mockSelect3 });
 
       const result = await videoService.getLikedVideos();
 
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         id: 1,
-        playbackId: 'test-playback-1',
+        playbackId: 'test-1',
         username: 'user1',
-        description: 'CBT therapy session',
-        likes: 10,
-        tags: [{ label: 'CBT', url: '/resources/cbt' }, { label: 'Therapy', url: '/resources/therapy' }],
+        description: 'Test video 1',
+        likes: 1, // Calculated from userInteractions
+        tags: [], // Generated from description
+        isLiked: true,
+      });
+      expect(result[1]).toEqual({
+        id: 2,
+        playbackId: 'test-2',
+        username: 'user2',
+        description: 'Test video 2',
+        likes: 1, // Calculated from userInteractions
+        tags: [], // Generated from description
         isLiked: true,
       });
     });
 
     it('should return empty array when user has no liked videos', async () => {
-      // Mock get liked video IDs (none)
+      // Mock no liked videos
       const mockSelect = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
       });
-      
-      mockSupabase.from.mockReturnValueOnce({ select: mockSelect });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
 
       const result = await videoService.getLikedVideos();
 
@@ -354,13 +365,16 @@ describe('VideoService - Unit Tests', () => {
     });
 
     it('should handle database errors gracefully', async () => {
+      // Mock database error
       const mockSelect = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({ data: null, error: 'Database error' }),
         }),
       });
-      
-      mockSupabase.from.mockReturnValue({ select: mockSelect });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
 
       const result = await videoService.getLikedVideos();
 

@@ -1,8 +1,8 @@
 {
-  "label": "Test Procedures",
+  "label": "Testing Documentation",
   "position": 8,
   "link": {
     "type": "generated-index",
-    "description": "Please remove and replace examples where necessary."
+    "description": "Comprehensive testing documentation for the Mental Health Literacy App, including unit tests, integration tests, and acceptance tests."
   }
 }

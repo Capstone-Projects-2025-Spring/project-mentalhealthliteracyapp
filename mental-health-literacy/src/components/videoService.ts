@@ -15,6 +15,21 @@ export interface Video {
 export class VideoService {
   private supabase = supabase();
 
+  // Ensure authentication state is loaded
+  private async ensureAuthState() {
+    try {
+      const { data: { session }, error } = await this.supabase.auth.getSession();
+      if (error) {
+        console.error('[VideoService] Error getting session:', error);
+        throw error;
+      }
+      return session;
+    } catch (error) {
+      console.error('[VideoService] Error ensuring auth state:', error);
+      throw error;
+    }
+  }
+
   // Get videos from recommendations and add like
   async processVideosWithLike(videos: any[]): Promise<Video[]> {
     if (!this.supabase) {
@@ -28,7 +43,7 @@ export class VideoService {
         playbackId: video.playbackId,
         username: video.username,
         description: video.description,
-        likes: video.likes,
+        likes: 0, // We'll calculate this from userInteractions
         // Generate tags based on video content
         tags: this.getTagsForVideo(video.description),
         isLiked: false
@@ -37,20 +52,41 @@ export class VideoService {
       // Check if user is authenticated
       const { data: { user } } = await this.supabase.auth.getUser();
 
+      // Get all like counts for videos
+      const { data: allLikes, error: likesError } = await this.supabase
+        .from('userInteractions')
+        .select('videoId, like')
+        .eq('like', true);
+
+      if (likesError) {
+        console.error('[VideoService] Error fetching likes:', likesError);
+      } else if (allLikes) {
+        // Calculate like counts for each video
+        const likeCounts = new Map<number, number>();
+        allLikes.forEach(like => {
+          likeCounts.set(like.videoId, (likeCounts.get(like.videoId) || 0) + 1);
+        });
+
+        // Update videos with correct like counts
+        videosWithTags.forEach(video => {
+          video.likes = likeCounts.get(video.id) || 0;
+        });
+      }
+
       // If no user is authenticated, return videos without like status
       if (!user) {
         return videosWithTags;
       }
 
       // Fetch user's liked video IDs
-      const { data: userLikes, error: likesError } = await this.supabase
+      const { data: userLikes, error: userLikesError } = await this.supabase
         .from('userInteractions')
         .select('videoId')
         .eq('user_id', user.id)
         .eq('like', true);
 
-      if (likesError) {
-        console.error('[VideoService] Error:', likesError);
+      if (userLikesError) {
+        console.error('[VideoService] Error fetching user likes:', userLikesError);
         return videosWithTags;
       }
 
@@ -72,12 +108,29 @@ export class VideoService {
 
   async updateLike(videoId: number): Promise<{ success: boolean; newLikeCount: number; isLiked: boolean }> {
     try {
-      const { data: { user } } = await this.supabase.auth.getUser();
+      console.log('[VideoService] Starting updateLike for video:', videoId);
+      
+      // Ensure authentication state is loaded
+      const session = await this.ensureAuthState();
+      if (!session) {
+        console.error('[VideoService] No active session found');
+        throw new Error('User must be authenticated to like videos');
+      }
+      
+      // Get the current user session
+      const { data: { user }, error: authError } = await this.supabase.auth.getUser();
+      
+      if (authError) {
+        console.error('[VideoService] Auth error:', authError);
+        throw new Error(`Authentication error: ${authError.message}`);
+      }
+      
       if (!user) {
+        console.error('[VideoService] No user found in session');
         throw new Error('User must be authenticated to like videos');
       }
 
-      console.log(`[VideoService] Liking video ${videoId} by user ${user.id}`);
+      console.log(`[VideoService] Liking video ${videoId} by user ${user.id} (${user.email})`);
 
       // Check if user has already liked video
       const { data: existingInteractions, error: checkError } = await this.supabase
@@ -87,13 +140,15 @@ export class VideoService {
         .eq('videoId', videoId);
 
       if (checkError) {
-        console.error('[VideoService] Error:', checkError);
+        console.error('[VideoService] Error checking existing interactions:', checkError);
         throw checkError;
       }
 
       const hasExistingInteraction = existingInteractions && existingInteractions.length > 0;
       const currentLikeState = hasExistingInteraction ? existingInteractions[0].like : false;
       const newLikeState = !currentLikeState;
+
+      console.log(`[VideoService] Current like state: ${currentLikeState}, new state: ${newLikeState}`);
 
       // Update or insert interaction
       if (hasExistingInteraction) {
@@ -104,7 +159,7 @@ export class VideoService {
           .eq('videoId', videoId);
 
         if (updateError) {
-          console.error('[VideoService] Error:', updateError);
+          console.error('[VideoService] Error updating interaction:', updateError);
           throw updateError;
         }
       } else {
@@ -117,40 +172,30 @@ export class VideoService {
           });
 
         if (insertError) {
-          console.error('[VideoService] Error:', insertError);
+          console.error('[VideoService] Error inserting interaction:', insertError);
           throw insertError;
         }
       }
 
-      // Update video's like count
-      const { data: currentVideo, error: videoError } = await this.supabase
-        .from('videos')
-        .select('likes')
-        .eq('id', videoId)
-        .single();
+      // Calculate the new like count by counting all likes for this video
+      const { data: allLikes, error: countError } = await this.supabase
+        .from('userInteractions')
+        .select('*')
+        .eq('videoId', videoId)
+        .eq('like', true);
 
-      if (videoError) {
-        console.error('[VideoService] Error:', videoError);
-        throw videoError;
+      if (countError) {
+        console.error('[VideoService] Error counting likes:', countError);
+        throw countError;
       }
 
-      const newLikeCount = currentVideo.likes + (newLikeState ? 1 : -1);
+      const newLikeCount = allLikes ? allLikes.length : 0;
 
-      const { error: updateLikesError } = await this.supabase
-        .from('videos')
-        .update({ likes: newLikeCount })
-        .eq('id', videoId);
-
-      if (updateLikesError) {
-        console.error('[VideoService] Error:', updateLikesError);
-        throw updateLikesError;
-      }
-
-      console.log(`[VideoService] Updated like for video ${videoId}. New count: ${newLikeCount}, isLiked: ${newLikeState}`);
+      console.log(`[VideoService] Successfully updated like for video ${videoId}. New count: ${newLikeCount}, isLiked: ${newLikeState}`);
       
       return { success: true, newLikeCount, isLiked: newLikeState };
     } catch (error) {
-      console.error('Error:', error);
+      console.error('[VideoService] Error in updateLike:', error);
       throw error;
     }
   }
@@ -234,13 +279,31 @@ export class VideoService {
         return [];
       }
 
+      // Get all like counts for videos
+      const { data: allLikes, error: allLikesError } = await this.supabase
+        .from('userInteractions')
+        .select('videoId, like')
+        .eq('like', true);
+
+      if (allLikesError) {
+        console.error('[VideoService] Error fetching all likes:', allLikesError);
+      }
+
+      // Calculate like counts
+      const likeCounts = new Map<number, number>();
+      if (allLikes) {
+        allLikes.forEach(like => {
+          likeCounts.set(like.videoId, (likeCounts.get(like.videoId) || 0) + 1);
+        });
+      }
+
       // Map to Video interface with tags and likes
       const likedVideos = videos.map(video => ({
         id: video.id,
         playbackId: video.playbackId,
         username: video.username,
         description: video.description,
-        likes: video.likes,
+        likes: likeCounts.get(video.id) || 0,
         tags: this.getTagsForVideo(video.description),
         isLiked: true
       }));

@@ -192,8 +192,8 @@ function Profile() {
   };
 
   // Get videos to display
-  const displayedVideos = showAllLikedVideos ? likedVideos : likedVideos.slice(0, 3);
-  const hasMoreVideos = likedVideos.length > 3;
+  const displayedVideos = showAllLikedVideos ? (likedVideos || []) : (likedVideos || []).slice(0, 3);
+  const hasMoreVideos = (likedVideos || []).length > 3;
 
   return (
     <div className="profile-page">
@@ -210,7 +210,7 @@ function Profile() {
                 <div className="loading-liked-videos">
                   <p>Loading your liked videos...</p>
                 </div>
-              ) : likedVideos.length === 0 ? (
+              ) : (likedVideos || []).length === 0 ? (
                 <div className="no-liked-videos">
                   <p>No liked videos yet. Start exploring the Videos tab to find content you love!</p>
                 </div>

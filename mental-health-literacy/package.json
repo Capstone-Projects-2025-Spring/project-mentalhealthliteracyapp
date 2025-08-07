@@ -14,7 +14,10 @@
     "postinstall": "npm run cf-typegen && npm run typegen-router && tsc",
     "typegen-router": "react-router typegen && tsc",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest",
+    "test:acceptance": "vitest acceptance.test.tsx",
+    "test:unit": "vitest --exclude=acceptance.test.tsx",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.7.5",
@@ -29,7 +32,6 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.3",
-    "jsdom": "^26.1.0",
     "ra-supabase": "^3.5.0",
     "react": "^19.1.0",
     "react-admin": "^5.10.0",
@@ -47,6 +49,7 @@
     "@eslint/js": "^9.25.0",
     "@react-router/dev": "^7.6.3",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^20",
     "@types/react": "^19.1.8",
@@ -57,6 +60,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "jsdom": "^26.1.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
@@ -64,5 +68,10 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"
+  },
+  "overrides": {
+    "@gilbarbara/hooks": {
+      "react": "^19.1.0"
+    }
   }
 }
