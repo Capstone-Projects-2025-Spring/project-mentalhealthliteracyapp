@@ -12,6 +12,23 @@ export async function saveUserPreferences(preferences: string[]) {
             return { error: "User not authenticated", status: 401 };
         }
 
+        // Delete existing preferences for user first
+        const { error: deleteError } = await supabase()
+            .from("userPreferences")
+            .delete()
+            .eq("user_id", user.id);
+
+        if (deleteError) {
+            console.log("[Preferences] Error deleting existing preferences:", deleteError);
+            return { error: "Error updating preferences", status: 500 };
+        }
+
+        // No preferences to save
+        if (!preferences || preferences.length === 0) {
+            console.log("[Preferences] No preferences to save, user preferences cleared");
+            return { message: "Preferences cleared", status: 200 };
+        }
+
         // Get preference IDs from preferences table with type
         const { data: prefRows, error: prefError } = await supabase()
             .from("preferences")
@@ -35,17 +52,6 @@ export async function saveUserPreferences(preferences: string[]) {
             user_id: user.id,
             preference_id: pref.id,
         }));
-
-        // Delete existing preferences for user
-        const { error: deleteError } = await supabase()
-            .from("userPreferences")
-            .delete()
-            .eq("user_id", user.id);
-
-        if (deleteError) {
-            console.log("[Preferences] Error deleting existing preferences:", deleteError);
-            return { error: "Error updating preferences", status: 500 };
-        }
 
         // Insert new preferences
         const { error: insertError } = await supabase()
