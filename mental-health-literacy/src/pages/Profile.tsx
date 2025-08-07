@@ -31,6 +31,7 @@ function Profile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const [loadingPreferences, setLoadingPreferences] = useState(true);
   
   // Liked videos state
   const [likedVideos, setLikedVideos] = useState<Video[]>([]);
@@ -39,21 +40,36 @@ function Profile() {
 
   useEffect(() => {
     const loadPreferences = async () => {
+      setLoadingPreferences(true);
+      
       if (user && user !== "Guest") {
         // If authenticated user, get preferences from Supabase
         const result = await fetchUserPreferences();
         
         if (result.status === 200 && result.data) {
+          // Always use Supabase data for authenticated users, even if empty
           setInterests(result.data.interests);
           setTraits(result.data.traits);
-          return;
+        } else {
+          // Supabase fetch failed, but user is authenticated
+          // Don't fall back to localStorage for authenticated users
+          // This prevents showing stale localStorage data
+          setInterests([]);
+          setTraits([]);
         }
+      } else if (user === null) {
+        // User is still loading, don't show anything yet
+        setInterests([]);
+        setTraits([]);
+      } else {
+        // Only use localStorage for non-authenticated users (Guest)
+        const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
+        const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
+        setInterests(storedInterests);
+        setTraits(storedTraits);
       }
-      // Fallback to localStorage for non-authenticated users or if database fetch fails
-      const storedInterests = JSON.parse(localStorage.getItem("userInterests") || "[]");
-      const storedTraits = JSON.parse(localStorage.getItem("userTraits") || "[]");
-      setInterests(storedInterests);
-      setTraits(storedTraits);
+      
+      setLoadingPreferences(false);
     };
     loadPreferences();
   }, [user]);
@@ -100,13 +116,20 @@ function Profile() {
     setSaving(true);
     setError(null);
     try {
-      // Save to localStorage
-      localStorage.setItem("userInterests", JSON.stringify(editInterests));
-      localStorage.setItem("userTraits", JSON.stringify(editTraits));
+      if (user && user !== "Guest") {
+        // For authenticated users, save to Supabase and clear localStorage
+        await saveUserPreferences([...editInterests, ...editTraits]);
+        // Clear localStorage to prevent conflicts
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userTraits");
+      } else {
+        // For non-authenticated users, save to localStorage only
+        localStorage.setItem("userInterests", JSON.stringify(editInterests));
+        localStorage.setItem("userTraits", JSON.stringify(editTraits));
+      }
+      
       setInterests(editInterests);
       setTraits(editTraits);
-      // Save to Supabase
-      await saveUserPreferences([...editInterests, ...editTraits]);
       setModalOpen(false);
     } catch (err: any) {
       setError(err.message || "Failed to save preferences");
@@ -190,35 +213,43 @@ function Profile() {
 
           <div className="profile-preferences-container">
             <h2>Your Preferences</h2>
-            <div>
-              <strong>Interests:</strong>
-              <div className="profile-pill-list">
-                {interests.length === 0 ? (
-                  <span className="profile-pill-empty">No interests selected.</span>
-                ) : (
-                  interests.map((interest) => (
-                    <span key={interest} className="profile-pill">
-                      {interest}
-                    </span>
-                  ))
-                )}
+            {loadingPreferences ? (
+              <div className="loading-preferences">
+                <p>Loading your preferences...</p>
               </div>
-            </div>
-            <div>
-              <strong>Traits:</strong>
-              <div className="profile-pill-list">
-                {traits.length === 0 ? (
-                  <span className="profile-pill-empty">No traits selected.</span>
-                ) : (
-                  traits.map((trait) => (
-                    <span key={trait} className="profile-pill">
-                      {trait}
-                    </span>
-                  ))
-                )}
-              </div>
-            </div>
-            <button className="profile-edit-button" onClick={handleEdit}>Edit Preferences</button>
+            ) : (
+              <>
+                <div>
+                  <strong>Interests:</strong>
+                  <div className="profile-pill-list">
+                    {interests.length === 0 ? (
+                      <span className="profile-pill-empty">No interests selected.</span>
+                    ) : (
+                      interests.map((interest) => (
+                        <span key={interest} className="profile-pill">
+                          {interest}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <strong>Traits:</strong>
+                  <div className="profile-pill-list">
+                    {traits.length === 0 ? (
+                      <span className="profile-pill-empty">No traits selected.</span>
+                    ) : (
+                      traits.map((trait) => (
+                        <span key={trait} className="profile-pill">
+                          {trait}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+                <button className="profile-edit-button" onClick={handleEdit}>Edit Preferences</button>
+              </>
+            )}
           </div>
 
           {modalOpen && (

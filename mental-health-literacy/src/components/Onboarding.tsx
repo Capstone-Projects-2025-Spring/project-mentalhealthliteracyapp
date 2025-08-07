@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Onboarding.css";
 import CloseButton from "./CloseButton";
 import { useDispatch, useSelector } from "react-redux";
-import { savePreferences } from "src/context/features/user/userSlice";
+import { savePreferences, syncOnboardingPreferences } from "src/context/features/user/userSlice";
 import { fetchUserPreferences } from "src/api/preferences";
 
 const INTERESTS = [
@@ -101,17 +101,34 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const persistPreferences = () => {
     console.log("[Onboarding] Saving preferences to localStorage", { interests, traits });
     localStorage.setItem("onboardingComplete", "true");
-    localStorage.setItem("userInterests", JSON.stringify(interests));
-    localStorage.setItem("userTraits", JSON.stringify(traits));
+    // Only save to localStorage for non-authenticated users
+    if (!user || user === "Guest") {
+      localStorage.setItem("userInterests", JSON.stringify(interests));
+      localStorage.setItem("userTraits", JSON.stringify(traits));
+    }
   };
 
   const closeOnboarding = async () => {
     persistPreferences();
     console.log("[Onboarding] User state on close:", user);
-    // If signed in user, dispatch savePreferences thunk
+    
     if (user && user !== "Guest") {
-      console.log("[Onboarding] Dispatching savePreferences thunk on close");
-      await dispatch(savePreferences([...interests, ...traits]));
+      // Check if this is a new user (has onboarding preferences to sync)
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const hasOnboardingPrefs = onboardingComplete && (interests.length > 0 || traits.length > 0);
+      
+      if (hasOnboardingPrefs) {
+        // New user during registration - sync onboarding preferences
+        console.log("[Onboarding] New user, syncing onboarding preferences");
+        await dispatch(syncOnboardingPreferences());
+      } else {
+        // Existing user updating preferences
+        console.log("[Onboarding] Existing user, saving updated preferences");
+        await dispatch(savePreferences([...interests, ...traits]));
+        // Clear localStorage to prevent conflicts
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userTraits");
+      }
     } else {
       console.log("[Onboarding] User not signed in, only saving to local storage.");
     }
@@ -122,10 +139,24 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const handleFinish = async () => {
     persistPreferences();
     console.log("[Onboarding] User state on finish:", user);
-    // If signed in user, dispatch savePreferences thunk
+    
     if (user && user !== "Guest") {
-      console.log("[Onboarding] Dispatching savePreferences thunk on finish");
-      await dispatch(savePreferences([...interests, ...traits]));
+      // Check if this is a new user (has onboarding preferences to sync)
+      const onboardingComplete = localStorage.getItem("onboardingComplete");
+      const hasOnboardingPrefs = onboardingComplete && (interests.length > 0 || traits.length > 0);
+      
+      if (hasOnboardingPrefs) {
+        // New user during registration - sync onboarding preferences
+        console.log("[Onboarding] New user, syncing onboarding preferences");
+        await dispatch(syncOnboardingPreferences());
+      } else {
+        // Existing user updating preferences
+        console.log("[Onboarding] Existing user, saving updated preferences");
+        await dispatch(savePreferences([...interests, ...traits]));
+        // Clear localStorage to prevent conflicts
+        localStorage.removeItem("userInterests");
+        localStorage.removeItem("userTraits");
+      }
     } else {
       console.log("[Onboarding] User not signed in, skipping backend save.");
     }
