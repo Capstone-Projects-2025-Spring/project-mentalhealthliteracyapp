@@ -137,7 +137,7 @@ describe('Acceptance Tests - Mental Health Literacy App', () => {
     it('should allow a new user to create an account successfully', async () => {
       render(
         <SimpleWrapper>
-          <SignUp close={() => {}} switch={() => {}} />
+          <SignUp close={() => {}} openLogin={() => {}} />
         </SimpleWrapper>
       );
 
@@ -170,7 +170,7 @@ describe('Acceptance Tests - Mental Health Literacy App', () => {
 
       render(
         <SimpleWrapper>
-          <SignUp close={() => {}} switch={() => {}} />
+          <SignUp close={() => {}} openLogin={() => {}} />
         </SimpleWrapper>
       );
 
@@ -506,7 +506,7 @@ describe('Acceptance Tests - Mental Health Literacy App', () => {
     it('should allow users to sign in with valid credentials', async () => {
       render(
         <SimpleWrapper>
-          <Login close={() => {}} switch={() => {}} />
+          <Login close={() => {}} openSignUp={() => {}} openResetPassword={() => {}} />
         </SimpleWrapper>
       );
 
@@ -539,7 +539,7 @@ describe('Acceptance Tests - Mental Health Literacy App', () => {
 
       render(
         <SimpleWrapper>
-          <Login close={() => {}} switch={() => {}} />
+          <Login close={() => {}} openSignUp={() => {}} openResetPassword={() => {}} />
         </SimpleWrapper>
       );
 
