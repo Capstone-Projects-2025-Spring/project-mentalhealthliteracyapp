@@ -3,7 +3,7 @@
 This section provides an overview of the class diagrams used in the system architecture. Diagrams illustrate key classes, their properties, methods, and relationships.
 
 ## Authentication Class Diagram
-<img width="3840" height="3322" alt="Authentication" src="https://github.com/user-attachments/assets/c09ed77c-7a91-4aa4-9b92-61671c86f56d" />
+<img alt="Authentication" src="https://github.com/user-attachments/assets/c09ed77c-7a91-4aa4-9b92-61671c86f56d" />
 
 ### **UI Components**
 - **Sidebar**: Main layout, contains auth modals and ProfileSidebar
@@ -27,7 +27,7 @@ This section provides an overview of the class diagrams used in the system archi
 - **SupabaseClient**: Authentication operations
 
 ## Video Components Class Diagram
-<img width="3840" height="2283" alt="Videos" src="https://github.com/user-attachments/assets/1e095869-86da-484d-a021-1dc5f70b61c0" />
+<img alt="Videos" src="https://github.com/user-attachments/assets/1e095869-86da-484d-a021-1dc5f70b61c0" />
 
 ### **Video (Main Page)**
 - **Video Management**: Manages list of videos and current index
@@ -61,7 +61,7 @@ This section provides an overview of the class diagrams used in the system archi
 
 
 ## Resource Components Class Diagram
-<img width="3840" height="2150" alt="Resources" src="https://github.com/user-attachments/assets/a4d3c37b-5968-49fa-b954-3fb08fa23973" />
+<img alt="Resources" src="https://github.com/user-attachments/assets/a4d3c37b-5968-49fa-b954-3fb08fa23973" />
 
 ### **Resources (Main Page)**
 - **Resource Display**: Shows grid of resource cards
