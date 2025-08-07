@@ -38,8 +38,8 @@ const title = rawProjectName
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   /*TODO: Change to your project's title and tagline*/
-  title: title,
-  tagline: 'Owls are cool',
+  title: 'Safe Scroll',
+  tagline: 'A Mental Health Literacy App',
   /*Unless you move this website to a seperate repo don't change url and baseurl.*/
   url: 'https://'+process.env.ORG_NAME+'.github.io/',
   baseUrl: '/'+process.env.PROJECT_NAME+'/',
@@ -126,7 +126,7 @@ const config = {
       }} : {}),
       navbar: {
         /*TODO: Change to your project's title*/
-        title: title,
+        title: 'Safe Scroll',
         logo: {
           alt: 'My Site Logo',
           src: logo,

@@ -12,7 +12,7 @@
 
 ## Keywords
 
-Section 701, Mental Health, Mobile Application
+Section 701, Safe Scroll, Mobile Application
 
 ## Project Abstract
 
@@ -56,11 +56,9 @@ Discuss what you need to develop this project. This includes background informat
 
 ## Features and Requirements
 ### Functional Requirements
-- Users' journals should be saved to cache.
-- Users should be able to create, delete, and edit journal entries.
-- Users should be able to login to save their journal onto the server.
+- Users should be able to access videos and resources
+- Users will be able to save preferences and generate personal video feed
 - Users will be authenticated when logging in to the system.
-- Users will be able to configure when they want to be notified to journal.
 
 ### Non-functional Requirements
 - Users should be able to navigate UI within a single button click.
@@ -72,17 +70,45 @@ Discuss what you need to develop this project. This includes background informat
 <table>
 <tr>
     <td align="center">
-        <a href="https://github.com/ApplebaumIan">
-            <img src="https://avatars.githubusercontent.com/u/9451941?v=4" width="100;" alt="ApplebaumIan"/>
+        <a href="https://github.com/GustavoBenitez1">
+            <img src="https://avatars.githubusercontent.com/u/157192634?v=4" width="100;" alt="BenitezGustavo"/>
             <br />
-            <sub><b>Ian Tyler Applebaum</b></sub>
+            <sub><b>Gustavo Benitez</b></sub>
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/leighflagg">
-            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="leighflagg"/>
+        <a href="https://github.com/Shyke50">
+            <img src="https://avatars.githubusercontent.com/u/97984098?v=4" width="100;" alt="DogjaniShyqiri"/>
             <br />
-            <sub><b>Null</b></sub>
+            <sub><b>Shyqiri Dogjani</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/andrew-seibert">
+            <img src="https://avatars.githubusercontent.com/u/123014837?s=96&v=4" width="100;" alt="SeibertAndrew"/>
+            <br />
+            <sub><b>Andrew Seibert</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/kathrynalvarez">
+            <img src="https://avatars.githubusercontent.com/u/179744643?v=4" width="100;" alt="AlvarezKathryn"/>
+            <br />
+            <sub><b>Kathryn Alvarez</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Timofei-Gomziakov-TU">
+            <img src="https://avatars.githubusercontent.com/u/9451941?v=4" width="100;" alt="GomziakovTimofei"/>
+            <br />
+            <sub><b>Timofei Gomziakov</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/tuq69747">
+            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="LernerLana"/>
+            <br />
+            <sub><b>Lana Lerner</b></sub>
         </a>
     </td></tr>
 </table>
