@@ -99,7 +99,7 @@ Discuss what you need to develop this project. This includes background informat
     </td>
     <td align="center">
         <a href="https://github.com/Timofei-Gomziakov-TU">
-            <img src="https://avatars.githubusercontent.com/u/9451941?v=4" width="100;" alt="GomziakovTimofei"/>
+            <img src="https://avatars.githubusercontent.com/u/179741451?v=4" width="100;" alt="GomziakovTimofei"/>
             <br />
             <sub><b>Timofei Gomziakov</b></sub>
         </a>
